@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Chancita</string>
+    <string name="registrarse">Registrarse</string>
+    <string name="iniciar_sesion">Iniciar sesión</string>
+</resources>

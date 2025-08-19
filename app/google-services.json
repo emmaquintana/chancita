@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "507666210999",
+    "project_id": "chancita-rifas",
+    "storage_bucket": "chancita-rifas.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:507666210999:android:6c645cbb227cd86f60ad32",
+        "android_client_info": {
+          "package_name": "com.emmanuel.chancita"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQH0N5wP5XrrUSEzJOIVoZDIgkfYCwAsc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
