@@ -2,4 +2,8 @@
     <string name="app_name">Chancita</string>
     <string name="registrarse">Registrarse</string>
     <string name="iniciar_sesion">Iniciar sesión</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="inicio">Inicio</string>
+    <string name="perfil">Perfil</string>
+    <string name="notificaciones">Notificaciones</string>
 </resources>
