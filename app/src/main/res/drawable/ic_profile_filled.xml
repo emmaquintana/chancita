@@ -1,0 +1,17 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24.0"
+    android:viewportHeight="24.0">
+    
+    <!-- Círculo de la cabeza (más pequeño) -->
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M12,6.5m-4,0a4,4 0,1 1,8 0a4,4 0,1 1,-8 0"/>
+    
+    <!-- Cuerpo (más pequeño y centrado) -->
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M18.5,22c0.5,0 1,-0.4 1,-1c0,-3.5 -3,-6.5 -7.5,-6.5S4.5,17.5 4.5,21c0,0.6 0.5,1 1,1H18.5z"/>
+    
+</vector>
