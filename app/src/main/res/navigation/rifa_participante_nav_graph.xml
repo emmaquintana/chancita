@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rifa_participante_nav_graph"
+    app:startDestination="@id/rifaParticipanteFragment">
+    <fragment
+        android:id="@+id/rifaParticipanteFragment"
+        android:name="com.emmanuel.chancita.ui.rifa.RifaParticipanteFragment"
+        android:label="fragment_rifa_participante"
+        tools:layout="@layout/fragment_rifa_participante" />
+</navigation>

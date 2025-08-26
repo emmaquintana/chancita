@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rifa_nav_graph"
+    app:startDestination="@id/rifaOrganizadorFragment">
+    <fragment
+        android:id="@+id/editarRifaFragment"
+        android:name="com.emmanuel.chancita.ui.rifa.EditarRifaFragment"
+        android:label="fragment_editar_rifa"
+        tools:layout="@layout/fragment_editar_rifa" />
+    <fragment
+        android:id="@+id/rifaOrganizadorFragment"
+        android:name="com.emmanuel.chancita.ui.rifa.RifaOrganizadorFragment"
+        android:label="fragment_rifa_organizador"
+        tools:layout="@layout/fragment_rifa_organizador" >
+        <action
+            android:id="@+id/action_rifaOrganizadorFragment_to_editarRifaFragment"
+            app:destination="@id/editarRifaFragment" />
+    </fragment>
+</navigation>
