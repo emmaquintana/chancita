@@ -23,7 +23,7 @@
                 android:text="Salvemos a Pepito 2"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:textColor="@android:color/black"
+                android:textColor="?attr/colorOnSurface"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:text="Monto recaudado: $18.000,00"
                 android:textSize="18sp"
-                android:textColor="@android:color/black"
+                android:textColor="?attr/colorOnSurface"
                 android:textStyle="bold"
                 android:layout_marginTop="8dp"
                 app:layout_constraintTop_toBottomOf="@id/txt_titulo_rifa"
@@ -46,7 +46,7 @@
                 android:text="Información"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@android:color/black"
+                android:textColor="?attr/colorOnSurface"
                 android:layout_marginTop="24dp"
                 app:layout_constraintTop_toBottomOf="@id/txt_monto_recaudado"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -56,6 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:textColor="?attr/colorOnSurface"
                 android:text="Estado: Sorteado"
                 app:layout_constraintTop_toBottomOf="@id/txt_seccion_informacion"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -65,6 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
+                android:textColor="?attr/colorOnSurface"
                 android:text="Título: Salvemos a Pepito 2"
                 app:layout_constraintTop_toBottomOf="@id/txt_info_estado"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -74,6 +76,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
+                android:textColor="?attr/colorOnSurface"
                 android:text="Descripción: [Resultados] de la rifa..."
                 app:layout_constraintTop_toBottomOf="@id/txt_info_titulo"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -84,6 +87,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="Código: AZX389"
+                android:textColor="?attr/colorOnSurface"
                 app:layout_constraintTop_toBottomOf="@id/txt_info_descripcion"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -93,6 +97,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="Fecha de sorteo: 22/09/2025 21:30"
+                android:textColor="?attr/colorOnSurface"
                 app:layout_constraintTop_toBottomOf="@id/txt_info_codigo"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -102,6 +107,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="Precio de número: $2000"
+                android:textColor="?attr/colorOnSurface"
                 app:layout_constraintTop_toBottomOf="@id/txt_info_fecha"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -111,6 +117,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="Método de elección: Determinista (Resultados de la tómbola de la Lotería Sanfer)"
+                android:textColor="?attr/colorOnSurface"
                 app:layout_constraintTop_toBottomOf="@id/txt_info_precio"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -121,7 +128,7 @@
                 android:text="Elección de ganadores"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@android:color/black"
+                android:textColor="?attr/colorOnSurface"
                 android:layout_marginTop="24dp"
                 app:layout_constraintTop_toBottomOf="@id/txt_info_metodo"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -132,6 +139,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="Elige los números ganadores y el valor (en cantidad) de los números comprados."
+                android:textColor="?attr/colorOnSurface"
                 app:layout_constraintTop_toBottomOf="@id/txt_seccion_eleccion_ganadores"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
@@ -151,6 +159,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Juan Manuel - Números comprados: 32"
+                    android:textColor="?attr/colorOnSurface"
                     android:textStyle="bold" />
 
                 <TextView
@@ -158,6 +167,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Rodríguez Fito - Números comprados: 12, 18, 44, 75"
+                    android:textColor="?attr/colorOnSurface"
                     android:layout_marginTop="4dp"
                     android:textStyle="bold" />
 
@@ -166,6 +176,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Iñaki Azcuénaga - Números comprados: 95, 97"
+                    android:textColor="?attr/colorOnSurface"
                     android:layout_marginTop="4dp"
                     android:textStyle="bold" />
 
@@ -174,6 +185,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Sofía Andaluza - Números comprados: 1"
+                    android:textColor="?attr/colorOnSurface"
                     android:layout_marginTop="4dp"
                     android:textStyle="bold" />
 
@@ -198,7 +210,7 @@
                 android:text="Ganadores"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@android:color/black"
+                android:textColor="?attr/colorOnSurface"
                 android:layout_marginTop="24dp"
                 app:layout_constraintTop_toBottomOf="@id/btn_confirmar_ganadores"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -218,16 +230,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Marcelo Tico"
+                    android:textColor="?attr/colorOnSurface"
                     android:textStyle="bold" />
                 <TextView
                     android:id="@+id/txt_ganador_contacto_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="?attr/colorOnSurface"
                     android:text="Número de celular: +5493854386742" />
                 <TextView
                     android:id="@+id/txt_ganador_email_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="?attr/colorOnSurface"
                     android:text="email: m.tico@gmail.com" />
 
                 <TextView
@@ -236,16 +251,19 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="Sofía Andaluza"
+                    android:textColor="?attr/colorOnSurface"
                     android:textStyle="bold" />
                 <TextView
                     android:id="@+id/txt_ganador_contacto_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="?attr/colorOnSurface"
                     android:text="Número de celular: +5493854238742" />
                 <TextView
                     android:id="@+id/txt_ganador_email_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="?attr/colorOnSurface"
                     android:text="email: s.andaluza@gmail.com" />
             </LinearLayout>
 
@@ -256,7 +274,7 @@
                 android:text="Participantes"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@android:color/black"
+                android:textColor="?attr/colorOnSurface"
                 android:layout_marginTop="24dp"
                 app:layout_constraintTop_toBottomOf="@id/ll_ganadores_info"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -275,6 +293,7 @@
                     android:id="@+id/txt_participante_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="?attr/colorOnSurface"
                     android:text="Nombre y apellido    Números comprados"
                     android:textStyle="bold" />
                 <TextView
@@ -282,24 +301,28 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
+                    android:textColor="?attr/colorOnSurface"
                     android:text="Juan Manuel                 32" />
                 <TextView
                     android:id="@+id/txt_participante_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
+                    android:textColor="?attr/colorOnSurface"
                     android:text="Rodríguez Fito                  9" />
                 <TextView
                     android:id="@+id/txt_participante_4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
+                    android:textColor="?attr/colorOnSurface"
                     android:text="Iñaki Azcuénaga              2" />
                 <TextView
                     android:id="@+id/txt_participante_5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
+                    android:textColor="?attr/colorOnSurface"
                     android:text="Sofía Andaluza                  1" />
             </LinearLayout>
 
@@ -310,7 +333,7 @@
                 android:text="Premios"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@android:color/black"
+                android:textColor="?attr/colorOnSurface"
                 android:layout_marginTop="24dp"
                 app:layout_constraintTop_toBottomOf="@id/ll_participantes_list"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -321,6 +344,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="1er puesto: $10000"
+                android:textColor="?attr/colorOnSurface"
                 android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@id/txt_seccion_premios"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -330,6 +354,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
+                android:textColor="?attr/colorOnSurface"
                 android:text="2do puesto: Pasafoto de mentrillo"
                 android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@id/txt_premio_1"

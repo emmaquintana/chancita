@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:text="Iniciar Sesión"
-                android:textColor="@android:color/black"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="28sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -36,8 +36,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="48dp"
                 android:hint="Correo electrónico"
-                app:boxStrokeColor="@color/md_theme_primary"
-                app:hintTextColor="@color/md_theme_primary"
+                app:boxStrokeColor="@color/text_input_selector"
+                app:hintTextColor="@color/text_input_selector"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/txt_titulo">
@@ -55,11 +55,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:hint="Contraseña"
-                app:boxStrokeColor="@color/md_theme_primary"
-                app:hintTextColor="@color/md_theme_primary"
+                app:boxStrokeColor="@color/text_input_selector"
+                app:hintTextColor="@color/text_input_selector"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/til_email"
+                app:passwordToggleTint="?attr/colorOnSurface"
                 app:passwordToggleEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -87,6 +88,7 @@
                 android:layout_marginTop="16dp"
                 android:checked="true"
                 android:text="Mantener sesión iniciada"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/txt_forgot_password" />
