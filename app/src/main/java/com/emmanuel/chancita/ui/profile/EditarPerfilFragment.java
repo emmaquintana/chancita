@@ -17,37 +17,38 @@ import com.emmanuel.chancita.R;
 import com.emmanuel.chancita.ui.SharedViewModel;
 import com.google.android.material.button.MaterialButton;
 
-public class ProfileFragment extends Fragment {
+public class EditarPerfilFragment extends Fragment {
 
-    private ProfileViewModel mViewModel;
-    private SharedViewModel sharedViewModel;
+    private EditarPerfilViewModel mViewModel;
 
-    public static ProfileFragment newInstance() {
-        return new ProfileFragment();
+    public static EditarPerfilFragment newInstance() {
+        return new EditarPerfilFragment();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Obtiene la instancia del ViewModel compartida con la MainActivity
-        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+
+        // Se deben recuperar los datos del usuario actual con tal de presentar los campos pre rellenados
+        // ...
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        return inflater.inflate(R.layout.fragment_editar_perfil, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        sharedViewModel.setToolbarTitle("Perfil");
+        MaterialButton btnGuardarCambios = view.findViewById(R.id.btn_guardar_cambios_editar_perfil);
 
-        MaterialButton btnEditarPerfil = view.findViewById(R.id.btn_edit_profile);
+        btnGuardarCambios.setOnClickListener(v -> {
+            // Guardar cambios
+            // ...
 
-        btnEditarPerfil.setOnClickListener(v -> {
-            Intent intent = new Intent(requireActivity(), EditarPerfilActivity.class);
-            startActivity(intent);
+            // Finaliza la actividad actual, volviendo "hacia atrás"
+            requireActivity().finish();
         });
     }
 }
