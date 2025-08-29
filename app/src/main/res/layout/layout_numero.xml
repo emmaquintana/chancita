@@ -3,7 +3,7 @@
     style="?attr/materialButtonOutlinedStyle"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/btn_numero"
+    android:id="@+id/layout_btn_numero"
     android:layout_width="48dp"
     android:layout_height="64dp"
     android:layout_margin="8dp"

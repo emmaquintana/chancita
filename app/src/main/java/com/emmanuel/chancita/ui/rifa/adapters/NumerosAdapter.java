@@ -3,7 +3,7 @@ package com.emmanuel.chancita.ui.rifa.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -55,7 +55,7 @@ public class NumerosAdapter extends RecyclerView.Adapter<NumerosAdapter.ViewHold
 
         public ViewHolder(View itemView) {
             super(itemView);
-            btnNumero = itemView.findViewById(R.id.btn_numero);
+            btnNumero = itemView.findViewById(R.id.layout_btn_numero);
         }
     }
 }
