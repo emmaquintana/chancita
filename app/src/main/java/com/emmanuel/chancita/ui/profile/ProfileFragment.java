@@ -12,15 +12,23 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.emmanuel.chancita.R;
+import com.emmanuel.chancita.data.model.Usuario;
 import com.emmanuel.chancita.ui.SharedViewModel;
+import com.emmanuel.chancita.utils.Edad;
 import com.google.android.material.button.MaterialButton;
+
+import org.w3c.dom.Text;
+
+import java.time.LocalDate;
 
 public class ProfileFragment extends Fragment {
 
     private ProfileViewModel mViewModel;
     private SharedViewModel sharedViewModel;
+    private Usuario usuario;
 
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
@@ -31,6 +39,7 @@ public class ProfileFragment extends Fragment {
         super.onCreate(savedInstanceState);
         // Obtiene la instancia del ViewModel compartida con la MainActivity
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        usuario = obtenerUsuario("a6sdta7-2873ff-a87sdbs");
     }
 
     @Override
@@ -43,11 +52,27 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         sharedViewModel.setToolbarTitle("Perfil");
 
-        MaterialButton btnEditarPerfil = view.findViewById(R.id.btn_edit_profile);
+        TextView nombreApellido = view.findViewById(R.id.perfil_txt_nombre_completo);
+        TextView edad = view.findViewById(R.id.perfil_txt_edad);
+        TextView correoElectronico = view.findViewById(R.id.perfil_txt_email);
+        TextView numeroCelular = view.findViewById(R.id.perfil_txt_celular);
+
+        nombreApellido.setText(usuario.getNombre() + " " + usuario.getApellido());
+        edad.setText(Edad.calcularEdad(usuario.getFechaNacimiento()) + " años");
+        correoElectronico.setText(usuario.getCorreo());
+
+        MaterialButton btnEditarPerfil = view.findViewById(R.id.perfil_btn_editar);
 
         btnEditarPerfil.setOnClickListener(v -> {
             Intent intent = new Intent(requireActivity(), EditarPerfilActivity.class);
             startActivity(intent);
         });
+    }
+
+    private Usuario obtenerUsuario(String id) {
+        // Usuario de prueba (debería ser una llamada a Firestore)
+        Usuario usuario = new Usuario(id, "juanperez@gmail.com", "juan", "perez", "+5493854877069", "123456", LocalDate.of(2003, 07, 03),LocalDate.now(), null);
+
+        return usuario;
     }
 }

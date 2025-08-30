@@ -20,13 +20,13 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Nombre y apellido"
+                android:text="@string/nombre_y_apellido"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface" />
 
             <TextView
-                android:id="@+id/txt_full_name"
+                android:id="@+id/perfil_txt_nombre_completo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -38,13 +38,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="Edad"
+                android:text="@string/edad"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"  />
 
             <TextView
-                android:id="@+id/txt_age"
+                android:id="@+id/perfil_txt_edad"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -56,13 +56,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="Correo electrónico"
+                android:text="@string/correo_electronico"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"  />
 
             <TextView
-                android:id="@+id/txt_email"
+                android:id="@+id/perfil_txt_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -74,31 +74,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="Fecha de nacimiento"
+                android:text="@string/numero_de_celular"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"  />
 
             <TextView
-                android:id="@+id/txt_birth_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="22 de octubre de 2003"
-                android:textSize="18sp"
-                android:textColor="?attr/colorOnSurface" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="Número de celular"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:textColor="?attr/colorOnSurface"  />
-
-            <TextView
-                android:id="@+id/txt_phone"
+                android:id="@+id/perfil_txt_celular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -112,11 +94,11 @@
                 android:layout_weight="1" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_edit_profile"
+                android:id="@+id/perfil_btn_editar"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginTop="32dp"
-                android:text="Editar datos"
+                android:text="@string/editar_datos"
                 android:textSize="18sp"
                 app:cornerRadius="28dp" />
 
