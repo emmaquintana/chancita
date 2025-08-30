@@ -38,6 +38,7 @@
                 android:layout_marginTop="-24dp" />
 
             <TextView
+                android:id="@+id/inicio_txt_no_rifas_creadas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
@@ -48,53 +49,11 @@
                 android:textColor="?attr/colorOnSurface"
                 />
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/mcv_rifa_creada"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_rifas_creadas"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:cardCornerRadius="8dp"
-                app:cardBackgroundColor="@color/md_theme_background"
-                app:strokeColor="?attr/colorOnSurface"
-                app:strokeWidth="1dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Sorteo día del amigo"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="?attr/colorOnSurface" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Código: AMIGO1000"
-                        android:textColor="?attr/colorOnSurface"
-                        android:layout_marginTop="4dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Sorteo: 20/07/2025 00:00 AM"
-                        android:textColor="?attr/colorOnSurface"
-                        android:layout_marginTop="4dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:text="Abierto"
-                        android:textStyle="bold"
-                        android:textColor="@color/green" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+                android:layout_marginTop="16dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -115,53 +74,23 @@
                 android:textStyle="bold"
                 android:layout_marginTop="-24dp" />
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/mcv_rifa_unida"
+            <TextView
+                android:id="@+id/inicio_txt_no_rifas_unidas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:text="No te uniste a ninguna rifa"
+                android:layout_marginTop="16dp"
+                android:textSize="16sp"
+                android:textStyle="normal"
+                android:textColor="?attr/colorOnSurface"
+                />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_rifas_unidas"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:cardCornerRadius="8dp"
-                app:cardBackgroundColor="@color/md_theme_background"
-                app:strokeColor="?attr/colorOnSurface"
-                app:strokeWidth="1dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Salvemos a Pepito"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="?attr/colorOnSurface" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Código: PEPITO2025"
-                        android:textColor="?attr/colorOnSurface"
-                        android:layout_marginTop="4dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Sorteo: 15/07/2025 00:00 AM"
-                        android:textColor="?attr/colorOnSurface"
-                        android:layout_marginTop="4dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:text="Sorteado"
-                        android:textStyle="bold"
-                        android:textColor="@color/md_theme_error" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+                android:layout_marginTop="16dp" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </FrameLayout>
