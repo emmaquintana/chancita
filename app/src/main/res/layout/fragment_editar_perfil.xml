@@ -17,7 +17,7 @@
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/txt_titulo"
+                android:id="@+id/editar_perfil_txt_titulo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
@@ -31,83 +31,83 @@
                 app:layout_constraintEnd_toEndOf="parent" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_nombre_completo"
+                android:id="@+id/editar_perfil_til_nombre_completo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:hint="@string/nombre_completo"
                 app:boxStrokeColor="@color/text_input_selector"
                 app:hintTextColor="@color/text_input_selector"
-                app:layout_constraintTop_toBottomOf="@id/txt_titulo"
+                app:layout_constraintTop_toBottomOf="@id/editar_perfil_txt_titulo"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_nombre_completo"
+                    android:id="@+id/editar_perfil_tiet_nombre_completo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_apellido_completo"
+                android:id="@+id/editar_perfil_til_apellido_completo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:hint="@string/apellido_completo"
                 app:boxStrokeColor="@color/text_input_selector"
                 app:hintTextColor="@color/text_input_selector"
-                app:layout_constraintTop_toBottomOf="@id/til_nombre_completo"
+                app:layout_constraintTop_toBottomOf="@id/editar_perfil_til_nombre_completo"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_apellido_completo"
+                    android:id="@+id/editar_perfil_tiet_apellido_completo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_email"
+                android:id="@+id/editar_perfil_til_email"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:hint="@string/correo_electronico"
                 app:boxStrokeColor="@color/text_input_selector"
                 app:hintTextColor="@color/text_input_selector"
-                app:layout_constraintTop_toBottomOf="@id/til_apellido_completo"
+                app:layout_constraintTop_toBottomOf="@id/editar_perfil_til_apellido_completo"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tiet_email"
+                    android:id="@+id/editar_perfil_tiet_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_nro_celular"
+                android:id="@+id/editar_perfil_til_nro_celular"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:hint="@string/numero_de_celular"
                 app:boxStrokeColor="@color/text_input_selector"
                 app:hintTextColor="@color/text_input_selector"
-                app:layout_constraintTop_toBottomOf="@id/til_email"
+                app:layout_constraintTop_toBottomOf="@id/editar_perfil_til_email"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_nro_celular"
+                    android:id="@+id/editar_perfil_tiet_nro_celular"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="phone" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_guardar_cambios_editar_perfil"
+                android:id="@+id/editar_perfil_btn_guardar_cambios"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:layout_marginTop="16dp"
