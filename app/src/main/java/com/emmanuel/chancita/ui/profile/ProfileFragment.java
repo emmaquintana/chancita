@@ -17,10 +17,8 @@ import android.widget.TextView;
 import com.emmanuel.chancita.R;
 import com.emmanuel.chancita.data.model.Usuario;
 import com.emmanuel.chancita.ui.SharedViewModel;
-import com.emmanuel.chancita.utils.Edad;
+import com.emmanuel.chancita.utils.Utilidades;
 import com.google.android.material.button.MaterialButton;
-
-import org.w3c.dom.Text;
 
 import java.time.LocalDate;
 
@@ -58,7 +56,7 @@ public class ProfileFragment extends Fragment {
         TextView numeroCelular = view.findViewById(R.id.perfil_txt_celular);
 
         nombreApellido.setText(usuario.getNombre() + " " + usuario.getApellido());
-        edad.setText(Edad.calcularEdad(usuario.getFechaNacimiento()) + " años");
+        edad.setText(Utilidades.calcularEdad(usuario.getFechaNacimiento()) + " años");
         correoElectronico.setText(usuario.getCorreo());
 
         MaterialButton btnEditarPerfil = view.findViewById(R.id.perfil_btn_editar);
