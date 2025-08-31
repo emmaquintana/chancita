@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.emmanuel.chancita.R;
+import com.emmanuel.chancita.data.model.MetodoEleccionGanador;
 import com.emmanuel.chancita.data.model.Rifa;
 import com.emmanuel.chancita.data.model.RifaEstado;
 import com.emmanuel.chancita.ui.SharedViewModel;
@@ -27,6 +28,7 @@ import com.emmanuel.chancita.ui.rifa.RifaParticipanteActivity;
 import com.google.android.material.card.MaterialCardView;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,14 +76,14 @@ public class HomeFragment extends Fragment {
         // rifasCreadas.add(new Rifa("id1", "Sorteo día del amigo", "Descripción", "user1", RifaEstado.ABIERTO, LocalDate.now(), "AMIGO1000", LocalDate.of(2025, 7, 20), 10.0));
 
         List<Rifa> rifasUnidas = new ArrayList<>();
-        rifasUnidas.add(new Rifa("id3", "Salvemos a Pepito", "Descripción", "user2", RifaEstado.SORTEADO, LocalDate.now(), "PEPITO2025", LocalDate.of(2025, 7, 15), 5.0));
-        rifasUnidas.add(new Rifa("id4", "Salvemos a Pepito 2", "Descripción", "user2", RifaEstado.SORTEADO, LocalDate.now(), "PEPITO2025", LocalDate.of(2025, 8, 15), 5.0));
-        rifasUnidas.add(new Rifa("id5", "Salvemos a Pepito 3", "Descripción", "user2", RifaEstado.ABIERTO, LocalDate.now(), "PEPITO2025", LocalDate.of(2025, 9, 15), 5.0));
+        rifasUnidas.add(new Rifa("id3", "Salvemos a Pepito", "Descripción", "user2", RifaEstado.SORTEADO, LocalDateTime.now(), "PEPITO2025", MetodoEleccionGanador.ALEATORIO,null,LocalDateTime.of(2025, 7, 15, 0,0,0), 5.0));
+        rifasUnidas.add(new Rifa("id4", "Salvemos a Pepito 2", "Descripción", "user2", RifaEstado.SORTEADO, LocalDateTime.now(), "PEPITO2025",  MetodoEleccionGanador.ALEATORIO,null,LocalDateTime.of(2025, 8, 15,0,0), 5.0));
+        rifasUnidas.add(new Rifa("id5", "Salvemos a Pepito 3", "Descripción", "user2", RifaEstado.ABIERTO, LocalDateTime.now(), "PEPITO2025",  MetodoEleccionGanador.ALEATORIO,null,LocalDateTime.of(2025, 9, 15,0,0), 5.0));
 
         // Si hay rifas creadas, se las muestra
         if (rifasCreadas.size() != 0) {
 
-            // Si se "toca" una rifa, se redirige a la actividad correspondiente
+            // Si se "toca" una rifa, se redirige a la actividad correspondiente a esa rifa
             RifaAdapter.OnItemClickListener rifaCreadaListener = new RifaAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(Rifa rifa) {
