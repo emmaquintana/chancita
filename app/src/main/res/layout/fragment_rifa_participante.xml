@@ -17,7 +17,7 @@
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/txt_titulo_rifa_participante"
+                android:id="@+id/rifa_participante_txt_titulo_rifa"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Salvemos a Pepito 2"
@@ -28,7 +28,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/txt_info_participante"
+                android:id="@+id/rifa_participante_txt_info_rifa"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -37,50 +37,40 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_titulo_rifa_participante" />
+                app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_titulo_rifa" />
 
             <TextView
-                android:id="@+id/txt_estado_participante"
+                android:id="@+id/rifa_participante_txt_estado_rifa"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:textColor="?attr/colorOnSurface"
                 android:text="Estado: Abierto"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_info_participante" />
+                app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_info_rifa" />
 
             <TextView
-                android:id="@+id/txt_titulo_informacion_participante"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:textColor="?attr/colorOnSurface"
-                android:text="Título: Salvemos a Pepito 2"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_estado_participante" />
-
-            <TextView
-                android:id="@+id/txt_fecha_sorteo_participante"
+                android:id="@+id/rifa_participante_txt_fecha_sorteo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:textColor="?attr/colorOnSurface"
                 android:text="Fecha de sorteo: 22/09/2025 21:30"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_titulo_informacion_participante" />
+                app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_estado_rifa" />
 
             <TextView
-                android:id="@+id/txt_metodo_eleccion_participante"
+                android:id="@+id/rifa_participante_txt_metodo_eleccion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:textColor="?attr/colorOnSurface"
                 android:text="Método de elección: Determinista (Resultados de la tómbola de la Lotería Sanfer)"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_fecha_sorteo_participante" />
+                app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_fecha_sorteo" />
 
             <TextView
-                android:id="@+id/txt_premios_participante"
+                android:id="@+id/rifa_participante_txt_premios_titulo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
@@ -89,10 +79,10 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_metodo_eleccion_participante" />
+                app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_metodo_eleccion" />
 
             <TextView
-                android:id="@+id/txt_premio1_participante"
+                android:id="@+id/rifa_participante_txt_premios"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -100,21 +90,10 @@
                 android:text="1er puesto: $10000"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_premios_participante" />
+                app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_premios_titulo" />
 
             <TextView
-                android:id="@+id/txt_premio2_participante"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:textColor="?attr/colorOnSurface"
-                android:text="2do puesto: Pasafoto de mentrillo"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_premio1_participante" />
-
-            <TextView
-                android:id="@+id/txt_comprar_numeros"
+                android:id="@+id/rifa_participante_txt_comprar_numeros_titulo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
@@ -123,30 +102,30 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_premio2_participante" />
+                app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_premios" />
 
             <TextView
-                android:id="@+id/txt_instruccion_numeros"
+                android:id="@+id/rifa_participante_txt_comprar_numeros_descripcion"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:textColor="?attr/colorOnSurface"
-                android:text="Selecciona los números que quieres comprar. Un número es un ticket de rifa."
+                android:text="Selecciona los números que quieres comprar:"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_comprar_numeros" />
+                app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_comprar_numeros_titulo" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_numeros"
+                android:id="@+id/rifa_participante_rv_numeros"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_instruccion_numeros" />
+                app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_comprar_numeros_descripcion" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_comprar_numeros"
+                android:id="@+id/rifa_participante_btn_comprar_numeros"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:layout_marginTop="32dp"
@@ -157,7 +136,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rv_numeros"
+                app:layout_constraintTop_toBottomOf="@id/rifa_participante_rv_numeros"
                 app:layout_constraintVertical_bias="1.0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
