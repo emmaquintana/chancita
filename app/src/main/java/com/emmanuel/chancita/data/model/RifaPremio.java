@@ -1,4 +1,57 @@
 package com.emmanuel.chancita.data.model;
 
 public class RifaPremio {
+    private String premioId;
+    private String premioTitulo;
+    private String premioDescripcion;
+    private String rifaId;
+    private int premioOrden; // Indica si el premio respecta al 1er/2do/3er/etc puesto
+
+    public RifaPremio(String premioId, String premioTitulo, String premioDescripcion, String rifaId, int premioOrden) {
+        setPremioId(premioId);
+        setPremioTitulo(premioTitulo);
+        setPremioDescripcion(premioDescripcion);
+        setRifaId(rifaId);
+        setPremioOrden(premioOrden);
+    }
+
+    public String getPremioId() {
+        return premioId;
+    }
+
+    public void setPremioId(String premioId) {
+        this.premioId = premioId;
+    }
+
+    public String getPremioTitulo() {
+        return premioTitulo;
+    }
+
+    public void setPremioTitulo(String premioTitulo) {
+        this.premioTitulo = premioTitulo;
+    }
+
+    public String getPremioDescripcion() {
+        return premioDescripcion;
+    }
+
+    public void setPremioDescripcion(String premioDescripcion) {
+        this.premioDescripcion = premioDescripcion;
+    }
+
+    public String getRifaId() {
+        return rifaId;
+    }
+
+    public void setRifaId(String rifaId) {
+        this.rifaId = rifaId;
+    }
+
+    public int getPremioOrden() {
+        return premioOrden;
+    }
+
+    public void setPremioOrden(int premioOrden) {
+        this.premioOrden = premioOrden;
+    }
 }

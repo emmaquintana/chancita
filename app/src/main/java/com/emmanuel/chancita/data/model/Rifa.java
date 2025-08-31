@@ -1,6 +1,7 @@
 package com.emmanuel.chancita.data.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Rifa {
 
@@ -9,12 +10,14 @@ public class Rifa {
     private String descripcion;
     private String creadoPor;
     private RifaEstado estado;
-    private LocalDate creadoEn;
+    private LocalDateTime creadoEn;
     private String codigo;
-    private LocalDate fechaSorteo;
+    private MetodoEleccionGanador metodoEleccionGanador;
+    private String motivoEleccionGanador; // Este campo solo debe usarse si metodoEleccionGanador = DETERMINISTA
+    private LocalDateTime fechaSorteo;
     private double precioNumero;
 
-    public Rifa(String id, String titulo, String descripcion, String creadoPor, RifaEstado estado, LocalDate creadoEn, String codigo, LocalDate fechaSorteo, double precioNumero) {
+    public Rifa(String id, String titulo, String descripcion, String creadoPor, RifaEstado estado, LocalDateTime creadoEn, String codigo, MetodoEleccionGanador metodoEleccionGanador, String motivoEleccionGanador ,LocalDateTime fechaSorteo, double precioNumero) {
         setId(id);
         setTitulo(titulo);
         setDescripcion(descripcion);
@@ -22,6 +25,8 @@ public class Rifa {
         setEstado(estado);
         setCreadoEn(creadoEn);
         setCodigo(codigo);
+        setMetodoEleccionGanador(metodoEleccionGanador);
+        setMotivoEleccionGanador(motivoEleccionGanador);
         setFechaSorteo(fechaSorteo);
         setPrecioNumero(precioNumero);
     }
@@ -66,11 +71,11 @@ public class Rifa {
         this.estado = estado;
     }
 
-    public LocalDate getCreadoEn() {
+    public LocalDateTime getCreadoEn() {
         return creadoEn;
     }
 
-    public void setCreadoEn(LocalDate creadoEn) {
+    public void setCreadoEn(LocalDateTime creadoEn) {
         this.creadoEn = creadoEn;
     }
 
@@ -82,11 +87,11 @@ public class Rifa {
         this.codigo = codigo;
     }
 
-    public LocalDate getFechaSorteo() {
+    public LocalDateTime getFechaSorteo() {
         return fechaSorteo;
     }
 
-    public void setFechaSorteo(LocalDate fechaSorteo) {
+    public void setFechaSorteo(LocalDateTime fechaSorteo) {
         this.fechaSorteo = fechaSorteo;
     }
 
@@ -96,5 +101,21 @@ public class Rifa {
 
     public void setPrecioNumero(double precioNumero) {
         this.precioNumero = precioNumero;
+    }
+
+    public MetodoEleccionGanador getMetodoEleccionGanador() {
+        return metodoEleccionGanador;
+    }
+
+    public void setMetodoEleccionGanador(MetodoEleccionGanador metodoEleccionGanador) {
+        this.metodoEleccionGanador = metodoEleccionGanador;
+    }
+
+    public String getMotivoEleccionGanador() {
+        return motivoEleccionGanador;
+    }
+
+    public void setMotivoEleccionGanador(String motivoEleccionGanador) {
+        this.motivoEleccionGanador = motivoEleccionGanador;
     }
 }
