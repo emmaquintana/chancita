@@ -21,6 +21,7 @@ import com.emmanuel.chancita.utils.Utilidades;
 import com.google.android.material.button.MaterialButton;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class ProfileFragment extends Fragment {
 
@@ -69,7 +70,7 @@ public class ProfileFragment extends Fragment {
 
     private Usuario obtenerUsuario(String id) {
         // Usuario de prueba (debería ser una llamada a Firestore)
-        Usuario usuario = new Usuario(id, "juanperez@gmail.com", "juan", "perez", "+5493854877069", "123456", LocalDate.of(2003, 07, 03),LocalDate.now(), null);
+        Usuario usuario = new Usuario(id, "juanperez@gmail.com", "juan", "perez", "+5493854877069", "123456", LocalDate.of(2003, 07, 03), LocalDateTime.now(), null);
 
         return usuario;
     }

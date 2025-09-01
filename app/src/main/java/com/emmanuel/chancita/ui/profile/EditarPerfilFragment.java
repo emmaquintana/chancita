@@ -16,6 +16,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class EditarPerfilFragment extends Fragment {
 
@@ -66,7 +67,7 @@ public class EditarPerfilFragment extends Fragment {
 
     private Usuario obtenerUsuario(String id) {
         // Usuario de prueba (debería ser una llamada a Firestore)
-        Usuario usuario = new Usuario(id, "juanperez@gmail.com", "juan", "perez", "+5493854877069", "123456", LocalDate.of(2003, 07, 03),LocalDate.now(), null);
+        Usuario usuario = new Usuario(id, "juanperez@gmail.com", "juan", "perez", "+5493854877069", "123456", LocalDate.of(2003, 07, 03), LocalDateTime.now(), null);
 
         return usuario;
     }
