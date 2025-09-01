@@ -17,7 +17,7 @@
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/txt_titulo_rifa"
+                android:id="@+id/rifa_organizador_txt_titulo_rifa"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Salvemos a Pepito 2"
@@ -28,7 +28,7 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
-                android:id="@+id/txt_monto_recaudado"
+                android:id="@+id/rifa_organizador_txt_monto_recaudado"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Monto recaudado: $18.000,00"
@@ -36,11 +36,11 @@
                 android:textColor="?attr/colorOnSurface"
                 android:textStyle="bold"
                 android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@id/txt_titulo_rifa"
+                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_txt_titulo_rifa"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
-                android:id="@+id/txt_seccion_informacion"
+                android:id="@+id/rifa_organizador_txt_seccion_informacion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Información"
@@ -48,81 +48,81 @@
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"
                 android:layout_marginTop="24dp"
-                app:layout_constraintTop_toBottomOf="@id/txt_monto_recaudado"
+                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_txt_monto_recaudado"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
-                android:id="@+id/txt_info_estado"
+                android:id="@+id/rifa_organizador_txt_info_estado"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:textColor="?attr/colorOnSurface"
                 android:text="Estado: Sorteado"
-                app:layout_constraintTop_toBottomOf="@id/txt_seccion_informacion"
+                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_txt_seccion_informacion"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
-                android:id="@+id/txt_info_titulo"
+                android:id="@+id/rifa_organizador_txt_info_titulo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:textColor="?attr/colorOnSurface"
                 android:text="Título: Salvemos a Pepito 2"
-                app:layout_constraintTop_toBottomOf="@id/txt_info_estado"
+                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_txt_info_estado"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
-                android:id="@+id/txt_info_descripcion"
+                android:id="@+id/rifa_organizador_txt_info_descripcion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:textColor="?attr/colorOnSurface"
                 android:text="Descripción: [Resultados] de la rifa..."
-                app:layout_constraintTop_toBottomOf="@id/txt_info_titulo"
+                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_txt_info_titulo"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
-                android:id="@+id/txt_info_codigo"
+                android:id="@+id/rifa_organizador_txt_info_codigo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="Código: AZX389"
                 android:textColor="?attr/colorOnSurface"
-                app:layout_constraintTop_toBottomOf="@id/txt_info_descripcion"
+                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_txt_info_descripcion"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
-                android:id="@+id/txt_info_fecha"
+                android:id="@+id/rifa_organizador_txt_info_fecha"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="Fecha de sorteo: 22/09/2025 21:30"
                 android:textColor="?attr/colorOnSurface"
-                app:layout_constraintTop_toBottomOf="@id/txt_info_codigo"
+                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_txt_info_codigo"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
-                android:id="@+id/txt_info_precio"
+                android:id="@+id/rifa_organizador_txt_info_precio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="Precio de número: $2000"
                 android:textColor="?attr/colorOnSurface"
-                app:layout_constraintTop_toBottomOf="@id/txt_info_fecha"
+                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_txt_info_fecha"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
-                android:id="@+id/txt_info_metodo"
+                android:id="@+id/rifa_organizador_txt_info_metodo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="Método de elección: Determinista (Resultados de la tómbola de la Lotería Sanfer)"
                 android:textColor="?attr/colorOnSurface"
-                app:layout_constraintTop_toBottomOf="@id/txt_info_precio"
+                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_txt_info_precio"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
-                android:id="@+id/txt_seccion_eleccion_ganadores"
+                android:id="@+id/rifa_organizador_txt_seccion_eleccion_ganadores"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Elección de ganadores"
@@ -130,81 +130,35 @@
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"
                 android:layout_marginTop="24dp"
-                app:layout_constraintTop_toBottomOf="@id/txt_info_metodo"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_txt_info_metodo"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <TextView
-                android:id="@+id/txt_ganadores_descripcion"
-                android:layout_width="0dp"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_eleccion_ganadores"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Elige los números ganadores y el valor (en cantidad) de los números comprados."
-                android:textColor="?attr/colorOnSurface"
-                app:layout_constraintTop_toBottomOf="@id/txt_seccion_eleccion_ganadores"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-            <LinearLayout
-                android:id="@+id/ll_ganadores_list"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@id/txt_ganadores_descripcion"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
-
-                <TextView
-                    android:id="@+id/txt_ganador_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Juan Manuel - Números comprados: 32"
-                    android:textColor="?attr/colorOnSurface"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/txt_ganador_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Rodríguez Fito - Números comprados: 12, 18, 44, 75"
-                    android:textColor="?attr/colorOnSurface"
-                    android:layout_marginTop="4dp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/txt_ganador_3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Iñaki Azcuénaga - Números comprados: 95, 97"
-                    android:textColor="?attr/colorOnSurface"
-                    android:layout_marginTop="4dp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/txt_ganador_4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Sofía Andaluza - Números comprados: 1"
-                    android:textColor="?attr/colorOnSurface"
-                    android:layout_marginTop="4dp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
+                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_txt_seccion_eleccion_ganadores" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_confirmar_ganadores"
+                android:id="@+id/rifa_organizador_btn_confirmar_ganadores"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Confirmar ganadores"
                 android:textSize="16sp"
+                android:visibility="gone"
                 app:cornerRadius="28dp"
-                app:layout_constraintTop_toBottomOf="@id/ll_ganadores_list"
+                app:layout_constraintTop_toBottomOf="@id/recycler_view_eleccion_ganadores"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
             <TextView
-                android:id="@+id/txt_seccion_ganadores"
+                android:id="@+id/rifa_organizador_txt_seccion_ganadores"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Ganadores"
@@ -212,63 +166,28 @@
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"
                 android:layout_marginTop="24dp"
-                app:layout_constraintTop_toBottomOf="@id/btn_confirmar_ganadores"
+                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_btn_confirmar_ganadores"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <LinearLayout
-                android:id="@+id/ll_ganadores_info"
+                android:id="@+id/rifa_organizador_ll_ganadores_info"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@id/txt_seccion_ganadores"
+                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_txt_seccion_ganadores"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
-                <TextView
-                    android:id="@+id/txt_ganador_nombre_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Marcelo Tico"
-                    android:textColor="?attr/colorOnSurface"
-                    android:textStyle="bold" />
-                <TextView
-                    android:id="@+id/txt_ganador_contacto_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="?attr/colorOnSurface"
-                    android:text="Número de celular: +5493854386742" />
-                <TextView
-                    android:id="@+id/txt_ganador_email_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="?attr/colorOnSurface"
-                    android:text="email: m.tico@gmail.com" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view_ganadores"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-                <TextView
-                    android:id="@+id/txt_ganador_nombre_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Sofía Andaluza"
-                    android:textColor="?attr/colorOnSurface"
-                    android:textStyle="bold" />
-                <TextView
-                    android:id="@+id/txt_ganador_contacto_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="?attr/colorOnSurface"
-                    android:text="Número de celular: +5493854238742" />
-                <TextView
-                    android:id="@+id/txt_ganador_email_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="?attr/colorOnSurface"
-                    android:text="email: s.andaluza@gmail.com" />
             </LinearLayout>
 
             <TextView
-                android:id="@+id/txt_seccion_participantes"
+                android:id="@+id/rifa_organizador_txt_seccion_participantes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Participantes"
@@ -276,58 +195,57 @@
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"
                 android:layout_marginTop="24dp"
-                app:layout_constraintTop_toBottomOf="@id/ll_ganadores_info"
+                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_ll_ganadores_info"
                 app:layout_constraintStart_toStartOf="parent" />
 
+            <TextView
+                android:id="@+id/rifa_organizador_txt_nombre_participante"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Nombre y apellido"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnSurface"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rifa_organizador_txt_seccion_participantes" />
+
+            <TextView
+                android:id="@+id/rifa_organizador_txt_numeros_comprados_participante"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textStyle="bold"
+                android:text="Números comprados"
+                android:textColor="?attr/colorOnSurface"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rifa_organizador_txt_seccion_participantes" />
+
             <LinearLayout
-                android:id="@+id/ll_participantes_list"
+                android:id="@+id/rifa_organizador_ll_participantes_list"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@id/txt_seccion_participantes"
+
+                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_txt_nombre_participante"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
                 <TextView
-                    android:id="@+id/txt_participante_1"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/rifa_organizador_txt_no_hay_participantes"
                     android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:text="Aún no hay participantes"
                     android:textColor="?attr/colorOnSurface"
-                    android:text="Nombre y apellido    Números comprados"
-                    android:textStyle="bold" />
-                <TextView
-                    android:id="@+id/txt_participante_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:textColor="?attr/colorOnSurface"
-                    android:text="Juan Manuel                 32" />
-                <TextView
-                    android:id="@+id/txt_participante_3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:textColor="?attr/colorOnSurface"
-                    android:text="Rodríguez Fito                  9" />
-                <TextView
-                    android:id="@+id/txt_participante_4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:textColor="?attr/colorOnSurface"
-                    android:text="Iñaki Azcuénaga              2" />
-                <TextView
-                    android:id="@+id/txt_participante_5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:textColor="?attr/colorOnSurface"
-                    android:text="Sofía Andaluza                  1" />
+                    />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view_participantes"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
             </LinearLayout>
 
             <TextView
-                android:id="@+id/txt_seccion_premios"
+                android:id="@+id/rifa_organizador_txt_seccion_premios"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Premios"
@@ -335,29 +253,17 @@
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"
                 android:layout_marginTop="24dp"
-                app:layout_constraintTop_toBottomOf="@id/ll_participantes_list"
+                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_ll_participantes_list"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
-                android:id="@+id/txt_premio_1"
+                android:id="@+id/rifa_organizador_txt_premios"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="1er puesto: $10000"
                 android:textColor="?attr/colorOnSurface"
-                android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/txt_seccion_premios"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
-                android:id="@+id/txt_premio_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:textColor="?attr/colorOnSurface"
-                android:text="2do puesto: Pasafoto de mentrillo"
-                android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/txt_premio_1"
+                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_txt_seccion_premios"
                 app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

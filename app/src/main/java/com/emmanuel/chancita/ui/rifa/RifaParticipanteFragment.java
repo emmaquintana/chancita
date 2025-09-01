@@ -61,7 +61,7 @@ public class RifaParticipanteFragment extends Fragment {
         rifaEstado.setText("Estado: " + rifa.getEstado());
         rifaFechaSorteo.setText("Fecha de sorteo: " + Utilidades.formatearFechaHora(rifa.getFechaSorteo(), "dd/MM/yyyy hh:mm"));
         rifaMetodoEleccionGanador.setText("Método de elección: " + Utilidades.capitalizar(rifa.getMetodoEleccionGanador().toString()) + (rifa.getMetodoEleccionGanador() == MetodoEleccionGanador.DETERMINISTA ? "(" + rifa.getMotivoEleccionGanador() + ")" : ""));
-        rifaPremios.setText(formatearPremios(rifa.getId()));
+        rifaPremios.setText(formatearPremios(obtenerPremios("id")));
     }
 
     /** Infla los numeros de los cuales el usuario participante podrá elegir cuál comprar */
@@ -93,12 +93,14 @@ public class RifaParticipanteFragment extends Fragment {
     }
 
     // Estos datos son solo de prueba
-    private RifaPremio[] obtenerPremios(String rifaId) {
-        return new RifaPremio[] {
-                new RifaPremio("id1", "Torta", "Torta de manzana", "id1", 1),
-                new RifaPremio("id2", "Tortita", null, "id1", 2),
-                new RifaPremio("id3", "$5000", null, "id1", 3),
-        };
+    private List<RifaPremio> obtenerPremios(String rifaId) {
+
+        List<RifaPremio> premios = new ArrayList<>();
+        premios.add(new RifaPremio("id1", "Torta", "Torta de manzana", "id1", 1));
+        premios.add(new RifaPremio("id2", "Tortita", null, "id1", 2));
+        premios.add(new RifaPremio("id3", "$5000", null, "id1", 3));
+
+        return premios;
     }
 
     /**
@@ -110,12 +112,11 @@ public class RifaParticipanteFragment extends Fragment {
      *  Puesto nro. N: TItulo (descripcion)"<br/>
      *
      * */
-    private String formatearPremios(String rifaId) {
+    private String formatearPremios(List<RifaPremio> rifaPremios) {
         StringBuilder stb = new StringBuilder();
-        RifaPremio[] rifaPremios = obtenerPremios(rifaId);
 
         for (RifaPremio premio : rifaPremios) {
-            stb.append("Puesto nro." + premio.getPremioOrden() + ": " + rifa.getTitulo() + " (" + rifa.getDescripcion() + ")" + "\n");
+            stb.append("Puesto nro." + premio.getPremioOrden() + ": " + premio.getPremioTitulo() + " (" + premio.getPremioDescripcion() + ")" + "\n");
         }
 
         return stb.toString();

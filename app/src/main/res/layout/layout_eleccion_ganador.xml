@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <com.google.android.material.checkbox.MaterialCheckBox
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_eleccion_ganador_checkbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="Nombre apellido - Números comprados: 15, 17, 19, 20, 25, 30, 21"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
