@@ -1,6 +1,7 @@
 package com.emmanuel.chancita.data.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
@@ -12,10 +13,10 @@ public class Usuario {
     private String nroCelular;
     private String contraseña;
     private LocalDate fechaNacimiento;
-    private LocalDate creadoEn;
-    private LocalDate ultimoIngreso;
+    private LocalDateTime creadoEn;
+    private LocalDateTime ultimoIngreso;
 
-    public Usuario(String id, String correo, String nombre, String apellido, String nroCelular, String contraseña, LocalDate fechaNacimiento, LocalDate creadoEn, LocalDate ultimoIngreso) {
+    public Usuario(String id, String correo, String nombre, String apellido, String nroCelular, String contraseña, LocalDate fechaNacimiento, LocalDateTime creadoEn, LocalDateTime ultimoIngreso) {
         setId(id);
         setCorreo(correo);
         setNombre(nombre);
@@ -83,19 +84,19 @@ public class Usuario {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public LocalDate getCreadoEn() {
+    public LocalDateTime getCreadoEn() {
         return creadoEn;
     }
 
-    public void setCreadoEn(LocalDate creadoEn) {
+    public void setCreadoEn(LocalDateTime creadoEn) {
         this.creadoEn = creadoEn;
     }
 
-    public LocalDate getUltimoIngreso() {
+    public LocalDateTime getUltimoIngreso() {
         return ultimoIngreso;
     }
 
-    public void setUltimoIngreso(LocalDate ultimoIngreso) {
+    public void setUltimoIngreso(LocalDateTime ultimoIngreso) {
         this.ultimoIngreso = ultimoIngreso;
     }
 
