@@ -21,6 +21,15 @@
             android:showDividers="middle"
             >
 
+            <TextView
+                android:id="@+id/notificacion_txt_no_hay_notificaciones"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginTop="16dp"
+                android:textSize="16sp"
+                android:text="@string/no_tienes_notificaciones" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view_notificaciones"
                 android:layout_width="match_parent"

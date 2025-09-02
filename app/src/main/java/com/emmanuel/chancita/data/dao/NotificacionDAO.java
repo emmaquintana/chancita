@@ -30,6 +30,14 @@ public class NotificacionDAO {
                 .addOnCompleteListener(listener);
     }
 
+    public void obtenerNotificacionesUsuarioActual(String usuarioId, OnCompleteListener<QuerySnapshot> listener) {
+        db.collection("notificaciones")
+                .whereEqualTo("usuarioId", usuarioId)
+                .orderBy("fecha", Query.Direction.DESCENDING)
+                .get()
+                .addOnCompleteListener(listener);
+    }
+
     public void obtenerNotificacionesGenerales(OnCompleteListener<QuerySnapshot> listener) {
         db.collection("notificaciones")
                 .whereEqualTo("usuarioId", null)

@@ -13,12 +13,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.emmanuel.chancita.R;
 import com.emmanuel.chancita.data.model.Notificacion;
 import com.emmanuel.chancita.ui.SharedViewModel;
 import com.emmanuel.chancita.ui.notificaciones.adapters.NotificacionAdapter;
+import com.emmanuel.chancita.utils.Utilidades;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,15 +57,18 @@ public class NotificacionesFragment extends Fragment {
     }
 
     private void inflarNotificaciones(View view) {
-        RecyclerView recyclerView = view.findViewById(R.id.recycler_view_notificaciones);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Simula notificaciones (debería recuperarlas desde la BD)
         List<Notificacion> notificaciones = new ArrayList<>();
-        notificaciones.add(new Notificacion("15/07/2025 00:00", "¡Ganaste en la rifa “Salvemos a Pepito”!", "El número 7 fue el ganador. Dirígete a la rifa para contactar con el organizador"));
-        notificaciones.add(new Notificacion("22/06/2025 23:59", "Mejor suerte para la próxima", "El número 15 fue el ganador en la rifa “Rifa para estudios”."));
 
-        NotificacionAdapter adapter = new NotificacionAdapter(notificaciones);
-        recyclerView.setAdapter(adapter);
+        if (notificaciones.isEmpty()) {
+            TextView txtNoHayNotificaciones = view.findViewById(R.id.notificacion_txt_no_hay_notificaciones);
+            txtNoHayNotificaciones.setVisibility(View.VISIBLE);
+        }
+        else {
+            RecyclerView recyclerView = view.findViewById(R.id.recycler_view_notificaciones);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            NotificacionAdapter adapter = new NotificacionAdapter(notificaciones);
+            recyclerView.setAdapter(adapter);
+        }
     }
 }
