@@ -1,5 +1,7 @@
 package com.emmanuel.chancita.data.repository;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -10,10 +12,13 @@ import com.emmanuel.chancita.data.dto.UsuarioDTO;
 import com.emmanuel.chancita.data.model.Organizador;
 import com.emmanuel.chancita.data.model.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.Timestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,29 +52,57 @@ public class UsuarioRepository {
         return liveData;
     }
 
-    /**
-     * Crea un nuevo usuario en la BD a partir de un UsuarioDTO.<br/>
-     * El DTO solo contiene los datos que el usuario ingresó en el formulario.<br/>
-     *
-     * @param usuarioDto Una referencia al objeto UsuarioDTO con los datos que el usuario ingresó
-     * @param listener Listener para manejar el resultado de la operación
-     * */
-    public void crearUsuario(UsuarioDTO usuarioDto, OnCompleteListener<Void> listener) {
-        // Mapear el DTO a la entidad de la base de datos (modelo completo)
-        Usuario nuevoUsuario = new Usuario(
-                null, // El ID se generará en el DAO
+    public LiveData<Usuario> obtenerUsuarioActual() {
+        MutableLiveData<Usuario> liveData = new MutableLiveData<>();
+        usuarioDAO.obtenerUsuarioActual()
+                .addOnSuccessListener(doc -> {
+                    if (doc.exists()) {
+                        Usuario usuario = new Usuario();
+
+                        usuario.setId(doc.getId());
+                        usuario.setNombre(doc.getString("nombre"));
+                        usuario.setApellido(doc.getString("apellido"));
+                        usuario.setCorreo(doc.getString("correo"));
+                        usuario.setNroCelular(doc.getString("nroCelular"));
+
+                        String fechaNacimientoStr = doc.getString("fechaNacimiento");
+                        LocalDate fechaNacimiento = LocalDate.parse(fechaNacimientoStr);
+
+                        String creadoEnStr = doc.getString("creadoEn");
+                        LocalDateTime creadoEn = LocalDateTime.parse(creadoEnStr);
+
+                        String ultimoIngresoStr = doc.getString("ultimoIngreso");
+                        LocalDateTime ultimoIngreso = ultimoIngresoStr != null ? LocalDateTime.parse(ultimoIngresoStr) : null;
+
+                        usuario.setFechaNacimiento(fechaNacimiento);
+                        usuario.setCreadoEn(creadoEn);
+                        usuario.setUltimoIngreso(ultimoIngreso);
+
+                        liveData.setValue(usuario);
+                        Log.println(Log.INFO, "ENCONTRADO", "EL USUARIO ES ENCONTRADO EN DOCS");
+                    } else {
+                        Log.println(Log.ERROR, "NO ENCONTRADO", "EL USUARIO NO ES ENCONTRADO EN DOCS " + doc.getId());
+                        liveData.setValue(null);
+                    }
+                })
+                .addOnFailureListener(e -> liveData.setValue(null));
+        return liveData;
+    }
+
+    public void crearUsuario(UsuarioDTO usuarioDto) {
+        // Mapear DTO a la entidad Usuario
+        Usuario usuario = new Usuario(
+                null,
                 usuarioDto.getCorreo(),
                 usuarioDto.getNombre(),
                 usuarioDto.getApellido(),
                 usuarioDto.getNroCelular(),
                 usuarioDto.getContraseña(),
-                usuarioDto.getFechaNacimiento(), // Se establece la fecha de creación en el repositorio
-                LocalDateTime.now(), // El último ingreso es nulo al crearse
+                usuarioDto.getFechaNacimiento(),
+                LocalDateTime.now(),
                 null
         );
-
-        // Llamar al DAO para guardar la entidad completa
-        usuarioDAO.crearUsuario(nuevoUsuario, listener);
+        usuarioDAO.crearUsuario(usuario, listener -> {});
     }
 
     public void eliminarUsuario(String usuarioId, OnCompleteListener<Void> listener) {

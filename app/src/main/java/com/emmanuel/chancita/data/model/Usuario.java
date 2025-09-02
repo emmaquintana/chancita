@@ -16,6 +16,8 @@ public class Usuario {
     private LocalDateTime creadoEn;
     private LocalDateTime ultimoIngreso;
 
+    public Usuario() {}
+
     public Usuario(String id, String correo, String nombre, String apellido, String nroCelular, String contraseña, LocalDate fechaNacimiento, LocalDateTime creadoEn, LocalDateTime ultimoIngreso) {
         setId(id);
         setCorreo(correo);

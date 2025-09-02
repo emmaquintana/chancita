@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.perfil.ProfileFragment">
+    tools:context=".ui.perfil.PerfilFragment">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -30,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Juan Exequiel Pérez"
+                android:text="@string/cargando"
                 android:textSize="18sp"
                 android:textColor="?attr/colorOnSurface" />
 
@@ -48,7 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="21 años"
+                android:text="@string/cargando"
                 android:textSize="18sp"
                 android:textColor="?attr/colorOnSurface" />
 
@@ -66,7 +66,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="juanexe21@gmail.com"
+                android:text="@string/cargando"
                 android:textSize="18sp"
                 android:textColor="?attr/colorOnSurface" />
 
@@ -84,7 +84,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="+5493854877069"
+                android:text="@string/cargando"
                 android:textSize="18sp"
                 android:textColor="?attr/colorOnSurface" />
 

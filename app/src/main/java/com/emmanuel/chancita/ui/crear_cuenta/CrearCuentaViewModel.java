@@ -6,14 +6,11 @@ import androidx.lifecycle.ViewModel;
 
 import com.emmanuel.chancita.data.dto.UsuarioDTO;
 import com.emmanuel.chancita.data.repository.UsuarioRepository;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 
 import java.time.LocalDate;
 
 public class CrearCuentaViewModel extends ViewModel {
     private final UsuarioRepository usuarioRepository;
-    private final FirebaseAuth firebaseAuth;
     private final MutableLiveData<Boolean> _estaRegistrandose = new MutableLiveData<>();
     public LiveData<Boolean> estaRegistrandose = _estaRegistrandose;
     private final MutableLiveData<String> _resultadoRegistro = new MutableLiveData<>();
@@ -21,7 +18,6 @@ public class CrearCuentaViewModel extends ViewModel {
 
     public CrearCuentaViewModel() {
         this.usuarioRepository = new UsuarioRepository();
-        this.firebaseAuth = FirebaseAuth.getInstance();
     }
 
     /**
@@ -43,35 +39,12 @@ public class CrearCuentaViewModel extends ViewModel {
             return;
         }
 
-        // Crear usuario en Firebase Authentication
-        firebaseAuth.createUserWithEmailAndPassword(correo, contraseña)
-                .addOnCompleteListener(authTask -> {
-                    if (authTask.isSuccessful()) {
-                        // Si la autenticación es exitosa, guardar el usuario en el repositorio
-                        UsuarioDTO usuarioDto = new UsuarioDTO(nombre, apellido, correo, nroCelular, contraseña, fechaNacimiento, null, null);
-                        usuarioRepository.crearUsuario(usuarioDto, repoTask -> {
-                            _estaRegistrandose.setValue(false);
-                            if (repoTask.isSuccessful()) {
-                                _resultadoRegistro.setValue("Registro exitoso.");
-                            } else {
-                                // Si falla la creación en el repositorio, se elimina el usuario de autenticación
-                                firebaseAuth.getCurrentUser().delete();
-                                _resultadoRegistro.setValue("Error al guardar los datos del usuario.");
-                            }
-                        });
-                    } else {
-                        _estaRegistrandose.setValue(false);
-                        if (authTask.getException() instanceof FirebaseAuthUserCollisionException) {
-                            _resultadoRegistro.setValue("Ya existe una cuenta con este correo electrónico.");
-                        } else {
-                            _resultadoRegistro.setValue("Error en el registro. Intente de nuevo.");
-                        }
-                    }
-                });
+        UsuarioDTO usuarioDto = new UsuarioDTO(nombre, apellido, correo, nroCelular, contraseña, fechaNacimiento, null, null);
+
+        usuarioRepository.crearUsuario(usuarioDto);
     }
 
     private boolean validarEntrada(String nombre, String apellido, String correo, LocalDate fechaNacimiento, String nroCelular, String contraseña, String confirmarContraseña) {
-        // Implementar lógica de validación aquí
         if (nombre.isEmpty() || apellido.isEmpty() || correo.isEmpty() || fechaNacimiento == null || nroCelular.isEmpty() || contraseña.isEmpty() || confirmarContraseña.isEmpty()) {
             _resultadoRegistro.setValue("Todos los campos son obligatorios.");
             return false;

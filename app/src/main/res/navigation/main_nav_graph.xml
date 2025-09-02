@@ -32,7 +32,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_profile"
-        android:name="com.emmanuel.chancita.ui.perfil.ProfileFragment"
+        android:name="com.emmanuel.chancita.ui.perfil.PerfilFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_perfil" >
         <action

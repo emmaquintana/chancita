@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
-import com.emmanuel.chancita.R;
 import com.emmanuel.chancita.databinding.FragmentCrearCuentaBinding;
 import com.google.android.material.datepicker.MaterialDatePicker;
 
@@ -21,7 +20,6 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;

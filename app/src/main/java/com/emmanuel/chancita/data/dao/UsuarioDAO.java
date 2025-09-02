@@ -3,6 +3,11 @@ package com.emmanuel.chancita.data.dao;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.emmanuel.chancita.data.model.Usuario;
@@ -14,9 +19,11 @@ import java.util.Map;
 
 public class UsuarioDAO {
     private final FirebaseFirestore db;
+    private final FirebaseAuth auth;
 
     public UsuarioDAO() {
         this.db = FirebaseFirestore.getInstance();
+        this.auth = FirebaseAuth.getInstance();
     }
 
     // Método para obtener un usuario por ID
@@ -26,18 +33,70 @@ public class UsuarioDAO {
                 .addOnCompleteListener(listener);
     }
 
+    public Task<DocumentSnapshot> obtenerUsuarioActual() {
+        FirebaseUser firebaseUser = auth.getCurrentUser();
+        if (firebaseUser == null) {
+            return Tasks.forException(new Exception("No hay usuario logueado."));
+        }
+        Log.println(Log.INFO, "ID", firebaseUser.getUid());
+        return db.collection("usuarios").document(firebaseUser.getUid()).get();
+    }
+
     public void crearUsuario(Usuario usuario, OnCompleteListener<Void> listener) {
-        // Genera un ID único para el documento en la colección "usuarios"
-        String nuevoId = db.collection("usuarios").document().getId();
+// Crear usuario en Firebase Auth primero
+        auth.createUserWithEmailAndPassword(usuario.getCorreo(), usuario.getContraseña())
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Usuario creado exitosamente en Auth
+                        FirebaseUser firebaseUser = task.getResult().getUser();
+                        if (firebaseUser != null) {
+                            String userId = firebaseUser.getUid();
 
-        // Se lo asigna al usuario pasado por parametro
-        usuario.setId(nuevoId);
+                            // Actualizar el ID del usuario con el UID de Firebase Auth
+                            usuario.setId(userId);
 
-        // Se crea un usuario con
-        db.collection("usuarios").document(nuevoId)
-                .set(usuario)
-                .addOnCompleteListener(listener);
+                            // Crear el documento en Firestore (sin la contraseña por seguridad)
+                            Map<String, Object> usuarioData = new HashMap<>();
+                            usuarioData.put("correo", usuario.getCorreo());
+                            usuarioData.put("nombre", usuario.getNombre());
+                            usuarioData.put("apellido", usuario.getApellido());
+                            usuarioData.put("nroCelular", usuario.getNroCelular());
+                            usuarioData.put("fechaNacimiento", usuario.getFechaNacimiento().toString());
+                            usuarioData.put("creadoEn", usuario.getCreadoEn().toString());
+                            usuarioData.put("ultimoIngreso", null);
 
+
+                            // Guardar en Firestore usando el mismo UID
+                            db.collection("usuarios")
+                                    .document(userId)
+                                    .set(usuarioData)
+                                    .addOnCompleteListener(firestoreTask -> {
+                                        if (firestoreTask.isSuccessful()) {
+                                            listener.onComplete(Tasks.forResult(null));
+                                        } else {
+                                            // Error al guardar en Firestore, eliminar usuario de Auth
+                                            firebaseUser.delete().addOnCompleteListener(deleteTask -> {
+                                                // Notificar el error original de Firestore
+                                                listener.onComplete(Tasks.forException(
+                                                        firestoreTask.getException() != null ?
+                                                                firestoreTask.getException() :
+                                                                new Exception("Error al guardar en Firestore")
+                                                ));
+                                            });
+                                        }
+                                    });
+                        } else {
+                            listener.onComplete(Tasks.forException(new Exception("Error al obtener usuario de Auth")));
+                        }
+                    } else {
+                        // Error al crear usuario en Auth
+                        listener.onComplete(Tasks.forException(
+                                task.getException() != null ?
+                                        task.getException() :
+                                        new Exception("Error al crear usuario en Auth")
+                        ));
+                    }
+                });
     }
 
     public void eliminarUsuario(String usuarioId, OnCompleteListener<Void> listener) {
