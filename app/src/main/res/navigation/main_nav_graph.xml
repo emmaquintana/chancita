@@ -6,7 +6,7 @@
     app:startDestination="@id/navigation_home">
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.emmanuel.chancita.ui.inicio.HomeFragment"
+        android:name="com.emmanuel.chancita.ui.inicio.inicioFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_inicio" >
         <action
@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.emmanuel.chancita.ui.notificaciones.NotificationsFragment"
+        android:name="com.emmanuel.chancita.ui.notificaciones.NotificacionesFragment"
         android:label="fragment_notifications"
         tools:layout="@layout/fragment_notificaciones" >
         <action

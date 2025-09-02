@@ -27,7 +27,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.emmanuel.chancita.ui.iniciar_sesion.LoginFragment"
+        android:name="com.emmanuel.chancita.ui.iniciar_sesion.InicioSesionFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_iniciar_sesion" >
         <action
@@ -40,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.emmanuel.chancita.ui.crear_cuenta.RegisterFragment"
+        android:name="com.emmanuel.chancita.ui.crear_cuenta.CrearCuentaFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_crear_cuenta" >
         <action
@@ -53,7 +53,7 @@
     </fragment>
     <fragment
         android:id="@+id/resetPasswordFragment"
-        android:name="com.emmanuel.chancita.ui.restablecer_contraseña.ResetPasswordFragment"
+        android:name="com.emmanuel.chancita.ui.restablecer_contraseña.RestablecerContraseñaFragment"
         android:label="fragment_reset_password"
         tools:layout="@layout/fragment_restablecer_contrasena" >
         <action

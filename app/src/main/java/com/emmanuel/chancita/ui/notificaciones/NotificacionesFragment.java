@@ -22,13 +22,13 @@ import com.emmanuel.chancita.ui.notificaciones.adapters.NotificacionAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NotificationsFragment extends Fragment {
+public class NotificacionesFragment extends Fragment {
 
-    private NotificationsViewModel mViewModel;
+    private NotificacionesViewModel mViewModel;
     private SharedViewModel sharedViewModel;
 
-    public static NotificationsFragment newInstance() {
-        return new NotificationsFragment();
+    public static NotificacionesFragment newInstance() {
+        return new NotificacionesFragment();
     }
 
     @Override

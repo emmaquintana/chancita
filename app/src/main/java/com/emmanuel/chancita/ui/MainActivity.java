@@ -1,5 +1,8 @@
 package com.emmanuel.chancita.ui;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +23,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.emmanuel.chancita.databinding.ActivityMainBinding;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -67,7 +71,20 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_sign_out) {
-            Toast.makeText(this, "About", Toast.LENGTH_SHORT).show();
+            // Cierra la sesión en Firebase
+            FirebaseAuth.getInstance().signOut();
+
+            // Borra la preferencia de usuario
+            SharedPreferences sharedPreferences = getSharedPreferences("user_session", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("is_logged_in", false);
+            editor.apply();
+
+            // Navega a la actividad de autenticación
+            Intent intent = new Intent(this, AuthActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
         }
 
         return super.onOptionsItemSelected(item);

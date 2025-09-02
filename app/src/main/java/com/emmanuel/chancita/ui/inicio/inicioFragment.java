@@ -30,13 +30,13 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeFragment extends Fragment {
+public class inicioFragment extends Fragment {
 
-    private HomeViewModel mViewModel;
+    private InicioViewModel mViewModel;
     private SharedViewModel sharedViewModel;
 
-    public static HomeFragment newInstance() {
-        return new HomeFragment();
+    public static inicioFragment newInstance() {
+        return new inicioFragment();
     }
 
     @Override
