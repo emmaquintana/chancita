@@ -12,13 +12,10 @@ import com.emmanuel.chancita.data.dto.UsuarioDTO;
 import com.emmanuel.chancita.data.model.Organizador;
 import com.emmanuel.chancita.data.model.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.firebase.Timestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -103,6 +100,11 @@ public class UsuarioRepository {
                 null
         );
         usuarioDAO.crearUsuario(usuario, listener);
+    }
+
+    public void actualizarUsuarioActual(String nombre, String apellido, String correo, String nroCelular,
+                                        OnCompleteListener<Void> listener) {
+        usuarioDAO.actualizarUsuarioActual(nombre, apellido, correo, nroCelular, listener);
     }
 
     public void eliminarUsuario(String usuarioId, OnCompleteListener<Void> listener) {

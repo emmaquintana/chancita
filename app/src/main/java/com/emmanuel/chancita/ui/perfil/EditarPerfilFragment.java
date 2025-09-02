@@ -5,70 +5,62 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.emmanuel.chancita.R;
-import com.emmanuel.chancita.data.model.Usuario;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 public class EditarPerfilFragment extends Fragment {
 
-    private EditarPerfilViewModel mViewModel;
-    private Usuario usuario;
-
-    public static EditarPerfilFragment newInstance() {
-        return new EditarPerfilFragment();
-    }
+    private PerfilViewModel perfilViewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Se deben recuperar los datos del usuario actual con tal de presentar los campos pre rellenados
-        usuario = obtenerUsuario("id");
+        perfilViewModel = new ViewModelProvider(requireActivity()).get(PerfilViewModel.class);
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_editar_perfil, container, false);
+        View view = inflater.inflate(R.layout.fragment_editar_perfil, container, false);
+
+        return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-        TextInputEditText nombreCompleto = view.findViewById(R.id.editar_perfil_tiet_nombre_completo);
-        TextInputEditText apellidoCompleto = view.findViewById(R.id.editar_perfil_tiet_apellido_completo);
-        TextInputEditText correoElectronico = view.findViewById(R.id.editar_perfil_tiet_email);
-        TextInputEditText nroCelular = view.findViewById(R.id.editar_perfil_tiet_nro_celular);
-
-        nombreCompleto.setText(usuario.getNombre());
-        apellidoCompleto.setText(usuario.getApellido());
-        correoElectronico.setText(usuario.getCorreo());
-        nroCelular.setText(usuario.getNroCelular());
-
         MaterialButton btnGuardarCambios = view.findViewById(R.id.editar_perfil_btn_guardar_cambios);
+        TextInputEditText tietNombreCompleto = view.findViewById(R.id.editar_perfil_tiet_nombre_completo);
+        TextInputEditText tietApellidoCompleto = view.findViewById(R.id.editar_perfil_tiet_apellido_completo);
+        TextInputEditText tietCorreoElectronico = view.findViewById(R.id.editar_perfil_tiet_email);
+        TextInputEditText tietNroCelular = view.findViewById(R.id.editar_perfil_tiet_nro_celular);
+
+        perfilViewModel.obtenerUsuarioActual().observe(getViewLifecycleOwner(), usuario -> {
+            tietNombreCompleto.setText(usuario.getNombre());
+            tietApellidoCompleto.setText(usuario.getApellido());
+            tietCorreoElectronico.setText(usuario.getCorreo());
+            tietNroCelular.setText(usuario.getNroCelular());
+        });
 
         btnGuardarCambios.setOnClickListener(v -> {
-            // Guardar cambios
-            // ...
+            String nombre = tietNombreCompleto.getText().toString();
+            String apellido = tietApellidoCompleto.getText().toString();
+            String correo = tietCorreoElectronico.getText().toString();
+            String numCelular = tietNroCelular.getText().toString();
 
-            // Finaliza la actividad actual, volviendo "hacia atrás"
-            requireActivity().finish();
+            perfilViewModel.actualizarUsuarioActual(nombre, apellido, correo, numCelular);
         });
-    }
 
-    private Usuario obtenerUsuario(String id) {
-        // Usuario de prueba (debería ser una llamada a Firestore)
-        Usuario usuario = new Usuario(id, "juanperez@gmail.com", "juan", "perez", "+5493854877069", "123456", LocalDate.of(2003, 07, 03), LocalDateTime.now(), null);
-
-        return usuario;
+        perfilViewModel.resultadoActualizacion.observe(getViewLifecycleOwner(), mensaje -> {
+            Toast.makeText(requireContext(), mensaje, Toast.LENGTH_SHORT).show();
+        });
     }
 }

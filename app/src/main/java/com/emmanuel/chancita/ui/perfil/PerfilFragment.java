@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.emmanuel.chancita.R;
+import com.emmanuel.chancita.data.model.Usuario;
 import com.emmanuel.chancita.ui.SharedViewModel;
 import com.emmanuel.chancita.utils.Utilidades;
 import com.google.android.material.button.MaterialButton;
@@ -24,6 +25,10 @@ public class PerfilFragment extends Fragment {
 
     private PerfilViewModel perfilViewModel;
     private SharedViewModel sharedViewModel;
+    private TextView nombreApellido;
+    private TextView edad;
+    private TextView correoElectronico;
+    private TextView numeroCelular;
 
     public static PerfilFragment newInstance() {
         return new PerfilFragment();
@@ -44,22 +49,28 @@ public class PerfilFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        perfilViewModel.obtenerUsuarioActual().observe(getViewLifecycleOwner(), usuario -> {
+            if (usuario != null) {
+                actualizarUI(usuario);
+            }
+        });
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         sharedViewModel.setToolbarTitle("Perfil");
 
-        TextView nombreApellido = view.findViewById(R.id.perfil_txt_nombre_completo);
-        TextView edad = view.findViewById(R.id.perfil_txt_edad);
-        TextView correoElectronico = view.findViewById(R.id.perfil_txt_email);
-        TextView numeroCelular = view.findViewById(R.id.perfil_txt_celular);
+        nombreApellido = view.findViewById(R.id.perfil_txt_nombre_completo);
+        edad = view.findViewById(R.id.perfil_txt_edad);
+        correoElectronico = view.findViewById(R.id.perfil_txt_email);
+        numeroCelular = view.findViewById(R.id.perfil_txt_celular);
         MaterialButton btnEditarPerfil = view.findViewById(R.id.perfil_btn_editar);
 
-        perfilViewModel.getUsuarioActual().observe(getViewLifecycleOwner(), usuario -> {
+        perfilViewModel.obtenerUsuarioActual().observe(getViewLifecycleOwner(), usuario -> {
             if (usuario != null) {
-                // Actualizar los TextViews con los datos del usuario
-                nombreApellido.setText(usuario.getNombre() + " " + usuario.getApellido());
-                edad.setText(Utilidades.calcularEdad(usuario.getFechaNacimiento()) + " años");
-                correoElectronico.setText(usuario.getCorreo());
-                numeroCelular.setText(usuario.getNroCelular());
+                actualizarUI(usuario);
             }
             else {
                 Log.println(Log.WARN, "WARN", "USUARIO NULO");
@@ -70,5 +81,12 @@ public class PerfilFragment extends Fragment {
             Intent intent = new Intent(requireActivity(), EditarPerfilActivity.class);
             startActivity(intent);
         });
+    }
+
+    private void actualizarUI(Usuario usuario) {
+        nombreApellido.setText(usuario.getNombre() + " " + usuario.getApellido());
+        edad.setText(Utilidades.calcularEdad(usuario.getFechaNacimiento()) + " años");
+        correoElectronico.setText(usuario.getCorreo());
+        numeroCelular.setText(usuario.getNroCelular());
     }
 }

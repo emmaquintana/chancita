@@ -83,7 +83,12 @@ public class CrearCuentaFragment extends Fragment {
 
     private void setupObservers() {
         crearCuentaViewModel.estaRegistrandose.observe(getViewLifecycleOwner(), isRegistering -> {
-            // Manejar el estado de carga, por ejemplo, mostrando un ProgressBar
+            if (isRegistering) {
+                // Botón cargando y deshabilitado
+            }
+            else {
+                // Botón normal
+            }
         });
 
         crearCuentaViewModel.resultadoRegistro.observe(getViewLifecycleOwner(), result -> {

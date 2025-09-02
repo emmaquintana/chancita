@@ -99,6 +99,47 @@ public class UsuarioDAO {
                 });
     }
 
+    /**
+     * Actualiza los datos del usuario actual en Firestore y su correo en Auth si cambia.
+     */
+    public void actualizarUsuarioActual(String nuevoNombre, String nuevoApellido, String nuevoCorreo,
+                                        String nuevoNroCelular, OnCompleteListener<Void> listener) {
+
+        FirebaseUser firebaseUser = auth.getCurrentUser();
+        if (firebaseUser == null) {
+            listener.onComplete(Tasks.forException(new Exception("No hay usuario logueado")));
+            return;
+        }
+
+        String userId = firebaseUser.getUid();
+        Map<String, Object> campos = new HashMap<>();
+        campos.put("nombre", nuevoNombre);
+        campos.put("apellido", nuevoApellido);
+        campos.put("nroCelular", nuevoNroCelular);
+
+        // Actualizar correo en Auth si cambió
+        Task<Void> authTask;
+        if (!firebaseUser.getEmail().equals(nuevoCorreo)) {
+            authTask = firebaseUser.updateEmail(nuevoCorreo);
+        } else {
+            authTask = Tasks.forResult(null);
+        }
+
+        authTask.addOnCompleteListener(authResult -> {
+            if (authResult.isSuccessful()) {
+                // Actualizar Firestore
+                campos.put("correo", nuevoCorreo);
+                db.collection("usuarios")
+                        .document(userId)
+                        .update(campos)
+                        .addOnCompleteListener(listener);
+            } else {
+                // Error al actualizar Auth
+                listener.onComplete(Tasks.forException(authResult.getException()));
+            }
+        });
+    }
+
     public void eliminarUsuario(String usuarioId, OnCompleteListener<Void> listener) {
         db.collection("usuarios").document(usuarioId)
                 .delete()
