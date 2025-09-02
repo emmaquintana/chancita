@@ -71,12 +71,8 @@ public class inicioFragment extends Fragment {
         RecyclerView rvRifasUnidas = view.findViewById(R.id.recycler_view_rifas_unidas);
 
         List<Rifa> rifasCreadas = new ArrayList<>();
-        rifasCreadas.add(new Rifa("id1", "Salvemos a Pepito", "Descripción", "user2", RifaEstado.SORTEADO, LocalDateTime.now(), "PEPITO2025", MetodoEleccionGanador.ALEATORIO,null,LocalDateTime.of(2025, 7, 15, 0,0,0), 5.0));
 
         List<Rifa> rifasUnidas = new ArrayList<>();
-        rifasUnidas.add(new Rifa("id3", "Salvemos a Pepito", "Descripción", "user2", RifaEstado.SORTEADO, LocalDateTime.now(), "PEPITO2025", MetodoEleccionGanador.ALEATORIO,null,LocalDateTime.of(2025, 7, 15, 0,0,0), 5.0));
-        rifasUnidas.add(new Rifa("id4", "Salvemos a Pepito 2", "Descripción", "user2", RifaEstado.SORTEADO, LocalDateTime.now(), "PEPITO2025",  MetodoEleccionGanador.ALEATORIO,null,LocalDateTime.of(2025, 8, 15,0,0), 5.0));
-        rifasUnidas.add(new Rifa("id5", "Salvemos a Pepito 3", "Descripción", "user2", RifaEstado.ABIERTO, LocalDateTime.now(), "PEPITO2025",  MetodoEleccionGanador.ALEATORIO,null,LocalDateTime.of(2025, 9, 15,0,0), 5.0));
 
         // Si hay rifas creadas, se las muestra
         if (rifasCreadas.size() != 0) {
