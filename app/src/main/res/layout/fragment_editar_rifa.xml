@@ -157,102 +157,28 @@
                     android:focusable="false" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:id="@+id/editar_rifa_premio_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:text="Premio 1"
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editar_rifa_til_fecha_sorteo" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/editar_rifa_til_premio1_titulo"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/editar_rifa_rv_ingreso_premios"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/titulo"
+                app:layout_constraintTop_toBottomOf="@id/editar_rifa_til_fecha_sorteo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editar_rifa_premio_1">
+                tools:listitem="@layout/layout_ingreso_premio"
+                tools:itemCount="2"
+                tools:layout_editor_absoluteY="16dp" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editar_rifa_tiet_premio1_titulo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/editar_rifa_til_premio1_descripcion"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/editar_rifa_btn_guardar_cambios"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="56dp"
+                android:text="@string/guardar_cambios"
                 android:layout_marginTop="16dp"
-                android:hint="@string/descripcion_opcional"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editar_rifa_til_premio1_titulo">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editar_rifa_tiet_premio1_descripcion"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="top"
-                    android:inputType="textMultiLine"
-                    android:lines="3" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
-                android:id="@+id/editar_rifa_premio_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="Premio 2"
-                android:textColor="?attr/colorOnSurface"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editar_rifa_til_premio1_descripcion" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/editar_rifa_til_premio2_titulo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/titulo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editar_rifa_premio_2">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editar_rifa_tiet_premio2_titulo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/editar_rifa_til_premio2_descripcion"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:hint="@string/descripcion_opcional"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editar_rifa_til_premio2_titulo">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editar_rifa_tiet_premio2_descripcion"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="top"
-                    android:inputType="textMultiLine"
-                    android:lines="3" />
-            </com.google.android.material.textfield.TextInputLayout>
-
+                app:layout_constraintTop_toBottomOf="@+id/editar_rifa_rv_ingreso_premios" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </androidx.core.widget.NestedScrollView>
 </FrameLayout>
