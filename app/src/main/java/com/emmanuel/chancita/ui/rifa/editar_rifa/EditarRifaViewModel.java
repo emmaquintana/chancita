@@ -1,4 +1,4 @@
-package com.emmanuel.chancita.ui.rifa;
+package com.emmanuel.chancita.ui.rifa.editar_rifa;
 
 import androidx.lifecycle.ViewModel;
 

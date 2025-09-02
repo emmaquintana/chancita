@@ -1,4 +1,4 @@
-package com.emmanuel.chancita.ui.crear_rifa;
+package com.emmanuel.chancita.ui.rifa.crear_rifa;
 
 import android.os.Bundle;
 

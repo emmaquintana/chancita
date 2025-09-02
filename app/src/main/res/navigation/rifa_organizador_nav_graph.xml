@@ -6,7 +6,7 @@
     app:startDestination="@id/rifaOrganizadorFragment">
     <fragment
         android:id="@+id/editarRifaFragment"
-        android:name="com.emmanuel.chancita.ui.rifa.EditarRifaFragment"
+        android:name="com.emmanuel.chancita.ui.rifa.editar_rifa.EditarRifaFragment"
         android:label="fragment_editar_rifa"
         tools:layout="@layout/fragment_editar_rifa" />
     <fragment

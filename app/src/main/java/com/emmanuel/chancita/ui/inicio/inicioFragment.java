@@ -21,7 +21,7 @@ import com.emmanuel.chancita.data.model.MetodoEleccionGanador;
 import com.emmanuel.chancita.data.model.Rifa;
 import com.emmanuel.chancita.data.model.RifaEstado;
 import com.emmanuel.chancita.ui.SharedViewModel;
-import com.emmanuel.chancita.ui.crear_rifa.CrearRifaActivity;
+import com.emmanuel.chancita.ui.rifa.crear_rifa.CrearRifaActivity;
 import com.emmanuel.chancita.ui.inicio.adapters.RifaAdapter;
 import com.emmanuel.chancita.ui.rifa.RifaOrganizadorActivity;
 import com.emmanuel.chancita.ui.rifa.RifaParticipanteActivity;

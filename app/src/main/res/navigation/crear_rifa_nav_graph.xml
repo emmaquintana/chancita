@@ -6,7 +6,7 @@
     app:startDestination="@id/crearRifaPaso1Fragment">
     <fragment
         android:id="@+id/crearRifaPaso1Fragment"
-        android:name="com.emmanuel.chancita.ui.crear_rifa.CrearRifaPaso1Fragment"
+        android:name="com.emmanuel.chancita.ui.rifa.crear_rifa.CrearRifaPaso1Fragment"
         android:label="fragment_crear_rifa_paso1"
         tools:layout="@layout/fragment_crear_rifa_paso1" >
         <action
@@ -15,7 +15,7 @@
     </fragment>
     <fragment
         android:id="@+id/crearRifaPaso2Fragment"
-        android:name="com.emmanuel.chancita.ui.crear_rifa.CrearRifaPaso2Fragment"
+        android:name="com.emmanuel.chancita.ui.rifa.crear_rifa.CrearRifaPaso2Fragment"
         android:label="fragment_crear_rifa_paso2"
         tools:layout="@layout/fragment_crear_rifa_paso2" >
         <action
@@ -24,7 +24,7 @@
     </fragment>
     <fragment
         android:id="@+id/crearRifaPaso3Fragment"
-        android:name="com.emmanuel.chancita.ui.crear_rifa.CrearRifaPaso3Fragment"
+        android:name="com.emmanuel.chancita.ui.rifa.crear_rifa.CrearRifaPaso3Fragment"
         android:label="fragment_crear_rifa_paso3"
         tools:layout="@layout/fragment_crear_rifa_paso3" >
         <action
@@ -33,7 +33,7 @@
     </fragment>
     <fragment
         android:id="@+id/crearRifaPaso4Fragment"
-        android:name="com.emmanuel.chancita.ui.crear_rifa.CrearRifaPaso4Fragment"
+        android:name="com.emmanuel.chancita.ui.rifa.crear_rifa.CrearRifaPaso4Fragment"
         android:label="fragment_crear_rifa_paso4"
         tools:layout="@layout/fragment_crear_rifa_paso4" >
         <action
@@ -42,7 +42,7 @@
     </fragment>
     <fragment
         android:id="@+id/crearRifaPaso5Fragment"
-        android:name="com.emmanuel.chancita.ui.crear_rifa.CrearRifaPaso5Fragment"
+        android:name="com.emmanuel.chancita.ui.rifa.crear_rifa.CrearRifaPaso5Fragment"
         android:label="fragment_crear_rifa_paso5"
         tools:layout="@layout/fragment_crear_rifa_paso5" />
 </navigation>

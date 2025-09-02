@@ -22,7 +22,8 @@
             android:name=".ui.rifa.RifaOrganizadorActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.crear_rifa.CrearRifaActivity"
+            android:name=".ui.rifa.crear_rifa.CrearRifaActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
             android:name=".ui.MainActivity"

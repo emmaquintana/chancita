@@ -1,4 +1,4 @@
-package com.emmanuel.chancita.ui.crear_rifa;
+package com.emmanuel.chancita.ui.rifa.crear_rifa;
 
 import android.os.Bundle;
 
@@ -15,19 +15,19 @@ import android.widget.Button;
 
 import com.emmanuel.chancita.R;
 
-public class CrearRifaPaso2Fragment extends Fragment {
+public class CrearRifaPaso4Fragment extends Fragment {
 
-    private CrearRifaPaso2ViewModel mViewModel;
+    private CrearRifaPaso4ViewModel mViewModel;
     private NavController navController;
 
-    public static CrearRifaPaso2Fragment newInstance() {
-        return new CrearRifaPaso2Fragment();
+    public static CrearRifaPaso4Fragment newInstance() {
+        return new CrearRifaPaso4Fragment();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_crear_rifa_paso2, container, false);
+        return inflater.inflate(R.layout.fragment_crear_rifa_paso4, container, false);
     }
 
     @Override
@@ -38,10 +38,19 @@ public class CrearRifaPaso2Fragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Button btnContinuar = view.findViewById(R.id.crear_rifa_paso_2_btn_continuar);
+        Button btnContinuar = view.findViewById(R.id.crear_rifa_paso_4_btn_continuar);
+
+        boolean metodoDeterminista = true;
 
         btnContinuar.setOnClickListener(v -> {
-            navController.navigate(R.id.action_crearRifaPaso2Fragment_to_crearRifaPaso3Fragment);
+            if (metodoDeterminista) {
+                navController.navigate(R.id.action_crearRifaPaso4Fragment_to_crearRifaPaso5Fragment);
+            }
+            else {
+                // Muestra la rifa creada
+            }
+
         });
     }
+
 }
