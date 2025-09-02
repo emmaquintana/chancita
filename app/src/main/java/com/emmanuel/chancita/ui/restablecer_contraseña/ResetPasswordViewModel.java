@@ -1,4 +1,4 @@
-package com.emmanuel.chancita.ui.reset_password;
+package com.emmanuel.chancita.ui.restablecer_contraseña;
 
 import androidx.lifecycle.ViewModel;
 

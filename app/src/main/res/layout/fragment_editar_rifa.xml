@@ -17,11 +17,11 @@
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/txt_head_paso_2"
+                android:id="@+id/editar_rifa_txt_titulo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:text="Editar datos de la rifa"
+                android:text="@string/editar_datos_de_la_rifa"
                 android:textColor="?attr/colorOnSurface"
                 android:textSize="21sp"
                 android:textStyle="bold"
@@ -30,33 +30,33 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_titulo"
+                android:id="@+id/editar_rifa_til_titulo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Título"
+                android:hint="@string/titulo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_head_paso_2">
+                app:layout_constraintTop_toBottomOf="@+id/editar_rifa_txt_titulo">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tiet_titulo"
+                    android:id="@+id/editar_rifa_tiet_titulo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_descripcion"
+                android:id="@+id/editar_rifa_til_descripcion"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Descripción (opcional)"
-                app:layout_constraintTop_toBottomOf="@id/til_titulo"
+                android:hint="@string/descripcion_opcional"
+                app:layout_constraintTop_toBottomOf="@id/editar_rifa_til_titulo"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tiet_descripcion"
+                    android:id="@+id/editar_rifa_tiet_descripcion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="top"
@@ -65,73 +65,73 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_premios"
+                android:id="@+id/editar_rifa_til_premios"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Cant. de premios (mín. 1)"
+                android:hint="@string/cant_de_premios_min_1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/til_descripcion">
+                app:layout_constraintTop_toBottomOf="@id/editar_rifa_til_descripcion">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tiet_premios"
+                    android:id="@+id/editar_rifa_tiet_premios"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_precio"
+                android:id="@+id/editar_rifa_til_precio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Precio"
+                android:hint="@string/precio"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/til_numeros">
+                app:layout_constraintTop_toBottomOf="@+id/editar_rifa_til_numeros">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tiet_precio"
+                    android:id="@+id/editar_rifa_tiet_precio"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_numeros"
+                android:id="@+id/editar_rifa_til_numeros"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Cant. de números (máx. 200)"
+                android:hint="@string/cant_de_numeros_max_200"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/til_premios">
+                app:layout_constraintTop_toBottomOf="@id/editar_rifa_til_premios">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tiet_numeros"
+                    android:id="@+id/editar_rifa_tiet_numeros"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_fecha_sorteo"
+                android:id="@+id/editar_rifa_til_fecha_sorteo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Fecha de sorteo"
-                app:layout_constraintEnd_toStartOf="@id/til_hora_sorteo"
+                android:hint="@string/fecha_de_sorteo"
+                app:layout_constraintEnd_toStartOf="@id/editar_rifa_til_hora_sorteo"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/til_precio">
+                app:layout_constraintTop_toBottomOf="@+id/editar_rifa_til_precio">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tiet_fecha_sorteo"
+                    android:id="@+id/editar_rifa_tiet_fecha_sorteo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
@@ -139,18 +139,18 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_hora_sorteo"
+                android:id="@+id/editar_rifa_til_hora_sorteo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:hint="Hora de sorteo"
-                app:layout_constraintTop_toTopOf="@id/til_fecha_sorteo"
-                app:layout_constraintStart_toEndOf="@id/til_fecha_sorteo"
+                android:hint="@string/hora_de_sorteo"
+                app:layout_constraintTop_toTopOf="@id/editar_rifa_til_fecha_sorteo"
+                app:layout_constraintStart_toEndOf="@id/editar_rifa_til_fecha_sorteo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="packed">
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tiet_hora_sorteo"
+                    android:id="@+id/editar_rifa_tiet_hora_sorteo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
@@ -158,7 +158,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/editar_rifa_premio_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
@@ -167,36 +167,36 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/til_fecha_sorteo" />
+                app:layout_constraintTop_toBottomOf="@+id/editar_rifa_til_fecha_sorteo" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_premio1_titulo"
+                android:id="@+id/editar_rifa_til_premio1_titulo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Título"
+                android:hint="@string/titulo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView">
+                app:layout_constraintTop_toBottomOf="@+id/editar_rifa_premio_1">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tiet_premio1_titulo"
+                    android:id="@+id/editar_rifa_tiet_premio1_titulo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_premio1_descripcion"
+                android:id="@+id/editar_rifa_til_premio1_descripcion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Descripción (opcional)"
+                android:hint="@string/descripcion_opcional"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/til_premio1_titulo">
+                app:layout_constraintTop_toBottomOf="@+id/editar_rifa_til_premio1_titulo">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tiet_premio1_descripcion"
+                    android:id="@+id/editar_rifa_tiet_premio1_descripcion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="top"
@@ -205,7 +205,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/editar_rifa_premio_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
@@ -214,36 +214,36 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/til_premio1_descripcion" />
+                app:layout_constraintTop_toBottomOf="@+id/editar_rifa_til_premio1_descripcion" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_premio2_titulo"
+                android:id="@+id/editar_rifa_til_premio2_titulo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Título"
+                android:hint="@string/titulo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView2">
+                app:layout_constraintTop_toBottomOf="@+id/editar_rifa_premio_2">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tiet_premio2_titulo"
+                    android:id="@+id/editar_rifa_tiet_premio2_titulo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_premio2_descripcion"
+                android:id="@+id/editar_rifa_til_premio2_descripcion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Descripción (opcional)"
+                android:hint="@string/descripcion_opcional"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/til_premio2_titulo">
+                app:layout_constraintTop_toBottomOf="@+id/editar_rifa_til_premio2_titulo">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tiet_premio2_descripcion"
+                    android:id="@+id/editar_rifa_tiet_premio2_descripcion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="top"

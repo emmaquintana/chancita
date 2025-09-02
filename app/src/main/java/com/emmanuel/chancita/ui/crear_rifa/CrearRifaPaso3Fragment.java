@@ -40,7 +40,7 @@ public class CrearRifaPaso3Fragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Button btnContinuar = view.findViewById(R.id.btn_continuar_paso_3);
+        Button btnContinuar = view.findViewById(R.id.crear_rifa_paso_3_btn_continuar);
 
         btnContinuar.setOnClickListener(v -> {
             navController.navigate(R.id.action_crearRifaPaso3Fragment_to_crearRifaPaso4Fragment);

@@ -1,4 +1,4 @@
-package com.emmanuel.chancita.ui.register;
+package com.emmanuel.chancita.ui.crear_cuenta;
 
 import androidx.lifecycle.ViewModel;
 

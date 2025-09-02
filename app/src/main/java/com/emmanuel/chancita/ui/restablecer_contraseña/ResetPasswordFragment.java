@@ -1,4 +1,4 @@
-package com.emmanuel.chancita.ui.reset_password;
+package com.emmanuel.chancita.ui.restablecer_contraseña;
 
 import androidx.lifecycle.ViewModelProvider;
 
@@ -25,7 +25,7 @@ public class ResetPasswordFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_reset_password, container, false);
+        return inflater.inflate(R.layout.fragment_restablecer_contrasena, container, false);
     }
 
     @Override

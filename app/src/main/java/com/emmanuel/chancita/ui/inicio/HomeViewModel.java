@@ -1,4 +1,4 @@
-package com.emmanuel.chancita.ui.home;
+package com.emmanuel.chancita.ui.inicio;
 
 import androidx.lifecycle.ViewModel;
 

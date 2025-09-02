@@ -1,7 +1,5 @@
 package com.emmanuel.chancita.ui.crear_rifa;
 
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -43,7 +41,7 @@ public class CrearRifaPaso5Fragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Button btnContinuar = view.findViewById(R.id.btn_continuar_paso_5);
+        Button btnContinuar = view.findViewById(R.id.crear_rifa_paso_5_btn_continuar);
 
         btnContinuar.setOnClickListener(v -> {
             Intent intent = new Intent(requireActivity(), RifaOrganizadorActivity.class);

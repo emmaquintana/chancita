@@ -1,7 +1,5 @@
 package com.emmanuel.chancita.ui.crear_rifa;
 
-import androidx.lifecycle.ViewModelProvider;
-
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -40,7 +38,7 @@ public class CrearRifaPaso2Fragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Button btnContinuar = view.findViewById(R.id.btn_continuar_paso_2);
+        Button btnContinuar = view.findViewById(R.id.crear_rifa_paso_2_btn_continuar);
 
         btnContinuar.setOnClickListener(v -> {
             navController.navigate(R.id.action_crearRifaPaso2Fragment_to_crearRifaPaso3Fragment);

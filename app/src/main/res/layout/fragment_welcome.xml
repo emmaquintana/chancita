@@ -17,7 +17,7 @@
         <!-- Botón Registrarse -->
 
         <LinearLayout
-            android:id="@+id/logoContainer"
+            android:id="@+id/welcome_logo_contenedor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="136dp"
@@ -29,7 +29,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/logo"
+                android:id="@+id/welcome_logo"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:layout_marginEnd="8dp"
@@ -37,7 +37,7 @@
                 app:tint="@color/md_theme_primary" />
 
             <TextView
-                android:id="@+id/txt_appName"
+                android:id="@+id/welcome_txt_app_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/app_name"
@@ -47,7 +47,7 @@
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_iniciarSesion"
+            android:id="@+id/welcome_btn_iniciar_sesion"
             android:layout_width="0dp"
             android:layout_height="56dp"
             android:layout_marginStart="16dp"
@@ -56,13 +56,13 @@
             android:text="@string/iniciar_sesion"
             android:textSize="20sp"
             app:cornerRadius="999dp"
-            app:layout_constraintBottom_toTopOf="@+id/btn_Registrarse"
+            app:layout_constraintBottom_toTopOf="@+id/welcome_btn_crear_cuenta"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_Registrarse"
+            android:id="@+id/welcome_btn_crear_cuenta"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="0dp"
             android:layout_height="56dp"

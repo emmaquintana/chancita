@@ -1,4 +1,4 @@
-package com.emmanuel.chancita.ui.notifications;
+package com.emmanuel.chancita.ui.notificaciones;
 
 import androidx.lifecycle.ViewModelProvider;
 
@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 import com.emmanuel.chancita.R;
 import com.emmanuel.chancita.data.model.Notificacion;
 import com.emmanuel.chancita.ui.SharedViewModel;
-import com.emmanuel.chancita.ui.notifications.adapters.NotificacionAdapter;
+import com.emmanuel.chancita.ui.notificaciones.adapters.NotificacionAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +41,7 @@ public class NotificationsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_notifications, container, false);
+        View view = inflater.inflate(R.layout.fragment_notificaciones, container, false);
 
         inflarNotificaciones(view);
 

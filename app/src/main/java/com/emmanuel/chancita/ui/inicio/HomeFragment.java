@@ -1,4 +1,4 @@
-package com.emmanuel.chancita.ui.home;
+package com.emmanuel.chancita.ui.inicio;
 
 import androidx.lifecycle.ViewModelProvider;
 
@@ -22,12 +22,10 @@ import com.emmanuel.chancita.data.model.Rifa;
 import com.emmanuel.chancita.data.model.RifaEstado;
 import com.emmanuel.chancita.ui.SharedViewModel;
 import com.emmanuel.chancita.ui.crear_rifa.CrearRifaActivity;
-import com.emmanuel.chancita.ui.home.adapters.RifaAdapter;
+import com.emmanuel.chancita.ui.inicio.adapters.RifaAdapter;
 import com.emmanuel.chancita.ui.rifa.RifaOrganizadorActivity;
 import com.emmanuel.chancita.ui.rifa.RifaParticipanteActivity;
-import com.google.android.material.card.MaterialCardView;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,14 +49,14 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        return inflater.inflate(R.layout.fragment_inicio, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         sharedViewModel.setToolbarTitle("Inicio");
 
-        TextView btnCrearRifa = view.findViewById(R.id.btn_create_raffle);
+        TextView btnCrearRifa = view.findViewById(R.id.inicio_btn_crear_rifa);
 
         btnCrearRifa.setOnClickListener(view1 -> {
             Intent intent = new Intent(requireActivity(), CrearRifaActivity.class);

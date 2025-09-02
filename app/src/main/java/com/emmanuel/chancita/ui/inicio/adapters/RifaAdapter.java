@@ -1,4 +1,4 @@
-package com.emmanuel.chancita.ui.home.adapters; // Cambia el paquete a tu ruta
+package com.emmanuel.chancita.ui.inicio.adapters; // Cambia el paquete a tu ruta
 
 import android.view.LayoutInflater;
 import android.view.View;

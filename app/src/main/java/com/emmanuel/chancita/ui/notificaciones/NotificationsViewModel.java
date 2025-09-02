@@ -1,4 +1,4 @@
-package com.emmanuel.chancita.ui.notifications;
+package com.emmanuel.chancita.ui.notificaciones;
 
 import androidx.lifecycle.ViewModel;
 

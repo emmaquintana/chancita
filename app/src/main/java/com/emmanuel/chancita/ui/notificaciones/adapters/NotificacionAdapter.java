@@ -1,4 +1,4 @@
-package com.emmanuel.chancita.ui.notifications.adapters;
+package com.emmanuel.chancita.ui.notificaciones.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;

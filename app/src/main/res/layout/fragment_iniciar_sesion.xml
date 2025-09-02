@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.login.LoginFragment">
+    tools:context=".ui.iniciar_sesion.LoginFragment">
 
 
     <androidx.core.widget.NestedScrollView
@@ -18,11 +18,11 @@
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/txt_titulo"
+                android:id="@+id/login_txt_titulo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:text="Iniciar Sesión"
+                android:text="@string/iniciar_sesion"
                 android:textColor="?attr/colorOnSurface"
                 android:textSize="28sp"
                 android:textStyle="bold"
@@ -31,73 +31,73 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_email"
+                android:id="@+id/login_til_email"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="48dp"
-                android:hint="Correo electrónico"
+                android:hint="@string/correo_electronico"
                 app:boxStrokeColor="@color/text_input_selector"
                 app:hintTextColor="@color/text_input_selector"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_titulo">
+                app:layout_constraintTop_toBottomOf="@id/login_txt_titulo">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tiet_email"
+                    android:id="@+id/login_tiet_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_password"
+                android:id="@+id/login_til_password"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Contraseña"
+                android:hint="@string/contraseña"
                 app:boxStrokeColor="@color/text_input_selector"
                 app:hintTextColor="@color/text_input_selector"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/til_email"
+                app:layout_constraintTop_toBottomOf="@id/login_til_email"
                 app:passwordToggleTint="?attr/colorOnSurface"
                 app:passwordToggleEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tiet_password"
+                    android:id="@+id/login_tiet_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:id="@+id/txt_forgot_password"
+                android:id="@+id/login_txt_contraseña_olvidada"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="¿Olvidaste tu contraseña?"
+                android:text="@string/olvidaste_tu_contraseña"
                 android:textColor="@color/md_theme_primary"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/til_password" />
+                app:layout_constraintTop_toBottomOf="@id/login_til_password" />
 
             <CheckBox
-                android:id="@+id/cb_remember_me"
+                android:id="@+id/login_cb_recordarme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:checked="true"
-                android:text="Mantener sesión iniciada"
+                android:text="@string/mantener_sesion_iniciada"
                 android:textColor="?attr/colorOnSurface"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_forgot_password" />
+                app:layout_constraintTop_toBottomOf="@id/login_txt_contraseña_olvidada" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_continuar_inicio_sesion"
+                android:id="@+id/login_btn_continuar"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
-                android:text="Continuar"
+                android:text="@string/continuar"
                 android:textSize="18sp"
                 app:cornerRadius="28dp"
                 app:layout_constraintBottom_toBottomOf="parent"

@@ -6,7 +6,7 @@
     app:startDestination="@id/editarPerfilFragment">
     <fragment
         android:id="@+id/editarPerfilFragment"
-        android:name="com.emmanuel.chancita.ui.profile.EditarPerfilFragment"
+        android:name="com.emmanuel.chancita.ui.perfil.EditarPerfilFragment"
         android:label="fragment_editar_perfil"
         tools:layout="@layout/fragment_editar_perfil" />
 </navigation>

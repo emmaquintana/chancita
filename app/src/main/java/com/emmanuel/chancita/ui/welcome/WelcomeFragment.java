@@ -1,18 +1,13 @@
 package com.emmanuel.chancita.ui.welcome;
 
-import androidx.lifecycle.ViewModelProvider;
-
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,8 +39,8 @@ public class WelcomeFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Button btnIniciarSesion = view.findViewById(R.id.btn_iniciarSesion);
-        Button btnRegistrarse = view.findViewById(R.id.btn_Registrarse);
+        Button btnIniciarSesion = view.findViewById(R.id.welcome_btn_iniciar_sesion);
+        Button btnRegistrarse = view.findViewById(R.id.welcome_btn_crear_cuenta);
 
         btnIniciarSesion.setOnClickListener(v -> {
             navController.navigate(R.id.action_welcomeFragment_to_loginFragment);

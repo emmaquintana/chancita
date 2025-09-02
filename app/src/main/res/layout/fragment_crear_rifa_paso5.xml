@@ -17,11 +17,11 @@
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/txt_head_paso_5"
+                android:id="@+id/crear_rifa_paso_5_txt_head"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Escribe una breve y concisa descripción de cómo escogerás los números ganadores."
+                android:text="@string/crear_rifa_paso_5_titulo"
                 android:textColor="@android:color/black"
                 android:textSize="21sp"
                 android:textStyle="bold"
@@ -30,31 +30,31 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/txt_ejemplo"
+                android:id="@+id/crear_rifa_paso_5_txt_ejemplo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Por ej.: Tómbola del día 27/7/2025"
+                android:text="@string/crear_rifa_paso_5_ejemplo"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_head_paso_5" />
+                app:layout_constraintTop_toBottomOf="@id/crear_rifa_paso_5_txt_head" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_raffle_method_description"
+                android:id="@+id/crear_rifa_paso_5_til_descripcion_metodo"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
-                android:hint="Descripción de la rifa"
-                app:layout_constraintBottom_toTopOf="@id/btn_continuar_paso_5"
+                android:hint="@string/descripcion_de_la_rifa"
+                app:layout_constraintBottom_toTopOf="@id/crear_rifa_paso_5_btn_continuar"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_ejemplo">
+                app:layout_constraintTop_toBottomOf="@id/crear_rifa_paso_5_txt_ejemplo">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tiet_metodo_rifa_descripcion"
+                    android:id="@+id/crear_rifa_paso_5_tiet_descripcion_metodo"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="top"
@@ -62,10 +62,10 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_continuar_paso_5"
+                android:id="@+id/crear_rifa_paso_5_btn_continuar"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
-                android:text="Continuar"
+                android:text="@string/continuar"
                 android:textSize="18sp"
                 app:cornerRadius="28dp"
                 app:layout_constraintBottom_toBottomOf="parent"

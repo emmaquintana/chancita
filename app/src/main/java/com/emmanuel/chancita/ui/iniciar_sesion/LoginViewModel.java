@@ -1,4 +1,4 @@
-package com.emmanuel.chancita.ui.login;
+package com.emmanuel.chancita.ui.iniciar_sesion;
 
 import androidx.lifecycle.ViewModel;
 

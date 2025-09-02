@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.HomeFragment">
+    tools:context=".ui.inicio.HomeFragment">
 
 
     <androidx.core.widget.NestedScrollView
@@ -28,7 +28,7 @@
                 android:textColor="?attr/colorOnSurface" />
 
             <TextView
-                android:id="@+id/btn_create_raffle"
+                android:id="@+id/inicio_btn_crear_rifa"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
@@ -65,7 +65,7 @@
                 android:textColor="?attr/colorOnSurface" />
 
             <TextView
-                android:id="@+id/btn_join_raffle"
+                android:id="@+id/inicio_btn_unirse_a_rifa"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"

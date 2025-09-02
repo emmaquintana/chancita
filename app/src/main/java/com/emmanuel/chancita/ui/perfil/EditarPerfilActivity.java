@@ -1,4 +1,4 @@
-package com.emmanuel.chancita.ui.profile;
+package com.emmanuel.chancita.ui.perfil;
 
 import android.os.Bundle;
 

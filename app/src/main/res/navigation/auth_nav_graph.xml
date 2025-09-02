@@ -27,9 +27,9 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.emmanuel.chancita.ui.login.LoginFragment"
+        android:name="com.emmanuel.chancita.ui.iniciar_sesion.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
+        tools:layout="@layout/fragment_iniciar_sesion" >
         <action
             android:id="@+id/action_loginFragment_to_resetPasswordFragment"
             app:destination="@id/resetPasswordFragment"
@@ -40,9 +40,9 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.emmanuel.chancita.ui.register.RegisterFragment"
+        android:name="com.emmanuel.chancita.ui.crear_cuenta.RegisterFragment"
         android:label="fragment_register"
-        tools:layout="@layout/fragment_register" >
+        tools:layout="@layout/fragment_crear_cuenta" >
         <action
             android:id="@+id/action_registerFragment_to_welcomeFragment"
             app:destination="@id/welcomeFragment"
@@ -53,9 +53,9 @@
     </fragment>
     <fragment
         android:id="@+id/resetPasswordFragment"
-        android:name="com.emmanuel.chancita.ui.reset_password.ResetPasswordFragment"
+        android:name="com.emmanuel.chancita.ui.restablecer_contraseña.ResetPasswordFragment"
         android:label="fragment_reset_password"
-        tools:layout="@layout/fragment_reset_password" >
+        tools:layout="@layout/fragment_restablecer_contrasena" >
         <action
             android:id="@+id/action_resetPasswordFragment_to_loginFragment"
             app:destination="@id/loginFragment"

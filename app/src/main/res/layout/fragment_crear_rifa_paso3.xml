@@ -18,11 +18,11 @@
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/txt_head_paso_3"
+                android:id="@+id/crear_rifa_paso_3_txt_titulo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:text="Ingresa información de los premios"
+                android:text="@string/ingresa_informacion_de_los_premios"
                 android:textColor="?attr/colorOnSurface"
                 android:textSize="21sp"
                 android:textStyle="bold"
@@ -40,26 +40,26 @@
                 android:layout_marginTop="16dp" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_premio1_titulo"
+                android:id="@+id/crear_rifa_paso_3_til_premio1_titulo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:hint="Título">
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tiet_premio1_titulo"
+                    android:id="@+id/crear_rifa_paso_3_tiet_premio1_titulo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_premio1_descripcion"
+                android:id="@+id/crear_rifa_paso_3_til_premio1_descripcion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:hint="Descripción (opcional)">
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tiet_premio1_descripcion"
+                    android:id="@+id/crear_rifa_paso_3_tiet_premio1_descripcion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="top"
@@ -77,26 +77,26 @@
                 android:layout_marginTop="24dp" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_premio2_titulo"
+                android:id="@+id/crear_rifa_paso_3_til_premio2_titulo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:hint="Título">
+                android:hint="@string/titulo">
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tiet_premio2_titulo"
+                    android:id="@+id/crear_rifa_paso_3_tiet_premio2_titulo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_premio2_descripcion"
+                android:id="@+id/crear_rifa_paso_3_til_premio2_descripcion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:hint="Descripción (opcional)">
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/tiet_premio2_descripcion"
+                    android:id="@+id/crear_rifa_paso_3_tiet_premio2_descripcion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="top"
@@ -110,11 +110,11 @@
                 android:layout_weight="1" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_continuar_paso_3"
+                android:id="@+id/crear_rifa_paso_3_btn_continuar"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginTop="16dp"
-                android:text="Continuar"
+                android:text="@string/continuar"
                 android:textSize="18sp"
                 app:cornerRadius="28dp" />
 

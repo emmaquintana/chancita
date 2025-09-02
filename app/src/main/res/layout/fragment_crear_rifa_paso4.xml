@@ -17,7 +17,7 @@
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/txt_head_paso_4"
+                android:id="@+id/crear_rifa_paso_4_txt_head"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -30,16 +30,16 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <RadioGroup
-                android:id="@+id/rg_metodo_seleccion"
+                android:id="@+id/crear_rifa_paso_4_rg_metodo_seleccion"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_head_paso_4">
+                app:layout_constraintTop_toBottomOf="@id/crear_rifa_paso_4_txt_head">
 
                 <RadioButton
-                    android:id="@+id/rb_aleatorio"
+                    android:id="@+id/crear_rifa_paso_4_rb_aleatorio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
@@ -47,7 +47,7 @@
                     android:textSize="16sp" />
 
                 <RadioButton
-                    android:id="@+id/rb_determinista"
+                    android:id="@+id/crear_rifa_paso_4_rb_determinista"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Determinista"
@@ -55,7 +55,7 @@
             </RadioGroup>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_continuar_paso_4"
+                android:id="@+id/crear_rifa_paso_4_btn_continuar"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:text="Continuar"
