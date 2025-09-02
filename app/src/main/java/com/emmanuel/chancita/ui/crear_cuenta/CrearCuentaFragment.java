@@ -14,6 +14,8 @@ import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
 import com.emmanuel.chancita.databinding.FragmentCrearCuentaBinding;
+import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.DateValidatorPointBackward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 
 import java.text.SimpleDateFormat;
@@ -65,7 +67,7 @@ public class CrearCuentaFragment extends Fragment {
     }
 
     private void setupListeners() {
-        binding.registrarseEtFechaNacimiento.setOnClickListener(v -> showDatePicker());
+        binding.registrarseEtFechaNacimiento.setOnClickListener(v -> mostrarDatePicker());
 
         binding.registrarseBtnContinuar.setOnClickListener(v -> {
             String nombre = binding.registrarseEtNombreCompleto.getText().toString();
@@ -86,14 +88,29 @@ public class CrearCuentaFragment extends Fragment {
 
         crearCuentaViewModel.resultadoRegistro.observe(getViewLifecycleOwner(), result -> {
             if (result != null) {
-                Toast.makeText(requireContext(), result, Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), result, Toast.LENGTH_LONG).show();
             }
         });
     }
 
-    private void showDatePicker() {
+    private void mostrarDatePicker() {
+        // Fecha máxima: hoy - 18 años
+        LocalDate hoy = LocalDate.now();
+        LocalDate fechaMax = hoy.minusYears(18);
+        LocalDate fechaMin = hoy.minusYears(150); // Alguien de >150 años no suele apostar .-.
+        long fechaMaxMillis = fechaMax.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli();
+
+        CalendarConstraints.Builder constraintsBuilder = new CalendarConstraints.Builder()
+                .setStart(fechaMin.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli())
+                .setEnd(fechaMax.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli())
+                .setValidator(DateValidatorPointBackward.before(
+                        fechaMax.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+                ));
+
         MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
                 .setTitleText("Selecciona tu fecha de nacimiento")
+                .setCalendarConstraints(constraintsBuilder.build())
+                .setSelection(fechaMaxMillis)
                 .build();
 
         datePicker.addOnPositiveButtonClickListener(selection -> {

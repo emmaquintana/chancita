@@ -3,6 +3,7 @@ package com.emmanuel.chancita.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -13,6 +14,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.emmanuel.chancita.R;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.Locale;
 
 public class AuthActivity extends AppCompatActivity {
 
@@ -26,6 +29,13 @@ public class AuthActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        Locale locale = new Locale("es");
+        Locale.setDefault(locale);
+        Configuration config = getResources().getConfiguration();
+        config.setLocale(locale);
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+
 
         SharedPreferences sharedPreferences = this.getSharedPreferences("user_session", Context.MODE_PRIVATE);
         boolean isLoggedIn = sharedPreferences.getBoolean("is_logged_in", false);

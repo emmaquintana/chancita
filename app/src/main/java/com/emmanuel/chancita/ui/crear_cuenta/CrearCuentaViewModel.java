@@ -1,11 +1,14 @@
 package com.emmanuel.chancita.ui.crear_cuenta;
 
+import android.util.Patterns;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.emmanuel.chancita.data.dto.UsuarioDTO;
 import com.emmanuel.chancita.data.repository.UsuarioRepository;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 
 import java.time.LocalDate;
 
@@ -41,7 +44,27 @@ public class CrearCuentaViewModel extends ViewModel {
 
         UsuarioDTO usuarioDto = new UsuarioDTO(nombre, apellido, correo, nroCelular, contraseña, fechaNacimiento, null, null);
 
-        usuarioRepository.crearUsuario(usuarioDto);
+        usuarioRepository.crearUsuario(usuarioDto, task -> {
+            _estaRegistrandose.postValue(false);
+            if (task.isSuccessful()) {
+                _resultadoRegistro.setValue("¡El usuario ha sido creado con éxito!");
+            }
+            else {
+                Exception e = task.getException();
+
+                if (e != null) {
+                    if (e instanceof FirebaseAuthUserCollisionException) {
+                        _resultadoRegistro.setValue("El correo ya está siendo usado por otra cuenta");
+                    }
+                    else {
+                        _resultadoRegistro.setValue("Error: " + e.getMessage());
+                    }
+                }
+                else {
+                    _resultadoRegistro.setValue("Algo salío mal");
+                }
+            }
+        });
     }
 
     private boolean validarEntrada(String nombre, String apellido, String correo, LocalDate fechaNacimiento, String nroCelular, String contraseña, String confirmarContraseña) {
@@ -55,6 +78,11 @@ public class CrearCuentaViewModel extends ViewModel {
             return false;
         }
 
+        if (!Patterns.PHONE.matcher(nroCelular).matches()) {
+            _resultadoRegistro.setValue(nroCelular + " no es un número válido");
+            return false;
+        }
+
         if (contraseña.length() < 6) {
             _resultadoRegistro.setValue("La contraseña debe tener al menos 6 caracteres.");
             return false;
@@ -64,7 +92,6 @@ public class CrearCuentaViewModel extends ViewModel {
             _resultadoRegistro.setValue("Las contraseñas no coinciden.");
             return false;
         }
-
         return true;
     }
 }

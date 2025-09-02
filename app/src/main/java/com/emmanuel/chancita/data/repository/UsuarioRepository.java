@@ -89,7 +89,7 @@ public class UsuarioRepository {
         return liveData;
     }
 
-    public void crearUsuario(UsuarioDTO usuarioDto) {
+    public void crearUsuario(UsuarioDTO usuarioDto, OnCompleteListener<Void> listener) {
         // Mapear DTO a la entidad Usuario
         Usuario usuario = new Usuario(
                 null,
@@ -102,7 +102,7 @@ public class UsuarioRepository {
                 LocalDateTime.now(),
                 null
         );
-        usuarioDAO.crearUsuario(usuario, listener -> {});
+        usuarioDAO.crearUsuario(usuario, listener);
     }
 
     public void eliminarUsuario(String usuarioId, OnCompleteListener<Void> listener) {
