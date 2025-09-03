@@ -89,7 +89,7 @@ public class RifaParticipanteFragment extends Fragment {
 
     // Devuelve una rifa de prueba
     private Rifa obtenerRifa(String id) {
-        return new Rifa(id, "Salvemos a Pepito", "Descripción", "user2", RifaEstado.SORTEADO, LocalDateTime.now(), "PEPITO2025", MetodoEleccionGanador.ALEATORIO,null,LocalDateTime.of(2025, 07, 03, 00, 00, 00), 5.0);
+        return new Rifa(id, "Salvemos a Pepito", "Descripción", 5, "user2", RifaEstado.SORTEADO, LocalDateTime.now(), "PEPITO2025", MetodoEleccionGanador.ALEATORIO,null,LocalDateTime.of(2025, 07, 03, 00, 00, 00), 5.0,null);
     }
 
     // Estos datos son solo de prueba

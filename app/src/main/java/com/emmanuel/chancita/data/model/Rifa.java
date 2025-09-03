@@ -2,12 +2,14 @@ package com.emmanuel.chancita.data.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Rifa {
 
     private String id;
     private String titulo;
     private String descripcion;
+    private int cantNumeros;
     private String creadoPor;
     private RifaEstado estado;
     private LocalDateTime creadoEn;
@@ -16,11 +18,13 @@ public class Rifa {
     private String motivoEleccionGanador; // Este campo solo debe usarse si metodoEleccionGanador = DETERMINISTA
     private LocalDateTime fechaSorteo;
     private double precioNumero;
+    private List<String> participantesIds;
 
-    public Rifa(String id, String titulo, String descripcion, String creadoPor, RifaEstado estado, LocalDateTime creadoEn, String codigo, MetodoEleccionGanador metodoEleccionGanador, String motivoEleccionGanador ,LocalDateTime fechaSorteo, double precioNumero) {
+    public Rifa(String id, String titulo, String descripcion, int cantNumeros, String creadoPor, RifaEstado estado, LocalDateTime creadoEn, String codigo, MetodoEleccionGanador metodoEleccionGanador, String motivoEleccionGanador ,LocalDateTime fechaSorteo, double precioNumero, List<String> participantesIds) {
         setId(id);
         setTitulo(titulo);
         setDescripcion(descripcion);
+        setCantNumeros(cantNumeros);
         setCreadoPor(creadoPor);
         setEstado(estado);
         setCreadoEn(creadoEn);
@@ -29,7 +33,11 @@ public class Rifa {
         setMotivoEleccionGanador(motivoEleccionGanador);
         setFechaSorteo(fechaSorteo);
         setPrecioNumero(precioNumero);
+        setParticipantesIds(participantesIds);
+
     }
+
+    public Rifa() {}
 
     public String getId() {
         return id;
@@ -117,5 +125,21 @@ public class Rifa {
 
     public void setMotivoEleccionGanador(String motivoEleccionGanador) {
         this.motivoEleccionGanador = motivoEleccionGanador;
+    }
+
+    public int getCantNumeros() {
+        return cantNumeros;
+    }
+
+    public void setCantNumeros(int cantNumeros) {
+        this.cantNumeros = cantNumeros;
+    }
+
+    public List<String> getParticipantesIds() {
+        return participantesIds;
+    }
+
+    public void setParticipantesIds(List<String> participantesIds) {
+        this.participantesIds = participantesIds;
     }
 }
