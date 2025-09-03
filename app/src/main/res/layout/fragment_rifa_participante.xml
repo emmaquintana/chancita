@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:text="Cargando..."
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="20sp"
+                android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -34,7 +34,7 @@
                 android:layout_marginTop="16dp"
                 android:text="Información"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_titulo_rifa" />
@@ -46,6 +46,7 @@
                 android:layout_marginTop="8dp"
                 android:textColor="?attr/colorOnSurface"
                 android:text="Estado: Cargando..."
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_info_rifa" />
 
@@ -53,9 +54,10 @@
                 android:id="@+id/rifa_participante_txt_fecha_sorteo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="8dp"
                 android:textColor="?attr/colorOnSurface"
                 android:text="Fecha de sorteo: Cargando..."
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_estado_rifa" />
 
@@ -63,9 +65,10 @@
                 android:id="@+id/rifa_participante_txt_metodo_eleccion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="8dp"
                 android:textColor="?attr/colorOnSurface"
                 android:text="Método de elección: Cargando..."
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_fecha_sorteo" />
 
@@ -76,7 +79,7 @@
                 android:layout_marginTop="24dp"
                 android:textColor="?attr/colorOnSurface"
                 android:text="Premios"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_metodo_eleccion" />
@@ -89,6 +92,7 @@
                 android:textColor="?attr/colorOnSurface"
                 android:text="Cargando..."
                 android:textStyle="bold"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_premios_titulo" />
 
@@ -99,7 +103,7 @@
                 android:layout_marginTop="24dp"
                 android:text="Comprar números"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_premios" />
@@ -111,6 +115,7 @@
                 android:layout_marginTop="8dp"
                 android:textColor="?attr/colorOnSurface"
                 android:text="Selecciona los números que quieres comprar:"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_comprar_numeros_titulo" />
