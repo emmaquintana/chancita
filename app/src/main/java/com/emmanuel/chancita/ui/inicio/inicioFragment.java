@@ -1,5 +1,6 @@
 package com.emmanuel.chancita.ui.inicio;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.AlertDialog;
@@ -65,6 +66,19 @@ public class inicioFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        View view = getView();
+        if (view == null) return;
+
+        inicioViewModel.obtenerRifasUnidasDeUsuarioActual().observe(getViewLifecycleOwner(), rifasUnidas -> {
+            inflarRifasUnidas(view);
+            inflarRifasCreadas(view);
+        });
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         sharedViewModel.setToolbarTitle("Inicio");
 
@@ -81,15 +95,18 @@ public class inicioFragment extends Fragment {
         });
 
         inflarRifasCreadas(view);
+        inflarRifasUnidas(view);
     }
 
     private void inflarRifasCreadas(View view) {
         RecyclerView rvRifasCreadas = view.findViewById(R.id.recycler_view_rifas_creadas);
-        RecyclerView rvRifasUnidas = view.findViewById(R.id.recycler_view_rifas_unidas);
 
         inicioViewModel.obtenerRifasCreadasPorUsuarioActual().observe(getViewLifecycleOwner(), listaRifa -> {
             // Si hay rifas creadas, se las muestra
             if (listaRifa.size() != 0) {
+
+                TextView msgNoRifasCreadas = view.findViewById(R.id.inicio_txt_no_rifas_creadas);
+                msgNoRifasCreadas.setVisibility(View.GONE);
 
                 /*
                 // Si se "toca" una rifa, se redirige a la actividad correspondiente a esa rifa
@@ -114,11 +131,18 @@ public class inicioFragment extends Fragment {
                 msgNoRifasCreadas.setVisibility(View.VISIBLE);
             }
         });
+    }
+
+    private void inflarRifasUnidas(View view) {
+        RecyclerView rvRifasUnidas = view.findViewById(R.id.recycler_view_rifas_unidas);
 
         inicioViewModel.obtenerRifasUnidasDeUsuarioActual().observe(getViewLifecycleOwner(), listaRifas -> {
             if (listaRifas.size() != 0) {
 
-                /*
+                // Si el usuario no se unió a rifas, se le informa de ello al usuario
+                TextView msgNoRifasUnidas = view.findViewById(R.id.inicio_txt_no_rifas_unidas);
+                msgNoRifasUnidas.setVisibility(View.GONE);
+
                 // Si se "toca" una rifa, se redirige a la actividad correspondiente
                 RifaAdapter.OnItemClickListener rifaUnidaListener = new RifaAdapter.OnItemClickListener() {
                     @Override
@@ -127,11 +151,11 @@ public class inicioFragment extends Fragment {
                         intent.putExtra("rifa_id", rifa.getId());
                         startActivity(intent);
                     }
-                };*/
+                };
 
                 // Genera el layout
                 rvRifasUnidas.setLayoutManager(new LinearLayoutManager(getContext()));
-                RifaAdapter joinedAdapter = new RifaAdapter(listaRifas, null);
+                RifaAdapter joinedAdapter = new RifaAdapter(listaRifas, rifaUnidaListener);
                 rvRifasUnidas.setAdapter(joinedAdapter);
             }
             else {
@@ -158,7 +182,19 @@ public class inicioFragment extends Fragment {
         btnUnirse.setOnClickListener(v -> {
             String codigo = input.getText().toString().trim();
             if (!codigo.isEmpty()) {
-                // Unirse a rifa
+                inicioViewModel.unirseARifa(codigo);
+
+                inicioViewModel.obtenerRifaPorCodigo(codigo).observe(getViewLifecycleOwner(), rifa -> {
+                    if (rifa != null) {
+                        Intent intent = new Intent(getContext(), RifaParticipanteActivity.class);
+                        intent.putExtra("rifa_id", rifa.getId());
+                        startActivity(intent);
+                    }
+                    else {
+                        Toast.makeText(requireContext(), "No existe rifa con el código " + codigo, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
                 dialog.dismiss();
             } else {
                 Toast.makeText(requireContext(), "Ingrese un código válido", Toast.LENGTH_SHORT).show();

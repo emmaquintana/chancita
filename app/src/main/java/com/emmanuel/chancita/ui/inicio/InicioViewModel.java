@@ -41,6 +41,10 @@ public class InicioViewModel extends ViewModel {
         });
     }
 
+    public void unirseARifa(String codigo) {
+        rifaRepository.unirseARifa(codigo, null);
+    }
+
     public LiveData<List<RifaDTO>> obtenerRifasCreadasPorUsuarioActual() {
         _obteniendoRifasCreadas.setValue(true);
 
@@ -48,7 +52,7 @@ public class InicioViewModel extends ViewModel {
             _obteniendoRifasCreadas.setValue(false);
 
             if (!task.isSuccessful()) {
-                _resultadoObtencionRifaCreadas.setValue("Algo salió mal");
+                _resultadoObtencionRifaCreadas.setValue("Algo salió mal al obtener las rifas que creaste");
             }
         });
     }
@@ -63,5 +67,9 @@ public class InicioViewModel extends ViewModel {
                 _resultadoObtencionRifaUnidas.setValue("Algo salió mal");
             }
         });
+    }
+
+    public LiveData<RifaDTO> obtenerRifaPorCodigo(String codigo) {
+        return rifaRepository.obtenerRifaPorCodigo(codigo, null);
     }
 }

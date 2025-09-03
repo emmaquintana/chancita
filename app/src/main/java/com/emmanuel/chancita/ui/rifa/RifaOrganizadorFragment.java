@@ -108,9 +108,9 @@ public class RifaOrganizadorFragment extends Fragment {
     private List<RifaPremio> obtenerPremios(String rifaId) {
 
         List<RifaPremio> premios = new ArrayList<>();
-        premios.add(new RifaPremio("id1", "Torta", "Torta de manzana", "id1", 1));
-        premios.add(new RifaPremio("id2", "Tortita", null, "id1", 2));
-        premios.add(new RifaPremio("id3", "$5000", null, "id1", 3));
+        premios.add(new RifaPremio("id1", "Torta", "Torta de manzana", 1));
+        premios.add(new RifaPremio("id2", "Tortita", null, 2));
+        premios.add(new RifaPremio("id3", "$5000", null, 3));
 
         return premios;
     }

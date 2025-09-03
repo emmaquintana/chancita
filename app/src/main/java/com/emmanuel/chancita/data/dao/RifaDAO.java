@@ -3,6 +3,8 @@ package com.emmanuel.chancita.data.dao;
 import com.emmanuel.chancita.data.model.Rifa;
 import com.emmanuel.chancita.data.model.RifaEstado;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -40,6 +42,7 @@ public class RifaDAO {
         rifaData.put("motivoEleccionGanador", rifa.getMotivoEleccionGanador());
         rifaData.put("participantesIds", rifa.getParticipantesIds());
         rifaData.put("precioNumero", rifa.getPrecioNumero());
+        rifaData.put("premios", rifa.getPremios());
 
         db.collection("rifas")
                 .document(nuevoId)
@@ -53,12 +56,28 @@ public class RifaDAO {
                 .addOnCompleteListener(listener);
     }
 
-    public void unirseARifa(String rifaId, String usuarioId, OnCompleteListener<Void> listener) {
-        db.collection("rifas")
-                .document(rifaId)
-                .update("participantes", FieldValue.arrayUnion(usuarioId))
-                .addOnCompleteListener(listener);
-    }
+        public void unirseARifa(String codigo, OnCompleteListener<Void> listener) {
+            FirebaseUser usuarioActual = auth.getCurrentUser();
+
+            db.collection("rifas")
+                    .whereEqualTo("codigo", codigo)
+                    .limit(1)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                            String rifaId = task.getResult().getDocuments().get(0).getId();
+
+                            db.collection("rifas")
+                                    .document(rifaId)
+                                    .update("participantesIds", FieldValue.arrayUnion(usuarioActual.getUid()))
+                                    .addOnCompleteListener(listener);
+                        } else {
+                            if (listener != null) {
+                                listener.onComplete(Tasks.forException(new Exception("No se encontró la rifa con ese código")));
+                            }
+                        }
+                    });
+        }
 
     public void obtenerRifasUnidasPorUsuario(String usuarioId, OnCompleteListener<QuerySnapshot> listener) {
         db.collection("rifas")

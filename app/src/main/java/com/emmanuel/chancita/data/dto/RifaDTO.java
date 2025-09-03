@@ -2,6 +2,7 @@ package com.emmanuel.chancita.data.dto;
 
 import com.emmanuel.chancita.data.model.MetodoEleccionGanador;
 import com.emmanuel.chancita.data.model.RifaEstado;
+import com.emmanuel.chancita.data.model.RifaPremio;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,12 +21,13 @@ public class RifaDTO {
     private double precioNumero;
     private LocalDateTime creadoEn;
     private List<String> participantesIds;
+    private List<RifaPremio> premios;
 
     // Constructor para crear nueva rifa
     public RifaDTO(String id, String titulo, String descripcion, int cantNumeros, String creadoPor,
                    String codigo, MetodoEleccionGanador metodoEleccionGanador,
                    String motivoEleccionGanador, LocalDateTime fechaSorteo,
-                   double precioNumero, List<String> participantesIds) {
+                   double precioNumero, List<String> participantesIds, List<RifaPremio> premios) {
         this.id = id;
         this.titulo = titulo;
         this.descripcion = descripcion;
@@ -39,13 +41,14 @@ public class RifaDTO {
         this.precioNumero = precioNumero;
         this.creadoEn = LocalDateTime.now();
         this.participantesIds = participantesIds;
+        this.premios = premios;
     }
 
     // Constructor completo para mapear desde entidad
     public RifaDTO(String id, String titulo, String descripcion, int cantNumeros, String creadoPor,
                    RifaEstado estado, String codigo, MetodoEleccionGanador metodoEleccionGanador,
                    String motivoEleccionGanador, LocalDateTime fechaSorteo,
-                   double precioNumero, LocalDateTime creadoEn) {
+                   double precioNumero, LocalDateTime creadoEn, List<RifaPremio> premios) {
         this.id = id;
         this.titulo = titulo;
         this.descripcion = descripcion;
@@ -58,6 +61,7 @@ public class RifaDTO {
         this.fechaSorteo = fechaSorteo;
         this.precioNumero = precioNumero;
         this.creadoEn = creadoEn;
+        this.premios = premios;
     }
 
     public RifaDTO() {}
@@ -115,5 +119,13 @@ public class RifaDTO {
 
     public void setParticipantesIds(List<String> participantesIds) {
         this.participantesIds = participantesIds;
+    }
+
+    public List<RifaPremio> getPremios() {
+        return premios;
+    }
+
+    public void setPremios(List<RifaPremio> premios) {
+        this.premios = premios;
     }
 }

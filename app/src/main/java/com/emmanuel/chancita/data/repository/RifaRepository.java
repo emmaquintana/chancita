@@ -6,31 +6,29 @@ import androidx.lifecycle.MutableLiveData;
 import com.emmanuel.chancita.data.dao.NumeroDAO;
 import com.emmanuel.chancita.data.dao.RifaDAO;
 import com.emmanuel.chancita.data.dao.RifaGanadorDAO;
-import com.emmanuel.chancita.data.dao.RifaPremioDAO;
 import com.emmanuel.chancita.data.dto.RifaDTO;
 import com.emmanuel.chancita.data.model.MetodoEleccionGanador;
 import com.emmanuel.chancita.data.model.Rifa;
 import com.emmanuel.chancita.data.model.RifaEstado;
+import com.emmanuel.chancita.data.model.RifaPremio;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class RifaRepository {
     private final RifaDAO rifaDAO;
     private final NumeroDAO numeroDAO;
-    private final RifaPremioDAO rifaPremioDAO;
     private final RifaGanadorDAO rifaGanadorDAO;
 
     public RifaRepository() {
         this.rifaDAO = new RifaDAO();
         this.numeroDAO = new NumeroDAO();
-        this.rifaPremioDAO = new RifaPremioDAO();
         this.rifaGanadorDAO = new RifaGanadorDAO();
     }
 
@@ -51,7 +49,8 @@ public class RifaRepository {
                 rifaDto.getMotivoEleccionGanador(),
                 rifaDto.getFechaSorteo(),
                 rifaDto.getPrecioNumero(),
-                new ArrayList<String>()
+                new ArrayList<String>(),
+                rifaDto.getPremios()
         );
 
         rifaDAO.crearRifa(nuevaRifa, listener);
@@ -78,14 +77,15 @@ public class RifaRepository {
                 rifaDto.getMotivoEleccionGanador(),
                 rifaDto.getFechaSorteo(),
                 rifaDto.getPrecioNumero(),
-                rifaDto.getParticipantesIds() != null ? rifaDto.getParticipantesIds() : new ArrayList<String>()
+                rifaDto.getParticipantesIds() != null ? rifaDto.getParticipantesIds() : new ArrayList<String>(),
+                rifaDto.getPremios()
         );
 
         rifaDAO.editarRifa(rifaActualizada, listener);
     }
 
-    public void unirseARifa(String rifaId, String usuarioId, OnCompleteListener<Void> listener) {
-        rifaDAO.unirseARifa(rifaId, usuarioId, listener);
+    public void unirseARifa(String codigo, OnCompleteListener<Void> listener) {
+        rifaDAO.unirseARifa(codigo, listener);
     }
 
     /**
@@ -96,26 +96,45 @@ public class RifaRepository {
 
         rifaDAO.obtenerRifa(rifaId, task -> {
             if (task.isSuccessful() && task.getResult().exists()) {
-                Rifa rifa = task.getResult().toObject(Rifa.class);
-                if (rifa != null) {
-                    RifaDTO rifaDTO = new RifaDTO(
-                            rifa.getId(),
-                            rifa.getTitulo(),
-                            rifa.getDescripcion(),
-                            rifa.getCantNumeros(),
-                            rifa.getCreadoPor(),
-                            rifa.getEstado(),
-                            rifa.getCodigo(),
-                            rifa.getMetodoEleccionGanador(),
-                            rifa.getMotivoEleccionGanador(),
-                            rifa.getFechaSorteo(),
-                            rifa.getPrecioNumero(),
-                            rifa.getCreadoEn()
-                    );
-                    liveData.setValue(rifaDTO);
-                } else {
-                    liveData.setValue(null);
+                DocumentSnapshot doc = task.getResult();
+
+                String id = doc.getString("id");
+                String titulo = doc.getString("titulo");
+                String descripcion = doc.getString("descripcion");
+                int cantNumeros = doc.getLong("cantNumeros").intValue();
+                String creadoPor = doc.getString("creadoPor");
+                String estadoStr = doc.getString("estado");
+                RifaEstado estado = RifaEstado.valueOf(estadoStr);
+                String codigo = doc.getString("codigo");
+                String metodoStr = doc.getString("metodoEleccionGanador");
+                MetodoEleccionGanador metodo = MetodoEleccionGanador.valueOf(metodoStr);
+                String motivo = doc.getString("motivoEleccionGanador");
+                String fechaSorteoStr = doc.getString("fechaSorteo");
+                LocalDateTime fechaSorteo = LocalDateTime.parse(fechaSorteoStr);
+                String creadoEnStr = doc.getString("creadoEn");
+                LocalDateTime creadoEn = LocalDateTime.parse(creadoEnStr);
+                double precioNumero = doc.getDouble("precioNumero");
+                List<Map<String, Object>> premiosMap = (List<Map<String, Object>>) doc.get("premios");
+                List<RifaPremio> premios = new ArrayList<>();
+                if (premiosMap != null) {
+                    for (Map<String, Object> map : premiosMap) {
+                        RifaPremio premio = new RifaPremio(
+                                (String) map.get("premioId"),
+                                (String) map.get("premioTitulo"),
+                                (String) map.get("premioDescripcion"),
+                                map.get("premioOrden") != null ? ((Long) map.get("premioOrden")).intValue() : 0
+                        );
+                        premios.add(premio);
+                    }
                 }
+
+                RifaDTO rifaDTO = new RifaDTO(
+                        id, titulo, descripcion, cantNumeros, creadoPor,
+                        estado, codigo, metodo, motivo, fechaSorteo, precioNumero, creadoEn, premios
+                );
+
+                liveData.setValue(rifaDTO);
+
             } else {
                 liveData.setValue(null);
             }
@@ -124,6 +143,7 @@ public class RifaRepository {
                 listener.onComplete(task);
             }
         });
+
 
         return liveData;
     }
@@ -151,7 +171,8 @@ public class RifaRepository {
                                     rifa.getMotivoEleccionGanador(),
                                     rifa.getFechaSorteo(),
                                     rifa.getPrecioNumero(),
-                                    rifa.getCreadoEn()
+                                    rifa.getCreadoEn(),
+                                    rifa.getPremios()
                             );
                         })
                         .collect(Collectors.toList());
@@ -171,31 +192,50 @@ public class RifaRepository {
     /**
      * Busca una rifa por código
      */
-    public LiveData<RifaDTO> buscarRifaPorCodigo(String codigo, OnCompleteListener<QuerySnapshot> listener) {
+    public LiveData<RifaDTO> obtenerRifaPorCodigo(String codigo, OnCompleteListener<QuerySnapshot> listener) {
         MutableLiveData<RifaDTO> liveData = new MutableLiveData<>();
 
         rifaDAO.obtenerRifasPorCodigo(codigo, task -> {
             if (task.isSuccessful() && !task.getResult().isEmpty()) {
-                Rifa rifa = task.getResult().getDocuments().get(0).toObject(Rifa.class);
-                if (rifa != null) {
-                    RifaDTO rifaDTO = new RifaDTO(
-                            null,
-                            rifa.getTitulo(),
-                            rifa.getDescripcion(),
-                            rifa.getCantNumeros(),
-                            rifa.getCreadoPor(),
-                            rifa.getEstado(),
-                            rifa.getCodigo(),
-                            rifa.getMetodoEleccionGanador(),
-                            rifa.getMotivoEleccionGanador(),
-                            rifa.getFechaSorteo(),
-                            rifa.getPrecioNumero(),
-                            rifa.getCreadoEn()
-                    );
-                    liveData.setValue(rifaDTO);
-                } else {
-                    liveData.setValue(null);
+                DocumentSnapshot doc = task.getResult().getDocuments().get(0);
+
+                // Mapear campos manualmente
+                String id = doc.getString("id");
+                String titulo = doc.getString("titulo");
+                String descripcion = doc.getString("descripcion");
+                int cantNumeros = doc.getLong("cantNumeros").intValue();
+                String creadoPor = doc.getString("creadoPor");
+                String estadoStr = doc.getString("estado");
+                RifaEstado estado = RifaEstado.valueOf(estadoStr);
+                String codigoVal = doc.getString("codigo");
+                String metodoStr = doc.getString("metodoEleccionGanador");
+                MetodoEleccionGanador metodo = MetodoEleccionGanador.valueOf(metodoStr);
+                String motivo = doc.getString("motivoEleccionGanador");
+                String fechaSorteoStr = doc.getString("fechaSorteo");
+                LocalDateTime fechaSorteo = LocalDateTime.parse(fechaSorteoStr);
+                String creadoEnStr = doc.getString("creadoEn");
+                LocalDateTime creadoEn =LocalDateTime.parse(creadoEnStr);
+                double precioNumero = doc.getDouble("precioNumero");
+
+                // Premios: convertir lista de HashMaps → lista de RifaPremio
+                List<RifaPremio> premios = new ArrayList<>();
+                List<Map<String, Object>> premiosRaw = (List<Map<String, Object>>) doc.get("premios");
+                if (premiosRaw != null) {
+                    for (Map<String, Object> premioMap : premiosRaw) {
+                        RifaPremio premio = new RifaPremio(
+                                (String) premioMap.get("premioId"),
+                                (String) premioMap.get("premioTitulo"),
+                                (String) premioMap.get("premioDescripcion"),
+                                ((Long) premioMap.get("premioOrden")).intValue()
+                        );
+                        premios.add(premio);
+                    }
                 }
+
+                // Construir DTO
+                RifaDTO rifaDTO = new RifaDTO(id,titulo,descripcion,cantNumeros,creadoPor,estado,codigoVal,metodo,motivo,fechaSorteo,precioNumero,creadoEn,premios);
+
+                liveData.setValue(rifaDTO);
             } else {
                 liveData.setValue(null);
             }
@@ -207,6 +247,7 @@ public class RifaRepository {
 
         return liveData;
     }
+
 
     public LiveData<List<RifaDTO>> obtenerRifasCreadasPorUsuarioActual(OnCompleteListener<QuerySnapshot> listener) {
         MutableLiveData<List<RifaDTO>> liveData = new MutableLiveData<>();
@@ -231,10 +272,23 @@ public class RifaRepository {
                             String creadoEnStr = document.getString("creadoEn");
                             LocalDateTime creadoEn = LocalDateTime.parse(creadoEnStr);
                             double precioNumero = document.getDouble("precioNumero");
+                            List<Map<String, Object>> premiosMap = (List<Map<String, Object>>) document.get("premios");
+                            List<RifaPremio> premios = new ArrayList<>();
+                            if (premiosMap != null) {
+                                for (Map<String, Object> map : premiosMap) {
+                                    RifaPremio premio = new RifaPremio(
+                                            (String) map.get("premioId"),
+                                            (String) map.get("premioTitulo"),
+                                            (String) map.get("premioDescripcion"),
+                                            map.get("premioOrden") != null ? ((Long) map.get("premioOrden")).intValue() : 0
+                                    );
+                                    premios.add(premio);
+                                }
+                            }
 
                             return new RifaDTO(
                                     id, titulo, descripcion, cantNumeros, creadoPor,
-                                    estado, codigo, metodo, motivo, fechaSorteo, precioNumero, creadoEn
+                                    estado, codigo, metodo, motivo, fechaSorteo, precioNumero, creadoEn, premios
                             );
                         })
                         .collect(Collectors.toList());
@@ -275,10 +329,23 @@ public class RifaRepository {
                             String creadoEnStr = document.getString("creadoEn");
                             LocalDateTime creadoEn = LocalDateTime.parse(creadoEnStr);
                             double precioNumero = document.getDouble("precioNumero");
+                            List<Map<String, Object>> premiosMap = (List<Map<String, Object>>) document.get("premios");
+                            List<RifaPremio> premios = new ArrayList<>();
+                            if (premiosMap != null) {
+                                for (Map<String, Object> map : premiosMap) {
+                                    RifaPremio premio = new RifaPremio(
+                                            (String) map.get("premioId"),
+                                            (String) map.get("premioTitulo"),
+                                            (String) map.get("premioDescripcion"),
+                                            map.get("premioOrden") != null ? ((Long) map.get("premioOrden")).intValue() : 0
+                                    );
+                                    premios.add(premio);
+                                }
+                            }
 
                             return new RifaDTO(
                                     id, titulo, descripcion, cantNumeros, creadoPor,
-                                    estado, codigo, metodo, motivo, fechaSorteo, precioNumero, creadoEn
+                                    estado, codigo, metodo, motivo, fechaSorteo, precioNumero, creadoEn, premios
                             );
                         })
                         .collect(Collectors.toList());
