@@ -51,6 +51,17 @@
                 app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_info_rifa" />
 
             <TextView
+                android:id="@+id/rifa_participante_txt_precio_numero"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textColor="?attr/colorOnSurface"
+                android:text="Precio: Cargando..."
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_estado_rifa" />
+
+            <TextView
                 android:id="@+id/rifa_participante_txt_codigo_rifa"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -59,7 +70,7 @@
                 android:text="Código: Cargando..."
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_estado_rifa" />
+                app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_precio_numero" />
 
             <TextView
                 android:id="@+id/rifa_participante_txt_fecha_sorteo"
@@ -84,6 +95,30 @@
                 app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_fecha_sorteo" />
 
             <TextView
+                android:id="@+id/rifa_participante_txt_descripcion_titulo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:textColor="?attr/colorOnSurface"
+                android:text="Descripción"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_metodo_eleccion" />
+
+            <TextView
+                android:id="@+id/rifa_participante_txt_descripcion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textColor="?attr/colorOnSurface"
+                android:text="Cargando..."
+                android:textStyle="normal"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_descripcion_titulo" />
+
+            <TextView
                 android:id="@+id/rifa_participante_txt_premios_titulo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -93,7 +128,7 @@
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_metodo_eleccion" />
+                app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_descripcion" />
 
             <TextView
                 android:id="@+id/rifa_participante_txt_premios"

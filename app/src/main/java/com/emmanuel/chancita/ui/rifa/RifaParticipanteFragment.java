@@ -48,23 +48,27 @@ public class RifaParticipanteFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-        TextView rifaTitulo = view.findViewById(R.id.rifa_participante_txt_titulo_rifa);
-        TextView rifaEstado = view.findViewById(R.id.rifa_participante_txt_estado_rifa); // Debe iniciar con "Estado: "
-        TextView rifaCodigo = view.findViewById(R.id.rifa_participante_txt_codigo_rifa); // Debe iniciar con "Código: "
-        TextView rifaFechaSorteo = view.findViewById(R.id.rifa_participante_txt_fecha_sorteo); // Debe iniciar con "Fecha de sorteo: "
-        TextView rifaMetodoEleccionGanador = view.findViewById(R.id.rifa_participante_txt_metodo_eleccion); // Debe iniciar con "Método de elección: "
-        TextView rifaPremios = view.findViewById(R.id.rifa_participante_txt_premios); // Debe iniciar con "1er puesto: "
+        TextView txtRifaTitulo = view.findViewById(R.id.rifa_participante_txt_titulo_rifa);
+        TextView txtRifaEstado = view.findViewById(R.id.rifa_participante_txt_estado_rifa); // Debe iniciar con "Estado: "
+        TextView txtRifaCodigo = view.findViewById(R.id.rifa_participante_txt_codigo_rifa); // Debe iniciar con "Código: "
+        TextView txtRifaFechaSorteo = view.findViewById(R.id.rifa_participante_txt_fecha_sorteo); // Debe iniciar con "Fecha de sorteo: "
+        TextView txtRifaMetodoEleccionGanador = view.findViewById(R.id.rifa_participante_txt_metodo_eleccion); // Debe iniciar con "Método de elección: "
+        TextView txtRifaPremios = view.findViewById(R.id.rifa_participante_txt_premios); // Debe iniciar con "1er puesto: "
+        TextView txtRifaDescripcion = view.findViewById(R.id.rifa_participante_txt_descripcion);
+        TextView txtPrecioNumero = view.findViewById(R.id.rifa_participante_txt_precio_numero); // Debe iniciar con "Precio por número: $"
         btnContinuar = view.findViewById(R.id.rifa_participante_btn_comprar_numeros);
 
         rifaParticipanteViewModel.obtenerRifa("B1EzULChLnb37D7LfC3m").observe(getViewLifecycleOwner(), rifa -> {
             precioNumero = rifa.getPrecioNumero();
             inflarNumeros(view, rifa.getCantNumeros(), rifa.getNumerosComprados());
-            rifaTitulo.setText(rifa.getTitulo());
-            rifaEstado.setText("Estado: " + rifa.getEstado());
-            rifaCodigo.setText("Código: " + rifa.getCodigo());
-            rifaFechaSorteo.setText("Fecha de sorteo: " + Utilidades.formatearFechaHora(rifa.getFechaSorteo(), "dd/MM/yyyy hh:mm"));
-            rifaMetodoEleccionGanador.setText("Método de elección: " + Utilidades.capitalizar(rifa.getMetodoEleccionGanador().toString()) + (rifa.getMetodoEleccionGanador() == MetodoEleccionGanador.DETERMINISTA ? " (" + rifa.getMotivoEleccionGanador() + ")" : ""));
-            rifaPremios.setText(formatearPremios(rifa.getPremios()));
+            txtRifaTitulo.setText(rifa.getTitulo());
+            txtRifaDescripcion.setText(rifa.getDescripcion());
+            txtRifaEstado.setText("Estado: " + rifa.getEstado());
+            txtRifaCodigo.setText("Código: " + rifa.getCodigo());
+            txtPrecioNumero.setText("Precio por número: $" + rifa.getPrecioNumero() + " + 2.2% comisión");
+            txtRifaFechaSorteo.setText("Fecha de sorteo: " + Utilidades.formatearFechaHora(rifa.getFechaSorteo(), "dd/MM/yyyy hh:mm"));
+            txtRifaMetodoEleccionGanador.setText("Método de elección: " + Utilidades.capitalizar(rifa.getMetodoEleccionGanador().toString()) + (rifa.getMetodoEleccionGanador() == MetodoEleccionGanador.DETERMINISTA ? " (" + rifa.getMotivoEleccionGanador() + ")" : ""));
+            txtRifaPremios.setText(formatearPremios(rifa.getPremios()));
 
 
             btnContinuar.setOnClickListener(v -> {
