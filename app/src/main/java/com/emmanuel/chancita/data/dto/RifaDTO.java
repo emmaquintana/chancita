@@ -22,33 +22,12 @@ public class RifaDTO {
     private LocalDateTime creadoEn;
     private List<String> participantesIds;
     private List<RifaPremio> premios;
+    private List<Integer> numerosComprados;
 
-    // Constructor para crear nueva rifa
-    public RifaDTO(String id, String titulo, String descripcion, int cantNumeros, String creadoPor,
-                   String codigo, MetodoEleccionGanador metodoEleccionGanador,
-                   String motivoEleccionGanador, LocalDateTime fechaSorteo,
-                   double precioNumero, List<String> participantesIds, List<RifaPremio> premios) {
-        this.id = id;
-        this.titulo = titulo;
-        this.descripcion = descripcion;
-        this.cantNumeros = cantNumeros;
-        this.creadoPor = creadoPor;
-        this.estado = RifaEstado.ABIERTO; // Estado inicial
-        this.codigo = codigo;
-        this.metodoEleccionGanador = metodoEleccionGanador;
-        this.motivoEleccionGanador = motivoEleccionGanador;
-        this.fechaSorteo = fechaSorteo;
-        this.precioNumero = precioNumero;
-        this.creadoEn = LocalDateTime.now();
-        this.participantesIds = participantesIds;
-        this.premios = premios;
-    }
-
-    // Constructor completo para mapear desde entidad
     public RifaDTO(String id, String titulo, String descripcion, int cantNumeros, String creadoPor,
                    RifaEstado estado, String codigo, MetodoEleccionGanador metodoEleccionGanador,
                    String motivoEleccionGanador, LocalDateTime fechaSorteo,
-                   double precioNumero, LocalDateTime creadoEn, List<RifaPremio> premios) {
+                   double precioNumero, LocalDateTime creadoEn, List<RifaPremio> premios, List<Integer> numerosComprados) {
         this.id = id;
         this.titulo = titulo;
         this.descripcion = descripcion;
@@ -62,6 +41,7 @@ public class RifaDTO {
         this.precioNumero = precioNumero;
         this.creadoEn = creadoEn;
         this.premios = premios;
+        this.numerosComprados = numerosComprados;
     }
 
     public RifaDTO() {}
@@ -127,5 +107,13 @@ public class RifaDTO {
 
     public void setPremios(List<RifaPremio> premios) {
         this.premios = premios;
+    }
+
+    public List<Integer> getNumerosComprados() {
+        return numerosComprados;
+    }
+
+    public void setNumerosComprados(List<Integer> numerosComprados) {
+        this.numerosComprados = numerosComprados;
     }
 }

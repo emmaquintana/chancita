@@ -20,8 +20,9 @@ public class Rifa {
     private double precioNumero;
     private List<String> participantesIds;
     private List<RifaPremio> premios;
+    private List<Integer> numerosComprados;
 
-    public Rifa(String id, String titulo, String descripcion, int cantNumeros, String creadoPor, RifaEstado estado, LocalDateTime creadoEn, String codigo, MetodoEleccionGanador metodoEleccionGanador, String motivoEleccionGanador ,LocalDateTime fechaSorteo, double precioNumero, List<String> participantesIds, List<RifaPremio> premios) {
+    public Rifa(String id, String titulo, String descripcion, int cantNumeros, String creadoPor, RifaEstado estado, LocalDateTime creadoEn, String codigo, MetodoEleccionGanador metodoEleccionGanador, String motivoEleccionGanador ,LocalDateTime fechaSorteo, double precioNumero, List<String> participantesIds, List<RifaPremio> premios, List<Integer> numerosComprados) {
         setId(id);
         setTitulo(titulo);
         setDescripcion(descripcion);
@@ -36,6 +37,7 @@ public class Rifa {
         setPrecioNumero(precioNumero);
         setParticipantesIds(participantesIds);
         setPremios(premios);
+        setNumerosComprados(numerosComprados);
     }
 
     public Rifa() {}
@@ -150,5 +152,13 @@ public class Rifa {
 
     public void setPremios(List<RifaPremio> premios) {
         this.premios = premios;
+    }
+
+    public List<Integer> getNumerosComprados() {
+        return numerosComprados;
+    }
+
+    public void setNumerosComprados(List<Integer> numerosComprados) {
+        this.numerosComprados = numerosComprados;
     }
 }

@@ -1,5 +1,7 @@
 package com.emmanuel.chancita.data.repository;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -50,7 +52,8 @@ public class RifaRepository {
                 rifaDto.getFechaSorteo(),
                 rifaDto.getPrecioNumero(),
                 new ArrayList<String>(),
-                rifaDto.getPremios()
+                rifaDto.getPremios(),
+                new ArrayList<Integer>()
         );
 
         rifaDAO.crearRifa(nuevaRifa, listener);
@@ -77,8 +80,9 @@ public class RifaRepository {
                 rifaDto.getMotivoEleccionGanador(),
                 rifaDto.getFechaSorteo(),
                 rifaDto.getPrecioNumero(),
-                rifaDto.getParticipantesIds() != null ? rifaDto.getParticipantesIds() : new ArrayList<String>(),
-                rifaDto.getPremios()
+                rifaDto.getParticipantesIds(),
+                rifaDto.getPremios(),
+                rifaDto.getNumerosComprados()
         );
 
         rifaDAO.editarRifa(rifaActualizada, listener);
@@ -127,10 +131,11 @@ public class RifaRepository {
                         premios.add(premio);
                     }
                 }
+                List<Integer> numerosComprados = (List<Integer>) doc.get("numerosComprados");
 
                 RifaDTO rifaDTO = new RifaDTO(
                         id, titulo, descripcion, cantNumeros, creadoPor,
-                        estado, codigo, metodo, motivo, fechaSorteo, precioNumero, creadoEn, premios
+                        estado, codigo, metodo, motivo, fechaSorteo, precioNumero, creadoEn, premios, numerosComprados
                 );
 
                 liveData.setValue(rifaDTO);
@@ -172,7 +177,8 @@ public class RifaRepository {
                                     rifa.getFechaSorteo(),
                                     rifa.getPrecioNumero(),
                                     rifa.getCreadoEn(),
-                                    rifa.getPremios()
+                                    rifa.getPremios(),
+                                    rifa.getNumerosComprados()
                             );
                         })
                         .collect(Collectors.toList());
@@ -231,9 +237,10 @@ public class RifaRepository {
                         premios.add(premio);
                     }
                 }
+                List<Integer> numerosComprados = (List<Integer>) doc.get("numerosComprados");
 
                 // Construir DTO
-                RifaDTO rifaDTO = new RifaDTO(id,titulo,descripcion,cantNumeros,creadoPor,estado,codigoVal,metodo,motivo,fechaSorteo,precioNumero,creadoEn,premios);
+                RifaDTO rifaDTO = new RifaDTO(id,titulo,descripcion,cantNumeros,creadoPor,estado,codigoVal,metodo,motivo,fechaSorteo,precioNumero,creadoEn,premios, numerosComprados);
 
                 liveData.setValue(rifaDTO);
             } else {
@@ -285,10 +292,11 @@ public class RifaRepository {
                                     premios.add(premio);
                                 }
                             }
+                            List<Integer> numerosComprados = (List<Integer>) document.get("numerosComprados");
 
                             return new RifaDTO(
                                     id, titulo, descripcion, cantNumeros, creadoPor,
-                                    estado, codigo, metodo, motivo, fechaSorteo, precioNumero, creadoEn, premios
+                                    estado, codigo, metodo, motivo, fechaSorteo, precioNumero, creadoEn, premios, numerosComprados
                             );
                         })
                         .collect(Collectors.toList());
@@ -342,10 +350,11 @@ public class RifaRepository {
                                     premios.add(premio);
                                 }
                             }
+                            List<Integer> numerosComprados = (List<Integer>) document.get("numerosComprados");
 
                             return new RifaDTO(
                                     id, titulo, descripcion, cantNumeros, creadoPor,
-                                    estado, codigo, metodo, motivo, fechaSorteo, precioNumero, creadoEn, premios
+                                    estado, codigo, metodo, motivo, fechaSorteo, precioNumero, creadoEn, premios, numerosComprados
                             );
                         })
                         .collect(Collectors.toList());

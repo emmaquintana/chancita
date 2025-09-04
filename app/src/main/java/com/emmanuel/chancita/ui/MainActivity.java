@@ -69,7 +69,8 @@ public class MainActivity extends AppCompatActivity {
                 getSupportActionBar().setTitle(title);
             }
         });
-/*
+
+        /*
         RifaOrganizadorViewModel rifaOrganizadorViewModel = new ViewModelProvider(this).get(RifaOrganizadorViewModel.class);
 
         List<RifaPremio> premios = new ArrayList<>();
@@ -85,17 +86,18 @@ public class MainActivity extends AppCompatActivity {
                 100, // cantidad de números
                 "usuario123", // creadoPor (id del usuario actual)
                 RifaEstado.ABIERTO, // estado
-                "TECNO2025", // código de rifa
+                "TECNO2026", // código de rifa
                 MetodoEleccionGanador.DETERMINISTA, // método de elección del ganador
                 "El número más alto será el ganador", // motivo (si aplica)
                 LocalDateTime.now().plusDays(7), // fecha del sorteo
                 10.0, // precio del número
                 LocalDateTime.now(), // creadoEn
-                premios // lista de premios
+                premios, // lista de premios,
+                new ArrayList<Integer>()
         );
 
         rifaOrganizadorViewModel.crearRifa(nuevaRifa);
-        */
+*/
 
     }
 

@@ -51,6 +51,17 @@
                 app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_info_rifa" />
 
             <TextView
+                android:id="@+id/rifa_participante_txt_codigo_rifa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textColor="?attr/colorOnSurface"
+                android:text="Código: Cargando..."
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_estado_rifa" />
+
+            <TextView
                 android:id="@+id/rifa_participante_txt_fecha_sorteo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -59,7 +70,7 @@
                 android:text="Fecha de sorteo: Cargando..."
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_estado_rifa" />
+                app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_codigo_rifa" />
 
             <TextView
                 android:id="@+id/rifa_participante_txt_metodo_eleccion"
@@ -114,7 +125,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:textColor="?attr/colorOnSurface"
-                android:text="Selecciona los números que quieres comprar:"
+                android:text="Selecciona los números que quieres comprar. Ten que los grises son aquellos que ya están comprados"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -125,23 +136,43 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                app:layout_constraintBottom_toTopOf="@+id/rifa_participante_txt_aclaracion_comision"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_comprar_numeros_descripcion" />
+                app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_comprar_numeros_descripcion"
+                app:layout_constraintVertical_bias="0.0"
+                tools:itemCount="2"
+                tools:listitem="@layout/layout_numero" />
+
+            <TextView
+                android:id="@+id/rifa_participante_txt_aclaracion_comision"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Tenga en cuenta que se cobra una comisión del 2.2%"
+                android:textAlignment="center"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintBottom_toTopOf="@+id/rifa_participante_btn_comprar_numeros"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/rifa_participante_btn_comprar_numeros"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
-                android:layout_marginTop="32dp"
                 android:layout_marginBottom="16dp"
-                android:text="Comprar número/s ($2000)"
+                android:enabled="false"
+                android:text="Comprar número/s"
                 android:textSize="18sp"
                 app:cornerRadius="28dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rifa_participante_rv_numeros"
                 app:layout_constraintVertical_bias="1.0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

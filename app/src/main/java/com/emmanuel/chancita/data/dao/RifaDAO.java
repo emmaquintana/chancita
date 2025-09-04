@@ -43,6 +43,7 @@ public class RifaDAO {
         rifaData.put("participantesIds", rifa.getParticipantesIds());
         rifaData.put("precioNumero", rifa.getPrecioNumero());
         rifaData.put("premios", rifa.getPremios());
+        rifaData.put("numerosComprados", rifa.getNumerosComprados());
 
         db.collection("rifas")
                 .document(nuevoId)

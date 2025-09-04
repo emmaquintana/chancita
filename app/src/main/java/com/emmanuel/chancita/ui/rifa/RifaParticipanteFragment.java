@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +19,16 @@ import com.emmanuel.chancita.data.model.MetodoEleccionGanador;
 import com.emmanuel.chancita.data.model.RifaPremio;
 import com.emmanuel.chancita.ui.rifa.adapters.NumerosAdapter;
 import com.emmanuel.chancita.utils.Utilidades;
+import com.google.android.material.button.MaterialButton;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class RifaParticipanteFragment extends Fragment {
 
     private RifaParticipanteViewModel rifaParticipanteViewModel;
-    private List<Integer> numerosAComprar;
+    private MaterialButton btnContinuar;
+    private double precioNumero;
 
     public static RifaParticipanteFragment newInstance() {
         return new RifaParticipanteFragment();
@@ -45,34 +50,52 @@ public class RifaParticipanteFragment extends Fragment {
 
         TextView rifaTitulo = view.findViewById(R.id.rifa_participante_txt_titulo_rifa);
         TextView rifaEstado = view.findViewById(R.id.rifa_participante_txt_estado_rifa); // Debe iniciar con "Estado: "
+        TextView rifaCodigo = view.findViewById(R.id.rifa_participante_txt_codigo_rifa); // Debe iniciar con "Código: "
         TextView rifaFechaSorteo = view.findViewById(R.id.rifa_participante_txt_fecha_sorteo); // Debe iniciar con "Fecha de sorteo: "
         TextView rifaMetodoEleccionGanador = view.findViewById(R.id.rifa_participante_txt_metodo_eleccion); // Debe iniciar con "Método de elección: "
         TextView rifaPremios = view.findViewById(R.id.rifa_participante_txt_premios); // Debe iniciar con "1er puesto: "
+        btnContinuar = view.findViewById(R.id.rifa_participante_btn_comprar_numeros);
 
         rifaParticipanteViewModel.obtenerRifa("B1EzULChLnb37D7LfC3m").observe(getViewLifecycleOwner(), rifa -> {
-            inflarNumeros(view, rifa.getCantNumeros());
+            precioNumero = rifa.getPrecioNumero();
+            inflarNumeros(view, rifa.getCantNumeros(), rifa.getNumerosComprados());
             rifaTitulo.setText(rifa.getTitulo());
             rifaEstado.setText("Estado: " + rifa.getEstado());
+            rifaCodigo.setText("Código: " + rifa.getCodigo());
             rifaFechaSorteo.setText("Fecha de sorteo: " + Utilidades.formatearFechaHora(rifa.getFechaSorteo(), "dd/MM/yyyy hh:mm"));
             rifaMetodoEleccionGanador.setText("Método de elección: " + Utilidades.capitalizar(rifa.getMetodoEleccionGanador().toString()) + (rifa.getMetodoEleccionGanador() == MetodoEleccionGanador.DETERMINISTA ? " (" + rifa.getMotivoEleccionGanador() + ")" : ""));
             rifaPremios.setText(formatearPremios(rifa.getPremios()));
+
+
+            btnContinuar.setOnClickListener(v -> {
+
+            });
         });
     }
 
     /** Infla los numeros de los cuales el usuario participante podrá elegir cuál comprar */
-    private void inflarNumeros(View view, int cantNumeros) {
+    private void inflarNumeros(View view, int cantNumeros, List<Integer> numerosComprados) {
         RecyclerView rvNumeros = view.findViewById(R.id.rifa_participante_rv_numeros);
+        List<Integer> numeros;
 
-        int numeroTotalDeTickets = cantNumeros;
-        numerosAComprar = new ArrayList<>();
-        for (int i = 1; i <= numeroTotalDeTickets; i++) {
-            numerosAComprar.add(i);
+        numeros = new ArrayList<>();
+        for (int i = 1; i <= cantNumeros; i++) {
+            numeros.add(i);
         }
 
-        NumerosAdapter adapter = new NumerosAdapter(numerosAComprar, new NumerosAdapter.OnNumeroClickListener() {
-            @Override
-            public void onNumeroClick(int numero) {
-                // Lógica para cuando se hace clic en un número
+        NumerosAdapter adapter = new NumerosAdapter(numeros, numerosComprados, numerosSeleccionados -> {
+            if (numerosSeleccionados.size() > 0) {
+                btnContinuar.setEnabled(true);
+            }
+            else {
+                btnContinuar.setEnabled(false);
+            }
+
+            if (numerosSeleccionados.size() == 1) {
+                btnContinuar.setText("Comprar número ($" + calcularPrecio(numerosSeleccionados.size(), precioNumero, 2.2) + ")");
+            }
+            else if (numerosSeleccionados.size() > 1) {
+                btnContinuar.setText("Comprar números ($" + calcularPrecio(numerosSeleccionados.size(), precioNumero, 2.2) + ")");
             }
         });
 
@@ -81,6 +104,12 @@ public class RifaParticipanteFragment extends Fragment {
         rvNumeros.setLayoutManager(layoutManager);
         rvNumeros.setAdapter(adapter);
     }
+
+    private double calcularPrecio(double cantNumerosSeleccionados, double precioNumero, double comision) {
+        double precioBase = cantNumerosSeleccionados * precioNumero;
+        return precioBase + (precioBase * comision / 100.0);
+    }
+
 
     /**
      * Devuelve los premios de la rifa con el siguiente formato:<br/>
