@@ -19,6 +19,8 @@ public class RifaGanador {
         this.asignadoEn = asignadoEn;
     }
 
+    public RifaGanador() {}
+
     public String getId() {
         return id;
     }

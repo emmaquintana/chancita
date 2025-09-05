@@ -1,7 +1,5 @@
 package com.emmanuel.chancita.ui.rifa.adapters;
 
-import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,26 +8,31 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.emmanuel.chancita.R;
+import com.emmanuel.chancita.data.model.NumeroComprado;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 public class NumerosAdapter extends RecyclerView.Adapter<NumerosAdapter.NumeroViewHolder> {
 
     private List<Integer> numeros;
     private List<Integer> numerosSeleccionados;
-    private List<Integer> numerosComprados; // <-- NUEVO
+    private List<NumeroComprado> numerosComprados;
+    private String usuarioActualId;
     private OnNumeroClickListener listener;
 
     public interface OnNumeroClickListener {
         void onNumeroClick(List<Integer> numerosSeleccionados);
     }
 
-    public NumerosAdapter(List<Integer> numeros, List<Integer> numerosComprados, OnNumeroClickListener listener) {
+    public NumerosAdapter(List<Integer> numeros,
+                          List<NumeroComprado> numerosComprados,
+                          String usuarioActualId,
+                          OnNumeroClickListener listener) {
         this.numeros = numeros != null ? numeros : new ArrayList<>();
         this.numerosComprados = numerosComprados != null ? numerosComprados : new ArrayList<>();
+        this.usuarioActualId = usuarioActualId;
         this.listener = listener;
         this.numerosSeleccionados = new ArrayList<>();
     }
@@ -63,25 +66,23 @@ public class NumerosAdapter extends RecyclerView.Adapter<NumerosAdapter.NumeroVi
 
         void bind(int numero) {
             btnNumero.setText(String.valueOf(numero));
-            Log.d("NUMEROS", "numero=" + numero + " | numerosComprados=" + numerosComprados.toString());
 
-            boolean estaComprado = false;
-            for (Object obj : numerosComprados) {
-                if (obj != null && Long.valueOf(numero).equals(obj)) {
-                    estaComprado = true;
+            // Verificar si el número está comprado por cualquier usuario
+            boolean comprado = false;
+            for (NumeroComprado nc : numerosComprados) {
+                if (nc.getNumerosComprados() != null && nc.getNumerosComprados().contains(numero)) {
+                    comprado = true;
                     break;
                 }
             }
 
-            if (estaComprado) {
-                Log.println(Log.INFO, "NUMERO COMPRADO (ADAPTER)", "ENTRA AQUI CON EL NUMERO " + numero);
+            if (comprado) {
                 btnNumero.setEnabled(false);
-                btnNumero.setBackgroundColor(Color.LTGRAY);
-                btnNumero.setTextColor(Color.WHITE);
+                btnNumero.setChecked(false);
                 return;
             }
 
-            // si NO está comprado, sí se puede seleccionar
+            // Número disponible
             btnNumero.setEnabled(true);
             btnNumero.setChecked(numerosSeleccionados.contains(numero));
 
@@ -98,5 +99,6 @@ public class NumerosAdapter extends RecyclerView.Adapter<NumerosAdapter.NumeroVi
                 listener.onNumeroClick(numerosSeleccionados);
             });
         }
+
     }
 }

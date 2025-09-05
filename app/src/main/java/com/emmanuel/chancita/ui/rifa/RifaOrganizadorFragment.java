@@ -1,42 +1,54 @@
 package com.emmanuel.chancita.ui.rifa;
 
-import androidx.lifecycle.ViewModelProvider;
-
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.emmanuel.chancita.R;
+import com.emmanuel.chancita.data.dto.GanadorInfoDTO;
+import com.emmanuel.chancita.data.dto.RifaDTO;
+import com.emmanuel.chancita.data.dto.UsuarioDTO;
+import com.emmanuel.chancita.data.model.MetodoEleccionGanador;
+import com.emmanuel.chancita.data.model.NumeroComprado;
+import com.emmanuel.chancita.data.model.RifaEstado;
 import com.emmanuel.chancita.data.model.RifaGanador;
 import com.emmanuel.chancita.data.model.RifaPremio;
+import com.emmanuel.chancita.data.model.Usuario;
 import com.emmanuel.chancita.ui.rifa.adapters.EleccionGanadoresAdapter;
 import com.emmanuel.chancita.ui.rifa.adapters.GanadorInfoAdapter;
 import com.emmanuel.chancita.ui.rifa.adapters.ParticipantesAdapter;
 import com.emmanuel.chancita.ui.rifa.model.CandidatoGanador;
 import com.emmanuel.chancita.ui.rifa.model.Participante;
+import com.emmanuel.chancita.utils.Utilidades;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.card.MaterialCardView;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class RifaOrganizadorFragment extends Fragment {
 
-    private RifaOrganizadorViewModel mViewModel;
+    private RifaOrganizadorViewModel rifaOrganizadorViewModel;
     private NavController navController;
 
     public static RifaOrganizadorFragment newInstance() {
@@ -52,40 +64,58 @@ public class RifaOrganizadorFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        rifaOrganizadorViewModel = new ViewModelProvider(this).get(RifaOrganizadorViewModel.class);
         navController = NavHostFragment.findNavController(this);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-        if (hayParticipantes("123123-123123")) {
+        TextView txtRifaTitulo = view.findViewById(R.id.rifa_organizador_txt_titulo_rifa);
+        TextView txtRifaRecaudado = view.findViewById(R.id.rifa_organizador_txt_monto_recaudado); // Debe iniciar con "Monto recaudado: $"
+        TextView txtRifaEstado = view.findViewById(R.id.rifa_organizador_txt_info_estado); // Debe iniciar con "Estado: "
+        TextView txtRifaCodigo = view.findViewById(R.id.rifa_organizador_txt_info_codigo); // Debe iniciar con "Código: "
+        TextView txtRifaFechaSorteo = view.findViewById(R.id.rifa_organizador_txt_info_fecha); // Debe iniciar con "Fecha de sorteo: "
+        TextView txtRifaMetodoEleccionGanador = view.findViewById(R.id.rifa_organizador_txt_info_metodo); // Debe iniciar con "Método de elección: "
+        TextView txtRifaPremios = view.findViewById(R.id.rifa_organizador_txt_premios); // Debe iniciar con "1er puesto: "
+        TextView txtRifaDescripcion = view.findViewById(R.id.rifa_organizador_txt_info_descripcion);
+        TextView txtPrecioNumero = view.findViewById(R.id.rifa_organizador_txt_info_precio); // Debe iniciar con "Precio por número: $"
+        MaterialButton btnConfirmarGanadores = view.findViewById(R.id.rifa_organizador_btn_confirmar_ganadores);
 
-            // Si hay participantes, NO se muestra el texto "No hay participantes"
-            TextView noHayParticipantes = view.findViewById(R.id.rifa_organizador_txt_no_hay_participantes);
-            noHayParticipantes.setVisibility(View.GONE);
+        rifaOrganizadorViewModel.obtenerRifa("B1EzULChLnb37D7LfC3m").observe(getViewLifecycleOwner(), rifa -> {
+            if (!rifa.getParticipantesIds().isEmpty()) {
+                // Si hay participantes, NO se muestra el texto "No hay participantes"
+                TextView noHayParticipantes = view.findViewById(R.id.rifa_organizador_txt_no_hay_participantes);
+                noHayParticipantes.setVisibility(View.GONE);
 
-            // Se muestra el nombre de cada participante y sus numeros comprados
-            inflarParticipantes(view);
+                // Se muestra el nombre de cada participante y sus numeros comprados
+                inflarParticipantes(view, rifa);
 
-            if (hayGanadores("123123-123123")) {
-                inflarGanadores(view);
-            }
-            else {
-                // Si no hay ganadores, no se muestra la sección "Ganadores"
-                TextView tituloGanadores = view.findViewById(R.id.rifa_organizador_txt_seccion_ganadores);
-                LinearLayout listaGanadores = view.findViewById(R.id.rifa_organizador_ll_ganadores_info);
-                tituloGanadores.setVisibility(View.GONE);
-                listaGanadores.setVisibility(View.GONE);
+                txtRifaTitulo.setText(rifa.getTitulo());
+                txtRifaEstado.setText("Estado: " + Utilidades.capitalizar(rifa.getEstado().toString()));
+                txtRifaCodigo.setText("Código: " + rifa.getCodigo());
+                txtRifaFechaSorteo.setText("Fecha de sorteo: " + Utilidades.formatearFechaHora(rifa.getFechaSorteo(), "dd-MM-yyyy hh:mm"));
+                txtRifaMetodoEleccionGanador.setText("Método de elección: " + Utilidades.capitalizar(rifa.getMetodoEleccionGanador().toString()) + (rifa.getMetodoEleccionGanador() == MetodoEleccionGanador.DETERMINISTA ? " (" + rifa.getMotivoEleccionGanador() + ")" : ""));
+                txtRifaPremios.setText(formatearPremios(rifa.getPremios()));
+                txtRifaDescripcion.setText("Descripción: " + rifa.getDescripcion());
+                txtPrecioNumero.setText("Precio por número: $" + String.valueOf(rifa.getPrecioNumero()));
+                txtRifaRecaudado.setText("Monto recaudado: $" + calcularRecaudado(rifa));
 
-                // Si el metodo de eleccion es "Determinista" y ya se está en fecha de sorteo, deben elegirse ganadores manualmente
-                if (debeElegirseGanador("123123-123123")) {
-                    inflarEleccionGanadores(view);
+                // Permite al usuario Organizador escoger los ganadores de la rifa
+                if (
+                        rifa.getMetodoEleccionGanador().toString().equals(MetodoEleccionGanador.DETERMINISTA.toString()) // El organizador escoge los ganadores
+                        && (LocalDateTime.now().isEqual(rifa.getFechaSorteo()) || LocalDateTime.now().isAfter(rifa.getFechaSorteo())) // Llegó/pasó la fecha de sorteo
+                ) {
+                    inflarEleccionGanadores(view, rifa);
+                }
+
+                // Muestra los ganadores
+                if (rifa.getEstado() == RifaEstado.SORTEADO) {
+                    inflarGanadores(view, rifa);
                 }
             }
-        }
+        });
 
-        TextView premios = view.findViewById(R.id.rifa_organizador_txt_premios);
-        premios.setText(formatearPremios(obtenerPremios("id")));
 
 
         // Debe permitirse navegar hacia "Editar rifa" y para ello se debe tener el FAB
@@ -98,21 +128,6 @@ public class RifaOrganizadorFragment extends Fragment {
             }
         });
         */
-    }
-
-    private boolean debeElegirseGanador(String rifaId) {
-        return true;
-    }
-
-    // Estos datos son solo de prueba
-    private List<RifaPremio> obtenerPremios(String rifaId) {
-
-        List<RifaPremio> premios = new ArrayList<>();
-        premios.add(new RifaPremio("id1", "Torta", "Torta de manzana", 1));
-        premios.add(new RifaPremio("id2", "Tortita", null, 2));
-        premios.add(new RifaPremio("id3", "$5000", null, 3));
-
-        return premios;
     }
 
     /**
@@ -134,58 +149,150 @@ public class RifaOrganizadorFragment extends Fragment {
         return stb.toString();
     }
 
-    private boolean hayGanadores(String rifaId) {
-        return false;
-    }
-
-    private boolean hayParticipantes(String rifaId) {
-        return true;
-    }
-
-    private void inflarGanadores(View view) {
+    private void inflarGanadores(View view, RifaDTO rifa) {
         RecyclerView rvGanadorInfo = view.findViewById(R.id.recycler_view_ganadores);
         rvGanadorInfo.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        List<RifaGanador> rifaGanadorList = new ArrayList<>();
-        rifaGanadorList.add(new RifaGanador("123123-123123", "321321-321321", "213213-213213", "313131-313131", "212121-212121", LocalDateTime.now()));
-        rifaGanadorList.add(new RifaGanador("123123-123123", "321321-321321", "213213-213213", "313131-313131", "212121-212121", LocalDateTime.now()));
-        rifaGanadorList.add(new RifaGanador("123123-123123", "321321-321321", "213213-213213", "313131-313131", "212121-212121", LocalDateTime.now()));
-        rifaGanadorList.add(new RifaGanador("123123-123123", "321321-321321", "213213-213213", "313131-313131", "212121-212121", LocalDateTime.now()));
+        rifaOrganizadorViewModel.obtenerNumerosGanadores("B1EzULChLnb37D7LfC3m")
+                .observe(getViewLifecycleOwner(), numerosGanadores -> {
+                    if (numerosGanadores == null || numerosGanadores.isEmpty()) return;
 
-        GanadorInfoAdapter ganadorInfoAdapter = new GanadorInfoAdapter(rifaGanadorList);
-        rvGanadorInfo.setAdapter(ganadorInfoAdapter);
+                    List<GanadorInfoDTO> ganadorInfoList = new ArrayList<>();
+                    int total = numerosGanadores.size();
+                    final int[] processed = {0};
+
+                    for (int i = 0; i < numerosGanadores.size(); i++) {
+                        int numeroGanador = numerosGanadores.get(i);
+                        int puesto = i + 1;
+
+                        boolean encontrado = false;
+
+                        for (NumeroComprado nc : rifa.getNumerosComprados()) {
+                            if (nc.getNumerosComprados().contains(numeroGanador)) {
+                                encontrado = true;
+                                final String usuarioId = nc.getUsuarioId();
+                                final int finalPuesto = puesto;
+                                final int finalNumeroGanador = numeroGanador;
+
+                                rifaOrganizadorViewModel.obtenerUsuario(usuarioId)
+                                        .observe(getViewLifecycleOwner(), usuario -> {
+                                            if (usuario != null) {
+                                                GanadorInfoDTO dto = new GanadorInfoDTO(
+                                                        usuario.getNombre() + " " + usuario.getApellido(),
+                                                        usuario.getNroCelular(),
+                                                        usuario.getCorreo(),
+                                                        finalNumeroGanador,
+                                                        finalPuesto
+                                                );
+                                                ganadorInfoList.add(dto);
+                                            }
+                                            processed[0]++;
+                                            if (processed[0] == total) {
+                                                GanadorInfoAdapter ganadorInfoAdapter = new GanadorInfoAdapter(ganadorInfoList);
+                                                rvGanadorInfo.setAdapter(ganadorInfoAdapter);
+                                                rvGanadorInfo.setVisibility(View.VISIBLE);
+                                                view.findViewById(R.id.rifa_organizador_txt_seccion_ganadores)
+                                                        .setVisibility(View.VISIBLE);
+                                            }
+                                        });
+                                break;
+                            }
+                        }
+
+                        // Si no encontramos usuario para ese número, igual incrementamos
+                        if (!encontrado) {
+                            processed[0]++;
+                            if (processed[0] == total) {
+                                GanadorInfoAdapter ganadorInfoAdapter = new GanadorInfoAdapter(ganadorInfoList);
+                                rvGanadorInfo.setAdapter(ganadorInfoAdapter);
+                                rvGanadorInfo.setVisibility(View.VISIBLE);
+                                view.findViewById(R.id.rifa_organizador_txt_seccion_ganadores)
+                                        .setVisibility(View.VISIBLE);
+                            }
+                        }
+                    }
+                });
     }
 
-    private void inflarParticipantes(View view) {
-        List<Participante> participantes = new ArrayList<>();
-        participantes.add(new Participante("Juan Perez", List.of(5,7,3,2)));
-        participantes.add(new Participante("Juan Perez Segundo", List.of(10,11,12)));
-        participantes.add(new Participante("Juan Perez Tercero", List.of(13,14,15)));
-        participantes.add(new Participante("Juan Perez Cuarto", List.of(16,17,18)));
 
-        RecyclerView rvParticipantes = view.findViewById(R.id.recycler_view_participantes);
-        rvParticipantes.setLayoutManager(new LinearLayoutManager(getContext()));
-        ParticipantesAdapter participantesAdapter = new ParticipantesAdapter(participantes);
-        rvParticipantes.setAdapter(participantesAdapter);
+    private void inflarParticipantes(View view, RifaDTO rifa) {
+        procesarParticipantes(rifa.getNumerosComprados(), participantes -> {
+            RecyclerView rvParticipantes = view.findViewById(R.id.recycler_view_participantes);
+            rvParticipantes.setLayoutManager(new LinearLayoutManager(getContext()));
+            ParticipantesAdapter adapter = new ParticipantesAdapter(participantes);
+            rvParticipantes.setAdapter(adapter);
+        });
     }
 
-    private void inflarEleccionGanadores(View view) {
-        List<CandidatoGanador> candidatosGanadores = new ArrayList<>();
-        candidatosGanadores.add(new CandidatoGanador("Juan Perez", true, List.of(1,2,3,4,5)));
-        candidatosGanadores.add(new CandidatoGanador("Juan Perez", true, List.of(6,7)));
-        candidatosGanadores.add(new CandidatoGanador("Juan Perez", true, List.of(8)));
+    private void inflarEleccionGanadores(View view, RifaDTO rifa) {
+        MaterialButton btnconfirmarGanadores = view.findViewById(R.id.rifa_organizador_btn_confirmar_ganadores);
+        procesarParticipantes(rifa.getNumerosComprados(), participantes -> {
+            List<CandidatoGanador> candidatosGanadores = new ArrayList<>();
+            for (Participante p : participantes) {
+                candidatosGanadores.add(new CandidatoGanador(p.getNombre(), true, p.getNumeros()));
+            }
 
-        RecyclerView rvCandidatosGanadores = view.findViewById(R.id.recycler_view_eleccion_ganadores);
-        rvCandidatosGanadores.setLayoutManager(new LinearLayoutManager(getContext()));
-        EleccionGanadoresAdapter eleccionGanadoresAdapter = new EleccionGanadoresAdapter(candidatosGanadores);
-        rvCandidatosGanadores.setAdapter(eleccionGanadoresAdapter);
+            RecyclerView rvCandidatosGanadores = view.findViewById(R.id.recycler_view_eleccion_ganadores);
+            rvCandidatosGanadores.setLayoutManager(new LinearLayoutManager(getContext()));
+            EleccionGanadoresAdapter adapter = new EleccionGanadoresAdapter(candidatosGanadores);
+            rvCandidatosGanadores.setAdapter(adapter);
 
-        TextView elegirGanadorTitulo = view.findViewById(R.id.rifa_organizador_txt_seccion_ganadores);
-        MaterialButton confirmarGanadores = view.findViewById(R.id.rifa_organizador_btn_confirmar_ganadores);
+            view.findViewById(R.id.rifa_organizador_txt_seccion_eleccion_ganadores).setVisibility(View.VISIBLE);
+            rvCandidatosGanadores.setVisibility(View.VISIBLE);
+            btnconfirmarGanadores.setVisibility(View.VISIBLE);
 
-        rvCandidatosGanadores.setVisibility(View.VISIBLE);
-        elegirGanadorTitulo.setVisibility(View.VISIBLE);
-        confirmarGanadores.setVisibility(View.VISIBLE);
+            btnconfirmarGanadores.setOnClickListener(v -> {
+                List<Integer> numerosComprados = new ArrayList<>();
+                for (NumeroComprado nc : rifa.getNumerosComprados()) {
+                    for (Integer valorNumero : nc.getNumerosComprados()) {
+                        numerosComprados.add(valorNumero);
+                    }
+                }
+                rifaOrganizadorViewModel.asignarNumerosGanadores(rifa.getId(), numerosComprados);
+            });
+        });
     }
+
+    private double calcularRecaudado(RifaDTO rifa) {
+        double acum = 0;
+
+        for (NumeroComprado nc : rifa.getNumerosComprados()) {
+            acum += nc.getNumerosComprados().size() * nc.getPrecioUnitario();
+        }
+        return acum;
+    }
+
+    private interface ParticipantesCallback {
+        void onParticipantesListos(List<Participante> participantes);
+    }
+
+    private void procesarParticipantes(List<NumeroComprado> numerosComprados, ParticipantesCallback callback) {
+        Map<String, Participante> mapParticipantes = new HashMap<>();
+        AtomicInteger pendientes = new AtomicInteger(numerosComprados.size());
+
+        if (numerosComprados.isEmpty()) {
+            callback.onParticipantesListos(new ArrayList<>());
+            return;
+        }
+
+        for (NumeroComprado nc : numerosComprados) {
+            String usuarioId = nc.getUsuarioId();
+            List<Integer> numeros = nc.getNumerosComprados();
+
+            rifaOrganizadorViewModel.obtenerUsuario(usuarioId)
+                    .observe(getViewLifecycleOwner(), usuario -> {
+                        if (usuario != null) {
+                            mapParticipantes.putIfAbsent(usuarioId,
+                                    new Participante(usuario.getNombre() + " " + usuario.getApellido(), new ArrayList<>()));
+                            mapParticipantes.get(usuarioId).getNumeros().addAll(numeros);
+                        }
+
+                        if (pendientes.decrementAndGet() == 0) {
+                            callback.onParticipantesListos(new ArrayList<>(mapParticipantes.values()));
+                        }
+                    });
+        }
+    }
+
 
 }

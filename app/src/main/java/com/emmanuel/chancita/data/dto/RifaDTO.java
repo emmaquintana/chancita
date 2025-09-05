@@ -1,6 +1,7 @@
 package com.emmanuel.chancita.data.dto;
 
 import com.emmanuel.chancita.data.model.MetodoEleccionGanador;
+import com.emmanuel.chancita.data.model.NumeroComprado;
 import com.emmanuel.chancita.data.model.RifaEstado;
 import com.emmanuel.chancita.data.model.RifaPremio;
 
@@ -22,12 +23,12 @@ public class RifaDTO {
     private LocalDateTime creadoEn;
     private List<String> participantesIds;
     private List<RifaPremio> premios;
-    private List<Integer> numerosComprados;
+    private List<NumeroComprado> numerosComprados;
 
     public RifaDTO(String id, String titulo, String descripcion, int cantNumeros, String creadoPor,
                    RifaEstado estado, String codigo, MetodoEleccionGanador metodoEleccionGanador,
-                   String motivoEleccionGanador, LocalDateTime fechaSorteo,
-                   double precioNumero, LocalDateTime creadoEn, List<RifaPremio> premios, List<Integer> numerosComprados) {
+                   String motivoEleccionGanador, LocalDateTime fechaSorteo, List<String> participantesIds,
+                   double precioNumero, LocalDateTime creadoEn, List<RifaPremio> premios, List<NumeroComprado> numerosComprados) {
         this.id = id;
         this.titulo = titulo;
         this.descripcion = descripcion;
@@ -42,6 +43,7 @@ public class RifaDTO {
         this.creadoEn = creadoEn;
         this.premios = premios;
         this.numerosComprados = numerosComprados;
+        this.participantesIds = participantesIds;
     }
 
     public RifaDTO() {}
@@ -109,11 +111,11 @@ public class RifaDTO {
         this.premios = premios;
     }
 
-    public List<Integer> getNumerosComprados() {
+    public List<NumeroComprado> getNumerosComprados() {
         return numerosComprados;
     }
 
-    public void setNumerosComprados(List<Integer> numerosComprados) {
+    public void setNumerosComprados(List<NumeroComprado> numerosComprados) {
         this.numerosComprados = numerosComprados;
     }
 }

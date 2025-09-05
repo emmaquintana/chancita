@@ -5,7 +5,6 @@ import android.util.Log;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -27,10 +26,9 @@ public class UsuarioDAO {
     }
 
     // Método para obtener un usuario por ID
-    public void getUsuario(String userId, OnCompleteListener<DocumentSnapshot> listener) {
-        db.collection("usuarios").document(userId)
-                .get()
-                .addOnCompleteListener(listener);
+    public Task<DocumentSnapshot> obtenerUsuario(String userId) {
+        return db.collection("usuarios").document(userId)
+                .get();
     }
 
     public Task<DocumentSnapshot> obtenerUsuarioActual() {

@@ -1,6 +1,5 @@
 package com.emmanuel.chancita.data.model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,9 +19,9 @@ public class Rifa {
     private double precioNumero;
     private List<String> participantesIds;
     private List<RifaPremio> premios;
-    private List<Integer> numerosComprados;
+    private List<NumeroComprado> numerosComprados;
 
-    public Rifa(String id, String titulo, String descripcion, int cantNumeros, String creadoPor, RifaEstado estado, LocalDateTime creadoEn, String codigo, MetodoEleccionGanador metodoEleccionGanador, String motivoEleccionGanador ,LocalDateTime fechaSorteo, double precioNumero, List<String> participantesIds, List<RifaPremio> premios, List<Integer> numerosComprados) {
+    public Rifa(String id, String titulo, String descripcion, int cantNumeros, String creadoPor, RifaEstado estado, LocalDateTime creadoEn, String codigo, MetodoEleccionGanador metodoEleccionGanador, String motivoEleccionGanador , LocalDateTime fechaSorteo, double precioNumero, List<String> participantesIds, List<RifaPremio> premios, List<NumeroComprado> numerosComprados) {
         setId(id);
         setTitulo(titulo);
         setDescripcion(descripcion);
@@ -154,11 +153,11 @@ public class Rifa {
         this.premios = premios;
     }
 
-    public List<Integer> getNumerosComprados() {
+    public List<NumeroComprado> getNumerosComprados() {
         return numerosComprados;
     }
 
-    public void setNumerosComprados(List<Integer> numerosComprados) {
+    public void setNumerosComprados(List<NumeroComprado> numerosComprados) {
         this.numerosComprados = numerosComprados;
     }
 }

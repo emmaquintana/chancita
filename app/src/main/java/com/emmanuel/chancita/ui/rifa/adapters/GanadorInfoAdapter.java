@@ -6,12 +6,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.emmanuel.chancita.R;
+import com.emmanuel.chancita.data.dto.GanadorInfoDTO;
+import com.emmanuel.chancita.data.dto.UsuarioDTO;
 import com.emmanuel.chancita.data.model.Rifa;
 import com.emmanuel.chancita.data.model.RifaGanador;
 import com.emmanuel.chancita.data.model.Usuario;
+import com.emmanuel.chancita.data.repository.RifaRepository;
+import com.emmanuel.chancita.data.repository.UsuarioRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,29 +24,28 @@ import java.util.List;
 
 public class GanadorInfoAdapter extends RecyclerView.Adapter<GanadorInfoAdapter.ViewHolder> {
 
-    private List<RifaGanador> ganadores; // MAL
+    private List<GanadorInfoDTO> ganadores;
 
-    public GanadorInfoAdapter(List<RifaGanador> ganadores) {
+    public GanadorInfoAdapter(List<GanadorInfoDTO> ganadores) {
         this.ganadores = ganadores;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_ganador_info, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.layout_ganador_info, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        RifaGanador rifaGanador = ganadores.get(position);
+        GanadorInfoDTO ganador = ganadores.get(position);
 
-        // Obtiene información del usuario
-        Usuario usuario = obtenerUsuario(rifaGanador.getUsuarioId());
-
-        holder.ganadorNombre.setText("Nombre: " + usuario.getNombre());
-        holder.ganadorCelular.setText("Nro. de celular: " + usuario.getNroCelular());
-        holder.ganadorEmail.setText("Email: " + usuario.getCorreo());
+        holder.ganadorNombre.setText("Nombre: " + ganador.getNombre());
+        holder.ganadorCelular.setText("Nro. de celular: " + ganador.getCelular());
+        holder.ganadorEmail.setText("Email: " + ganador.getEmail());
+        holder.ganadorPuesto.setText("Premio del puesto nro.: " + ganador.getPuesto() + " - Número ganador: " + ganador.getNumeroGanador());
     }
 
     @Override
@@ -50,23 +54,17 @@ public class GanadorInfoAdapter extends RecyclerView.Adapter<GanadorInfoAdapter.
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-
-        public TextView ganadorNombre;
-        public TextView ganadorCelular;
-        public TextView ganadorEmail;
-
+        TextView ganadorNombre;
+        TextView ganadorCelular;
+        TextView ganadorEmail;
+        TextView ganadorPuesto;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
             ganadorNombre = itemView.findViewById(R.id.rifa_txt_ganador_nombre);
             ganadorCelular = itemView.findViewById(R.id.rifa_txt_ganador_contacto);
             ganadorEmail = itemView.findViewById(R.id.rifa_txt_ganador_email);
+            ganadorPuesto = itemView.findViewById(R.id.rifa_txt_ganador_puesto);
         }
     }
-
-    private Usuario obtenerUsuario(String usuarioId) {
-        return new Usuario(usuarioId, "example@example.com", "Juan", "Perez", "+5493854877069", "123456", LocalDate.now(), LocalDateTime.now(), LocalDateTime.now());
-    }
 }
-

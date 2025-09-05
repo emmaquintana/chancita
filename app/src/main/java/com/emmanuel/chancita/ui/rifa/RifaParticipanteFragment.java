@@ -9,17 +9,19 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.emmanuel.chancita.R;
 import com.emmanuel.chancita.data.model.MetodoEleccionGanador;
+import com.emmanuel.chancita.data.model.NumeroComprado;
 import com.emmanuel.chancita.data.model.RifaPremio;
 import com.emmanuel.chancita.ui.rifa.adapters.NumerosAdapter;
 import com.emmanuel.chancita.utils.Utilidades;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +57,7 @@ public class RifaParticipanteFragment extends Fragment {
         TextView txtRifaMetodoEleccionGanador = view.findViewById(R.id.rifa_participante_txt_metodo_eleccion); // Debe iniciar con "Método de elección: "
         TextView txtRifaPremios = view.findViewById(R.id.rifa_participante_txt_premios); // Debe iniciar con "1er puesto: "
         TextView txtRifaDescripcion = view.findViewById(R.id.rifa_participante_txt_descripcion);
+        TextView txtRifaDescripcionHead = view.findViewById(R.id.rifa_participante_txt_descripcion_titulo);
         TextView txtPrecioNumero = view.findViewById(R.id.rifa_participante_txt_precio_numero); // Debe iniciar con "Precio por número: $"
         btnContinuar = view.findViewById(R.id.rifa_participante_btn_comprar_numeros);
 
@@ -62,7 +65,14 @@ public class RifaParticipanteFragment extends Fragment {
             precioNumero = rifa.getPrecioNumero();
             inflarNumeros(view, rifa.getCantNumeros(), rifa.getNumerosComprados());
             txtRifaTitulo.setText(rifa.getTitulo());
-            txtRifaDescripcion.setText(rifa.getDescripcion());
+            if (txtRifaDescripcion.getText().equals("") || txtRifaDescripcionHead.getText() == null) {
+                txtRifaDescripcion.setVisibility(View.GONE);
+                txtRifaDescripcionHead.setVisibility(View.GONE);
+            }
+            else {
+                txtRifaDescripcion.setText(rifa.getDescripcion());
+            }
+
             txtRifaEstado.setText("Estado: " + rifa.getEstado());
             txtRifaCodigo.setText("Código: " + rifa.getCodigo());
             txtPrecioNumero.setText("Precio por número: $" + rifa.getPrecioNumero() + " + 2.2% comisión");
@@ -78,7 +88,7 @@ public class RifaParticipanteFragment extends Fragment {
     }
 
     /** Infla los numeros de los cuales el usuario participante podrá elegir cuál comprar */
-    private void inflarNumeros(View view, int cantNumeros, List<Integer> numerosComprados) {
+    private void inflarNumeros(View view, int cantNumeros, List<NumeroComprado> numerosComprados) {
         RecyclerView rvNumeros = view.findViewById(R.id.rifa_participante_rv_numeros);
         List<Integer> numeros;
 
@@ -87,7 +97,7 @@ public class RifaParticipanteFragment extends Fragment {
             numeros.add(i);
         }
 
-        NumerosAdapter adapter = new NumerosAdapter(numeros, numerosComprados, numerosSeleccionados -> {
+        NumerosAdapter adapter = new NumerosAdapter(numeros, numerosComprados, FirebaseAuth.getInstance().getCurrentUser().getUid(), numerosSeleccionados -> {
             if (numerosSeleccionados.size() > 0) {
                 btnContinuar.setEnabled(true);
             }
@@ -95,7 +105,11 @@ public class RifaParticipanteFragment extends Fragment {
                 btnContinuar.setEnabled(false);
             }
 
-            if (numerosSeleccionados.size() == 1) {
+
+            if (numerosSeleccionados.isEmpty()) {
+                btnContinuar.setText("Comprar número/s");
+            }
+            else if (numerosSeleccionados.size() == 1) {
                 btnContinuar.setText("Comprar número ($" + calcularPrecio(numerosSeleccionados.size(), precioNumero, 2.2) + ")");
             }
             else if (numerosSeleccionados.size() > 1) {

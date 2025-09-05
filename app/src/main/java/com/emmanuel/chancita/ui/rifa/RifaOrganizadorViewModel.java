@@ -5,7 +5,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.emmanuel.chancita.data.dto.RifaDTO;
+import com.emmanuel.chancita.data.dto.UsuarioDTO;
+import com.emmanuel.chancita.data.model.Usuario;
 import com.emmanuel.chancita.data.repository.RifaRepository;
+import com.emmanuel.chancita.data.repository.UsuarioRepository;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -13,6 +16,7 @@ import java.util.List;
 
 public class RifaOrganizadorViewModel extends ViewModel {
     private final RifaRepository rifaRepository;
+    private final UsuarioRepository usuarioRepository;
 
     // Creación de rifa
     private final MutableLiveData<Boolean> _creandoRifa = new MutableLiveData<>();
@@ -32,9 +36,16 @@ public class RifaOrganizadorViewModel extends ViewModel {
     private final MutableLiveData<String> _resultadoObtencionRifa = new MutableLiveData<>();
     public final LiveData<String> resultadoObtencionRifa = _resultadoObtencionRifa;
 
+    // Asignar numeros ganadores
+    private final MutableLiveData<Boolean> _asignandoNumerosGanadores = new MutableLiveData<>();
+    public final LiveData<Boolean> asignandoNumerosGanadores = _asignandoNumerosGanadores;
+    private final MutableLiveData<String> _resultadoAsignacionNumerosGanadores = new MutableLiveData<>();
+    public final LiveData<String> resultadoAsignacionNumerosGanadores = _resultadoAsignacionNumerosGanadores;
+
 
     public RifaOrganizadorViewModel() {
         this.rifaRepository = new RifaRepository();
+        this.usuarioRepository = new UsuarioRepository();
     }
 
     public void crearRifa(RifaDTO rifaDTO) {
@@ -48,6 +59,10 @@ public class RifaOrganizadorViewModel extends ViewModel {
                 _resultadoCreacionRifa.setValue("Algo salió mal");
             }
         });
+    }
+
+    public LiveData<Usuario> obtenerUsuario(String usuarioId) {
+        return usuarioRepository.obtenerUsuario(usuarioId);
     }
 
     public void editarRifa(RifaDTO rifaDTO) {
@@ -65,6 +80,24 @@ public class RifaOrganizadorViewModel extends ViewModel {
         });
     }
 
+    public LiveData<List<Integer>> obtenerNumerosGanadores(String rifaId) {
+        return rifaRepository.obtenerNumerosGanadores(rifaId);
+    }
+
+    public void asignarNumerosGanadores(String rifaId, List<Integer> numerosGanadores) {
+        _asignandoNumerosGanadores.setValue(true);
+
+        rifaRepository.asignarNumerosGanadores(rifaId, numerosGanadores, task -> {
+            if (task.isSuccessful()) {
+                _asignandoNumerosGanadores.setValue(false);
+                _resultadoAsignacionNumerosGanadores.setValue("¡Los ganadores han sido asignados con éxito!");
+            }
+            else {
+                _resultadoAsignacionNumerosGanadores.setValue("Algo salió mal. Intente nuevamente");
+            }
+        });
+    }
+
     public LiveData<RifaDTO> obtenerRifa(String rifaId) {
         _obteniendoRifa.setValue(true);
 
@@ -75,6 +108,10 @@ public class RifaOrganizadorViewModel extends ViewModel {
                 _resultadoObtencionRifa.setValue("Algo salió mal");
             }
         });
+    }
+
+    public LiveData<List<UsuarioDTO>> obtenerParticipantes(String rifaId) {
+        return rifaRepository.obtenerParticipantes(rifaId);
     }
 
     public LiveData<List<RifaDTO>> obtenerRifasCreadasPorUsuarioActual(OnCompleteListener<QuerySnapshot> listener) {

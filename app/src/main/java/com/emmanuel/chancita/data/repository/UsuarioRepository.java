@@ -36,16 +36,40 @@ public class UsuarioRepository {
      * @param userId La ID del usuario cuya info se quiere obtener
      * @return LiveData Un LiveData con los datos del usuario
      * */
-    public LiveData<Usuario> getUsuario(String userId) {
+    public LiveData<Usuario> obtenerUsuario(String userId) {
         MutableLiveData<Usuario> liveData = new MutableLiveData<>();
-        usuarioDAO.getUsuario(userId, task -> {
-            if (task.isSuccessful() && task.getResult().exists()) {
-                Usuario usuario = task.getResult().toObject(Usuario.class);
-                liveData.setValue(usuario);
-            } else {
-                liveData.setValue(null);
-            }
-        });
+        usuarioDAO.obtenerUsuario(userId)
+                .addOnSuccessListener(doc -> {
+                    if (doc.exists()) {
+                        Usuario usuario = new Usuario();
+
+                        usuario.setId(doc.getId());
+                        usuario.setNombre(doc.getString("nombre"));
+                        usuario.setApellido(doc.getString("apellido"));
+                        usuario.setCorreo(doc.getString("correo"));
+                        usuario.setNroCelular(doc.getString("nroCelular"));
+
+                        String fechaNacimientoStr = doc.getString("fechaNacimiento");
+                        LocalDate fechaNacimiento = LocalDate.parse(fechaNacimientoStr);
+
+                        String creadoEnStr = doc.getString("creadoEn");
+                        LocalDateTime creadoEn = LocalDateTime.parse(creadoEnStr);
+
+                        String ultimoIngresoStr = doc.getString("ultimoIngreso");
+                        LocalDateTime ultimoIngreso = ultimoIngresoStr != null ? LocalDateTime.parse(ultimoIngresoStr) : null;
+
+                        usuario.setFechaNacimiento(fechaNacimiento);
+                        usuario.setCreadoEn(creadoEn);
+                        usuario.setUltimoIngreso(ultimoIngreso);
+
+                        liveData.setValue(usuario);
+                        Log.println(Log.INFO, "ENCONTRADO", "EL USUARIO ES ENCONTRADO EN DOCS");
+                    } else {
+                        Log.println(Log.ERROR, "NO ENCONTRADO", "EL USUARIO NO ES ENCONTRADO EN DOCS " + doc.getId());
+                        liveData.setValue(null);
+                    }
+                })
+                .addOnFailureListener(e -> liveData.setValue(null));
         return liveData;
     }
 

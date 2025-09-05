@@ -9,8 +9,9 @@
         android:id="@+id/rifa_txt_ganador_nombre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nombre y apellido"
+        android:text="Nombre y apellido: Cargando..."
         android:textColor="?attr/colorOnSurface"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,7 +21,8 @@
         android:id="@+id/rifa_txt_ganador_contacto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Número de celular: +xxxxxxxxxxxxx"
+        android:text="Número de celular: Cargando..."
+        android:textSize="16sp"
         android:textColor="?attr/colorOnSurface"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rifa_txt_ganador_nombre" />
@@ -29,9 +31,20 @@
         android:id="@+id/rifa_txt_ganador_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="E-mail: alguien@example.com"
+        android:text="E-mail: Cargando..."
+        android:textSize="16sp"
         android:textColor="?attr/colorOnSurface"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rifa_txt_ganador_contacto" />
+
+    <TextView
+        android:id="@+id/rifa_txt_ganador_puesto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ganador del premio nro.: Cargando..."
+        android:textSize="16sp"
+        android:textColor="?attr/colorOnSurface"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rifa_txt_ganador_email" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

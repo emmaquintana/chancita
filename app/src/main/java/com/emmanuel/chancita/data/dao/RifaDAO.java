@@ -2,6 +2,7 @@ package com.emmanuel.chancita.data.dao;
 
 import com.emmanuel.chancita.data.model.Rifa;
 import com.emmanuel.chancita.data.model.RifaEstado;
+import com.emmanuel.chancita.data.model.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -10,11 +11,16 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class RifaDAO {
     private final FirebaseFirestore db;
@@ -48,6 +54,24 @@ public class RifaDAO {
         db.collection("rifas")
                 .document(nuevoId)
                 .set(rifaData)
+                .addOnCompleteListener(listener);
+    }
+
+    public void asignarNumerosGanadores(String rifaId, List<Integer> numerosGanadores, OnCompleteListener<Void> listener) {
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("numerosGanadores", numerosGanadores);
+
+        db.collection("rifas")
+                .document(rifaId)
+                .set(updates, SetOptions.merge())
+                .addOnCompleteListener(listener);
+
+    }
+
+    public void obtenerNumerosGanadores(String rifaId, OnCompleteListener<DocumentSnapshot> listener) {
+        db.collection("rifas")
+                .document(rifaId)
+                .get()
                 .addOnCompleteListener(listener);
     }
 
@@ -151,5 +175,59 @@ public class RifaDAO {
                 .whereEqualTo("rifaId", rifaId)
                 .get()
                 .addOnCompleteListener(listener);
+    }
+
+    public interface OnParticipantesListener {
+        void onComplete(List<Usuario> participantes);
+    }
+
+    public interface OnParticipantesDocsListener {
+        void onComplete(List<DocumentSnapshot> documentos);
+    }
+
+    /**
+     * Obtiene los DocumentSnapshot de los participantes de una rifa, usando chunks de 10 IDs.
+     */
+    public void obtenerParticipantes(String rifaId, OnParticipantesDocsListener listener) {
+        db.collection("rifas").document(rifaId).get().addOnCompleteListener(rifaTask -> {
+            if (!rifaTask.isSuccessful() || !rifaTask.getResult().exists()) {
+                listener.onComplete(Collections.emptyList());
+                return;
+            }
+
+            List<String> participantesIds = (List<String>) rifaTask.getResult().get("participantesIds");
+            if (participantesIds == null || participantesIds.isEmpty()) {
+                listener.onComplete(Collections.emptyList());
+                return;
+            }
+
+            List<DocumentSnapshot> resultadoFinal = new ArrayList<>();
+            List<List<String>> chunks = chunkList(participantesIds, 10);
+            AtomicInteger consultasPendientes = new AtomicInteger(chunks.size());
+
+            for (List<String> chunk : chunks) {
+                db.collection("usuarios")
+                        .whereIn("usuario_id", chunk)
+                        .get()
+                        .addOnCompleteListener(usuariosTask -> {
+                            if (usuariosTask.isSuccessful() && usuariosTask.getResult() != null) {
+                                resultadoFinal.addAll(usuariosTask.getResult().getDocuments());
+                            }
+
+                            if (consultasPendientes.decrementAndGet() == 0) {
+                                listener.onComplete(resultadoFinal);
+                            }
+                        });
+            }
+        });
+    }
+
+    /** Divide una lista en chunks de tamaño n */
+    private <T> List<List<T>> chunkList(List<T> list, int n) {
+        List<List<T>> chunks = new ArrayList<>();
+        for (int i = 0; i < list.size(); i += n) {
+            chunks.add(list.subList(i, Math.min(list.size(), i + n)));
+        }
+        return chunks;
     }
 }

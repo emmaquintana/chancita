@@ -1,15 +1,14 @@
 package com.emmanuel.chancita.data.repository;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.emmanuel.chancita.data.dao.NumeroDAO;
 import com.emmanuel.chancita.data.dao.RifaDAO;
 import com.emmanuel.chancita.data.dao.RifaGanadorDAO;
 import com.emmanuel.chancita.data.dto.RifaDTO;
+import com.emmanuel.chancita.data.dto.UsuarioDTO;
 import com.emmanuel.chancita.data.model.MetodoEleccionGanador;
+import com.emmanuel.chancita.data.model.NumeroComprado;
 import com.emmanuel.chancita.data.model.Rifa;
 import com.emmanuel.chancita.data.model.RifaEstado;
 import com.emmanuel.chancita.data.model.RifaPremio;
@@ -17,6 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,12 +25,10 @@ import java.util.stream.Collectors;
 
 public class RifaRepository {
     private final RifaDAO rifaDAO;
-    private final NumeroDAO numeroDAO;
     private final RifaGanadorDAO rifaGanadorDAO;
 
     public RifaRepository() {
         this.rifaDAO = new RifaDAO();
-        this.numeroDAO = new NumeroDAO();
         this.rifaGanadorDAO = new RifaGanadorDAO();
     }
 
@@ -53,7 +51,7 @@ public class RifaRepository {
                 rifaDto.getPrecioNumero(),
                 new ArrayList<String>(),
                 rifaDto.getPremios(),
-                new ArrayList<Integer>()
+                new ArrayList<>()
         );
 
         rifaDAO.crearRifa(nuevaRifa, listener);
@@ -131,11 +129,43 @@ public class RifaRepository {
                         premios.add(premio);
                     }
                 }
-                List<Integer> numerosComprados = (List<Integer>) doc.get("numerosComprados");
+                List<Map<String, Object>> numerosCompradosMap = (List<Map<String, Object>>) doc.get("numerosComprados");
+                List<NumeroComprado> numerosComprados = new ArrayList<>();
+
+                if (numerosCompradosMap != null) {
+                    for (Map<String, Object> map : numerosCompradosMap) {
+                        String usuarioId = (String) map.get("usuarioId");
+                        List<Integer> valores = new ArrayList<>();
+
+                        List<?> valoresRaw = (List<?>) map.get("valor");
+                        if (valoresRaw != null) {
+                            for (Object obj : valoresRaw) {
+                                if (obj instanceof Long) {
+                                    valores.add(((Long) obj).intValue());
+                                } else if (obj instanceof Integer) {
+                                    valores.add((Integer) obj);
+                                }
+                            }
+                        }
+
+                        Number precioRaw = (Number) map.get("precioUnitario");
+                        double precioUnitario = precioRaw.doubleValue();
+
+                        numerosComprados.add(
+                                new NumeroComprado(
+                                        valores,
+                                        usuarioId,
+                                        precioUnitario
+                                )
+                        );
+                    }
+                }
+                List<String> participantesIds = (List<String>) doc.get("participantesIds");
+
 
                 RifaDTO rifaDTO = new RifaDTO(
                         id, titulo, descripcion, cantNumeros, creadoPor,
-                        estado, codigo, metodo, motivo, fechaSorteo, precioNumero, creadoEn, premios, numerosComprados
+                        estado, codigo, metodo, motivo, fechaSorteo, participantesIds, precioNumero, creadoEn, premios, numerosComprados
                 );
 
                 liveData.setValue(rifaDTO);
@@ -175,6 +205,7 @@ public class RifaRepository {
                                     rifa.getMetodoEleccionGanador(),
                                     rifa.getMotivoEleccionGanador(),
                                     rifa.getFechaSorteo(),
+                                    rifa.getParticipantesIds(),
                                     rifa.getPrecioNumero(),
                                     rifa.getCreadoEn(),
                                     rifa.getPremios(),
@@ -237,10 +268,45 @@ public class RifaRepository {
                         premios.add(premio);
                     }
                 }
-                List<Integer> numerosComprados = (List<Integer>) doc.get("numerosComprados");
+                List<Map<String, Object>> numerosCompradosMap = (List<Map<String, Object>>) doc.get("numerosComprados");
+                List<NumeroComprado> numerosComprados = new ArrayList<>();
 
-                // Construir DTO
-                RifaDTO rifaDTO = new RifaDTO(id,titulo,descripcion,cantNumeros,creadoPor,estado,codigoVal,metodo,motivo,fechaSorteo,precioNumero,creadoEn,premios, numerosComprados);
+                if (numerosCompradosMap != null) {
+                    for (Map<String, Object> map : numerosCompradosMap) {
+                        String usuarioId = (String) map.get("usuarioId");
+                        List<Integer> valores = new ArrayList<>();
+
+                        List<?> valoresRaw = (List<?>) map.get("valor");
+                        if (valoresRaw != null) {
+                            for (Object obj : valoresRaw) {
+                                if (obj instanceof Long) {
+                                    valores.add(((Long) obj).intValue());
+                                } else if (obj instanceof Integer) {
+                                    valores.add((Integer) obj);
+                                }
+                            }
+                        }
+
+                        Number precioRaw = (Number) map.get("precioUnitario");
+                        double precioUnitario = precioRaw.doubleValue();
+
+                        numerosComprados.add(
+                                new NumeroComprado(
+                                        valores,
+                                        usuarioId,
+                                        precioUnitario
+                                )
+                        );
+                    }
+                }
+
+                List<String> participantesIds = (List<String>) doc.get("participantesIds");
+
+
+                RifaDTO rifaDTO = new RifaDTO(
+                        id, titulo, descripcion, cantNumeros, creadoPor,
+                        estado, codigo, metodo, motivo, fechaSorteo, participantesIds, precioNumero, creadoEn, premios, numerosComprados
+                );
 
                 liveData.setValue(rifaDTO);
             } else {
@@ -292,11 +358,44 @@ public class RifaRepository {
                                     premios.add(premio);
                                 }
                             }
-                            List<Integer> numerosComprados = (List<Integer>) document.get("numerosComprados");
+                            List<Map<String, Object>> numerosCompradosMap = (List<Map<String, Object>>) document.get("numerosComprados");
+                            List<NumeroComprado> numerosComprados = new ArrayList<>();
+
+                            if (numerosCompradosMap != null) {
+                                for (Map<String, Object> map : numerosCompradosMap) {
+                                    String usuarioId = (String) map.get("usuarioId");
+                                    List<Integer> valores = new ArrayList<>();
+
+                                    List<?> valoresRaw = (List<?>) map.get("valor");
+                                    if (valoresRaw != null) {
+                                        for (Object obj : valoresRaw) {
+                                            if (obj instanceof Long) {
+                                                valores.add(((Long) obj).intValue());
+                                            } else if (obj instanceof Integer) {
+                                                valores.add((Integer) obj);
+                                            }
+                                        }
+                                    }
+
+                                    Number precioRaw = (Number) map.get("precioUnitario");
+                                    double precioUnitario = precioRaw.doubleValue();
+
+                                    numerosComprados.add(
+                                            new NumeroComprado(
+                                                    valores,
+                                                    usuarioId,
+                                                    precioUnitario
+                                            )
+                                    );
+                                }
+                            }
+
+                            List<String> participantesIds = (List<String>) document.get("participantesIds");
+
 
                             return new RifaDTO(
                                     id, titulo, descripcion, cantNumeros, creadoPor,
-                                    estado, codigo, metodo, motivo, fechaSorteo, precioNumero, creadoEn, premios, numerosComprados
+                                    estado, codigo, metodo, motivo, fechaSorteo, participantesIds, precioNumero, creadoEn, premios, numerosComprados
                             );
                         })
                         .collect(Collectors.toList());
@@ -350,11 +449,44 @@ public class RifaRepository {
                                     premios.add(premio);
                                 }
                             }
-                            List<Integer> numerosComprados = (List<Integer>) document.get("numerosComprados");
+                            List<Map<String, Object>> numerosCompradosMap = (List<Map<String, Object>>) document.get("numerosComprados");
+                            List<NumeroComprado> numerosComprados = new ArrayList<>();
+
+                            if (numerosCompradosMap != null) {
+                                for (Map<String, Object> map : numerosCompradosMap) {
+                                    String usuarioId = (String) map.get("usuarioId");
+                                    List<Integer> valores = new ArrayList<>();
+
+                                    List<?> valoresRaw = (List<?>) map.get("valor");
+                                    if (valoresRaw != null) {
+                                        for (Object obj : valoresRaw) {
+                                            if (obj instanceof Long) {
+                                                valores.add(((Long) obj).intValue());
+                                            } else if (obj instanceof Integer) {
+                                                valores.add((Integer) obj);
+                                            }
+                                        }
+                                    }
+
+                                    Number precioRaw = (Number) map.get("precioUnitario");
+                                    double precioUnitario = precioRaw.doubleValue();
+
+                                    numerosComprados.add(
+                                            new NumeroComprado(
+                                                    valores,
+                                                    usuarioId,
+                                                    precioUnitario
+                                            )
+                                    );
+                                }
+                            }
+
+                            List<String> participantesIds = (List<String>) document.get("participantesIds");
+
 
                             return new RifaDTO(
                                     id, titulo, descripcion, cantNumeros, creadoPor,
-                                    estado, codigo, metodo, motivo, fechaSorteo, precioNumero, creadoEn, premios, numerosComprados
+                                    estado, codigo, metodo, motivo, fechaSorteo, participantesIds, precioNumero, creadoEn, premios, numerosComprados
                             );
                         })
                         .collect(Collectors.toList());
@@ -365,6 +497,83 @@ public class RifaRepository {
 
             if (listener != null) {
                 listener.onComplete(task);
+            }
+        });
+
+        return liveData;
+    }
+
+    public LiveData<List<UsuarioDTO>> obtenerParticipantes(String rifaId) {
+        MutableLiveData<List<UsuarioDTO>> liveData = new MutableLiveData<>();
+
+        rifaDAO.obtenerParticipantes(rifaId, documentos -> {
+            List<UsuarioDTO> dtos = new ArrayList<>();
+
+            for (DocumentSnapshot doc : documentos) {
+                if (doc.exists()) {
+                    try {
+                        String nombre = doc.getString("nombre");
+                        String apellido = doc.getString("apellido");
+                        String correo = doc.getString("correo");
+                        String nroCelular = doc.getString("nroCelular");
+                        String contrasena = doc.getString("contraseña");
+                        LocalDate fechaNacimiento = null;
+                        String fechaNacimientoStr = doc.getString("fechaNacimiento");
+                        if (fechaNacimientoStr != null && !fechaNacimientoStr.isEmpty()) {
+                            fechaNacimiento = LocalDate.parse(fechaNacimientoStr);
+                        }
+                        LocalDateTime creadoEn = null;
+                        String creadoEnStr = doc.getString("creadoEn");
+                        if (creadoEnStr != null && !creadoEnStr.isEmpty()) {
+                            creadoEn = LocalDateTime.parse(creadoEnStr);
+                        }
+                        LocalDateTime ultimoIngreso = null;
+                        String ultimoIngresoStr = doc.getString("ultimoIngreso");
+                        if (ultimoIngresoStr != null && !ultimoIngresoStr.isEmpty()) {
+                            ultimoIngreso = LocalDateTime.parse(ultimoIngresoStr);
+                        }
+                        UsuarioDTO dto = new UsuarioDTO(
+                                nombre, apellido, correo, nroCelular, contrasena,
+                                fechaNacimiento, creadoEn, ultimoIngreso
+                        );
+
+                        dtos.add(dto);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            liveData.postValue(dtos);
+        });
+
+        return liveData;
+    }
+
+    public void asignarNumerosGanadores(String rifaId, List<Integer> numerosGanadores, OnCompleteListener<Void> listener) {
+        rifaDAO.asignarNumerosGanadores(rifaId, numerosGanadores, listener);
+    }
+
+    public LiveData<List<Integer>> obtenerNumerosGanadores(String rifaId) {
+        MutableLiveData<List<Integer>> liveData = new MutableLiveData<>();
+
+        rifaDAO.obtenerNumerosGanadores(rifaId, doc -> {
+            if (doc.isSuccessful()) {
+                DocumentSnapshot document = doc.getResult();
+                if (document.exists()) {
+                    List<Long> numeros = (List<Long>) document.get("numerosGanadores");
+                    if (numeros != null) {
+                        List<Integer> convertidos = new ArrayList<>();
+                        for (Long n : numeros) convertidos.add(n.intValue());
+                        liveData.setValue(convertidos);
+                    }
+                else {
+                    liveData.setValue(null);
+                }
+            }
+            else {
+                liveData.setValue(null);
+            }
             }
         });
 
