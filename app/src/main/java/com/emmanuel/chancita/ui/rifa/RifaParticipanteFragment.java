@@ -21,16 +21,14 @@ import com.emmanuel.chancita.ui.rifa.adapters.NumerosAdapter;
 import com.emmanuel.chancita.utils.Utilidades;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RifaParticipanteFragment extends Fragment {
 
     private RifaParticipanteViewModel rifaParticipanteViewModel;
-    private MaterialButton btnContinuar;
-    private double precioNumero;
 
     public static RifaParticipanteFragment newInstance() {
         return new RifaParticipanteFragment();
@@ -59,37 +57,41 @@ public class RifaParticipanteFragment extends Fragment {
         TextView txtRifaDescripcion = view.findViewById(R.id.rifa_participante_txt_descripcion);
         TextView txtRifaDescripcionHead = view.findViewById(R.id.rifa_participante_txt_descripcion_titulo);
         TextView txtPrecioNumero = view.findViewById(R.id.rifa_participante_txt_precio_numero); // Debe iniciar con "Precio por número: $"
-        btnContinuar = view.findViewById(R.id.rifa_participante_btn_comprar_numeros);
 
         rifaParticipanteViewModel.obtenerRifa("B1EzULChLnb37D7LfC3m").observe(getViewLifecycleOwner(), rifa -> {
-            precioNumero = rifa.getPrecioNumero();
-            inflarNumeros(view, rifa.getCantNumeros(), rifa.getNumerosComprados());
-            txtRifaTitulo.setText(rifa.getTitulo());
-            if (txtRifaDescripcion.getText().equals("") || txtRifaDescripcionHead.getText() == null) {
-                txtRifaDescripcion.setVisibility(View.GONE);
-                txtRifaDescripcionHead.setVisibility(View.GONE);
-            }
-            else {
-                txtRifaDescripcion.setText(rifa.getDescripcion());
+            // Permite al usuario comprar números si la fecha de sorteo aún no llega
+            if (LocalDateTime.now().isBefore(rifa.getFechaSorteo())) {
+                inflarSeccionNumeros(view, rifa.getCantNumeros(), rifa.getNumerosComprados(), rifa.getPrecioNumero());
             }
 
+            // Setea la información de la rifa
+            txtRifaTitulo.setText(rifa.getTitulo());
             txtRifaEstado.setText("Estado: " + rifa.getEstado());
             txtRifaCodigo.setText("Código: " + rifa.getCodigo());
             txtPrecioNumero.setText("Precio por número: $" + rifa.getPrecioNumero() + " + 2.2% comisión");
             txtRifaFechaSorteo.setText("Fecha de sorteo: " + Utilidades.formatearFechaHora(rifa.getFechaSorteo(), "dd/MM/yyyy hh:mm"));
             txtRifaMetodoEleccionGanador.setText("Método de elección: " + Utilidades.capitalizar(rifa.getMetodoEleccionGanador().toString()) + (rifa.getMetodoEleccionGanador() == MetodoEleccionGanador.DETERMINISTA ? " (" + rifa.getMotivoEleccionGanador() + ")" : ""));
             txtRifaPremios.setText(formatearPremios(rifa.getPremios()));
-
-
-            btnContinuar.setOnClickListener(v -> {
-
-            });
+            // Si no hay descripción, se oculta la sección "Descripción"
+            if (txtRifaDescripcion.getText().equals("") || txtRifaDescripcionHead.getText() == null) {
+                txtRifaDescripcion.setVisibility(View.GONE);
+                txtRifaDescripcionHead.setVisibility(View.GONE);
+            }
+            else { // Se setea la descripción
+                txtRifaDescripcion.setText(rifa.getDescripcion());
+            }
         });
     }
 
     /** Infla los numeros de los cuales el usuario participante podrá elegir cuál comprar */
-    private void inflarNumeros(View view, int cantNumeros, List<NumeroComprado> numerosComprados) {
+    private void inflarSeccionNumeros(View view, int cantNumeros, List<NumeroComprado> numerosComprados, double precioNumero) {
+        MaterialButton btnContinuar = view.findViewById(R.id.rifa_participante_btn_comprar_numeros);
         RecyclerView rvNumeros = view.findViewById(R.id.rifa_participante_rv_numeros);
+        view.findViewById(R.id.rifa_participante_txt_comprar_numeros_titulo).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.rifa_participante_txt_comprar_numeros_descripcion).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.rifa_participante_txt_aclaracion_comision).setVisibility(View.VISIBLE);
+        rvNumeros.setVisibility(View.VISIBLE);
+        btnContinuar.setVisibility(View.VISIBLE);
         List<Integer> numeros;
 
         numeros = new ArrayList<>();
@@ -116,11 +118,14 @@ public class RifaParticipanteFragment extends Fragment {
                 btnContinuar.setText("Comprar números ($" + calcularPrecio(numerosSeleccionados.size(), precioNumero, 2.2) + ")");
             }
         });
-
         // Distribuye los items en una grilla
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 5); // 5 columnas
         rvNumeros.setLayoutManager(layoutManager);
         rvNumeros.setAdapter(adapter);
+
+        btnContinuar.setOnClickListener(v -> {
+
+        });
     }
 
     private double calcularPrecio(double cantNumerosSeleccionados, double precioNumero, double comision) {
