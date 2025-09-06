@@ -6,20 +6,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.emmanuel.chancita.R;
 import com.emmanuel.chancita.data.dto.GanadorInfoDTO;
-import com.emmanuel.chancita.data.dto.UsuarioDTO;
-import com.emmanuel.chancita.data.model.Rifa;
-import com.emmanuel.chancita.data.model.RifaGanador;
-import com.emmanuel.chancita.data.model.Usuario;
-import com.emmanuel.chancita.data.repository.RifaRepository;
-import com.emmanuel.chancita.data.repository.UsuarioRepository;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class GanadorInfoAdapter extends RecyclerView.Adapter<GanadorInfoAdapter.ViewHolder> {

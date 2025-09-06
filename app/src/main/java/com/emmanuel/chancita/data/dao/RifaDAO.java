@@ -1,5 +1,6 @@
 package com.emmanuel.chancita.data.dao;
 
+import com.emmanuel.chancita.data.dto.UsuarioDTO;
 import com.emmanuel.chancita.data.model.Rifa;
 import com.emmanuel.chancita.data.model.RifaEstado;
 import com.emmanuel.chancita.data.model.Usuario;
@@ -14,6 +15,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
+
+import org.w3c.dom.Document;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -55,6 +58,67 @@ public class RifaDAO {
                 .document(nuevoId)
                 .set(rifaData)
                 .addOnCompleteListener(listener);
+    }
+
+    public void obtenerNumerosCompradosPorUsuarioActual(String rifaId, OnCompleteListener<List<Integer>> listener) {
+        FirebaseUser usuarioActual = auth.getCurrentUser();
+        if (usuarioActual == null) {
+            listener.onComplete(Tasks.forException(new Exception("Usuario no autenticado")));
+            return;
+        }
+
+        db.collection("rifas")
+                .document(rifaId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful() || task.getResult() == null) {
+                        listener.onComplete(Tasks.forException(
+                                task.getException() != null ? task.getException() : new Exception("No se pudo obtener la rifa")
+                        ));
+                        return;
+                    }
+
+                    DocumentSnapshot snapshot = task.getResult();
+                    List<Map<String, Object>> numerosComprados = (List<Map<String, Object>>) snapshot.get("numerosComprados");
+
+                    List<Integer> numerosUsuario = new ArrayList<>();
+                    if (numerosComprados != null) {
+                        for (Map<String, Object> compra : numerosComprados) {
+                            String uid = (String) compra.get("usuarioId");
+                            if (usuarioActual.getUid().equals(uid)) {
+                                List<Long> valores = (List<Long>) compra.get("valor");
+                                if (valores != null) {
+                                    for (Long num : valores) {
+                                        numerosUsuario.add(num.intValue());
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    listener.onComplete(Tasks.forResult(numerosUsuario));
+                });
+    }
+
+    public void obtenerUidOrganizador(String rifaId, OnCompleteListener<String> listener) {
+        db.collection("rifas")
+                .document(rifaId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful() || task.getResult() == null || !task.getResult().exists()) {
+                        listener.onComplete(Tasks.forException(
+                                task.getException() != null ? task.getException() : new Exception("Rifa no encontrada")
+                        ));
+                        return;
+                    }
+
+                    String uidOrganizador = task.getResult().getString("creadoPor");
+                    if (uidOrganizador == null) {
+                        listener.onComplete(Tasks.forException(new Exception("No se encontró el organizador")));
+                    } else {
+                        listener.onComplete(Tasks.forResult(uidOrganizador));
+                    }
+                });
     }
 
     public void asignarNumerosGanadores(String rifaId, List<Integer> numerosGanadores, OnCompleteListener<Void> listener) {

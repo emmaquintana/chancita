@@ -24,6 +24,8 @@ public class UsuarioDTO {
         this.ultimoIngreso = ultimoIngreso;
     }
 
+    public UsuarioDTO() {}
+
     public String getNombre() {
         return nombre;
     }

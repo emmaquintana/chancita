@@ -13,7 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import com.emmanuel.chancita.R;
+import com.emmanuel.chancita.data.dto.RifaDTO;
 import com.emmanuel.chancita.data.model.MetodoEleccionGanador;
 import com.emmanuel.chancita.data.model.NumeroComprado;
 import com.emmanuel.chancita.data.model.RifaPremio;
@@ -21,6 +23,7 @@ import com.emmanuel.chancita.ui.rifa.adapters.NumerosAdapter;
 import com.emmanuel.chancita.utils.Utilidades;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -29,6 +32,7 @@ import java.util.List;
 public class RifaParticipanteFragment extends Fragment {
 
     private RifaParticipanteViewModel rifaParticipanteViewModel;
+    private RifaDTO rifa;
 
     public static RifaParticipanteFragment newInstance() {
         return new RifaParticipanteFragment();
@@ -59,6 +63,7 @@ public class RifaParticipanteFragment extends Fragment {
         TextView txtPrecioNumero = view.findViewById(R.id.rifa_participante_txt_precio_numero); // Debe iniciar con "Precio por número: $"
 
         rifaParticipanteViewModel.obtenerRifa("B1EzULChLnb37D7LfC3m").observe(getViewLifecycleOwner(), rifa -> {
+            this.rifa = rifa;
             // Permite al usuario comprar números si la fecha de sorteo aún no llega
             if (LocalDateTime.now().isBefore(rifa.getFechaSorteo())) {
                 inflarSeccionNumeros(view, rifa.getCantNumeros(), rifa.getNumerosComprados(), rifa.getPrecioNumero());
@@ -80,7 +85,92 @@ public class RifaParticipanteFragment extends Fragment {
             else { // Se setea la descripción
                 txtRifaDescripcion.setText(rifa.getDescripcion());
             }
+
+            rifaParticipanteViewModel.obenerOrganizador("B1EzULChLnb37D7LfC3m").observe(getViewLifecycleOwner(), organizador -> {
+                TextView txtCorreoOrganizador = view.findViewById(R.id.rifa_participante_txt_correo_organizador);
+                TextView txtCelularOrganizador = view.findViewById(R.id.rifa_participante_txt_nro_celular_organizador);
+
+                txtCorreoOrganizador.setText("Correo del creador de la rifa: " + organizador.getCorreo());
+                txtCelularOrganizador.setText("Nro. celular del creador de la rifa: " + organizador.getNroCelular());
+            });
         });
+
+        rifaParticipanteViewModel.obtenerNumerosCompradosPorUsuarioActual("B1EzULChLnb37D7LfC3m").observe(getViewLifecycleOwner(), numerosComprados -> {
+            TextView txtNumerosCompradosPorUsuarioActual = view.findViewById(R.id.rifa_participante_txt_numeros_comprados_por_usuario_actual);
+
+            if (numerosComprados.isEmpty()) {
+                txtNumerosCompradosPorUsuarioActual.setText("Aún no compraste números");
+            } else {
+                txtNumerosCompradosPorUsuarioActual.setText("Números que compraste: " + Utilidades.listaAString(numerosComprados));
+            }
+        });
+
+        rifaParticipanteViewModel.obtenerNumerosGanadores("B1EzULChLnb37D7LfC3m")
+                .observe(getViewLifecycleOwner(), numerosGanadores -> {
+                    if (numerosGanadores != null && !numerosGanadores.isEmpty()) {
+
+                        // Se oculta la sección de compra de números
+                        view.findViewById(R.id.rifa_participante_btn_comprar_numeros).setVisibility(View.GONE);
+                        view.findViewById(R.id.rifa_participante_rv_numeros).setVisibility(View.GONE);
+                        view.findViewById(R.id.rifa_participante_txt_comprar_numeros_titulo).setVisibility(View.GONE);
+                        view.findViewById(R.id.rifa_participante_txt_comprar_numeros_descripcion).setVisibility(View.GONE);
+                        view.findViewById(R.id.rifa_participante_txt_aclaracion_comision).setVisibility(View.GONE);
+
+                        // Se oculta la sección de premios, pues después se muestra otra sección con premios pero que indica
+                        // el número ganador correspondiente al premio
+                        view.findViewById(R.id.rifa_participante_txt_premios_titulo).setVisibility(View.GONE);
+                        view.findViewById(R.id.rifa_participante_txt_premios).setVisibility(View.GONE);
+
+                        // Se oculta la sección de compra de números
+
+                        // TextView para los números ganadores
+                        TextView txtNumerosGanadores = view.findViewById(R.id.rifa_participante_txt_numeros_ganadores);
+                        txtNumerosGanadores.setVisibility(View.VISIBLE);
+                        txtNumerosGanadores.setText("Números ganadores: " + Utilidades.listaAString(numerosGanadores));
+
+                        // TextView para premios + número ganador
+                        TextView txtPremiosGanadores = view.findViewById(R.id.rifa_participante_txt_numeros_ganadores_premios);
+                        StringBuilder premiosText = new StringBuilder();
+
+
+                        List<RifaPremio> premios = rifa.getPremios();
+                        for (int i = 0; i < premios.size(); i++) {
+                            String premioTitulo = premios.get(i).getPremioTitulo();
+                            String premioDescripcion = premios.get(i).getPremioDescripcion();
+                            String numeroGanador = (i < numerosGanadores.size()) ? String.valueOf(numerosGanadores.get(i)) : "-";
+
+                            premiosText.append("Premio ").append(i + 1).append(": ")
+                                    .append(premioTitulo).append(" - ").append(premioDescripcion)
+                                    .append("\nNúmero ganador: ").append(numeroGanador).append("\n\n");
+                        }
+
+                        txtPremiosGanadores.setVisibility(View.VISIBLE);
+                        txtPremiosGanadores.setText(premiosText.toString());
+
+                        // Verifica si el usuario ganó
+                        FirebaseUser usuarioActual = FirebaseAuth.getInstance().getCurrentUser();
+                        boolean gano = false;
+                        for (int numero : numerosGanadores) {
+                            for (NumeroComprado nc : rifa.getNumerosComprados()) {
+                                if (nc.getUsuarioId().equals(usuarioActual.getUid()) && nc.getNumerosComprados().contains(numero)) {
+                                    gano = true;
+                                    break;
+                                }
+                            }
+                            if (gano) break;
+                        }
+
+                        TextView txtMsjResultado = view.findViewById(R.id.rifa_participante_txt_msj_resultado);
+                        txtMsjResultado.setVisibility(View.VISIBLE);
+                        if (gano) {
+                            txtMsjResultado.setText("¡Felicidades! El creador de la rifa se pondrá en contacto contigo.");
+                        }
+                        else {
+                            txtMsjResultado.setText("¡Mejor suerte para la próxima!");
+                        }
+                    }
+                });
+
     }
 
     /** Infla los numeros de los cuales el usuario participante podrá elegir cuál comprar */
@@ -148,10 +238,10 @@ public class RifaParticipanteFragment extends Fragment {
 
         if (rifaPremios != null && !rifaPremios.isEmpty()) {
             for (RifaPremio premio : rifaPremios) {
-                stb.append("Puesto nro." + premio.getPremioOrden() + ": " + premio.getPremioTitulo() + " (" + premio.getPremioDescripcion() + ")" + "\n");
+                stb.append("Puesto nro." + premio.getPremioOrden() + ": " + premio.getPremioTitulo() + " (" + premio.getPremioDescripcion() + ")" + "\n\n");
             }
         }
 
-        return stb.toString();
+        return stb.toString().substring(0, stb.toString().length() - 2); // Quita el padding bottom que se forma por el último \n\n
     }
 }

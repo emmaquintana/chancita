@@ -11,11 +11,9 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,31 +21,24 @@ import com.emmanuel.chancita.R;
 import com.emmanuel.chancita.data.dto.GanadorInfoDTO;
 import com.emmanuel.chancita.data.dto.PremioAsignacionDTO;
 import com.emmanuel.chancita.data.dto.RifaDTO;
-import com.emmanuel.chancita.data.dto.UsuarioDTO;
 import com.emmanuel.chancita.data.model.MetodoEleccionGanador;
 import com.emmanuel.chancita.data.model.NumeroComprado;
 import com.emmanuel.chancita.data.model.RifaEstado;
-import com.emmanuel.chancita.data.model.RifaGanador;
 import com.emmanuel.chancita.data.model.RifaPremio;
-import com.emmanuel.chancita.data.model.Usuario;
 import com.emmanuel.chancita.ui.rifa.adapters.EleccionGanadoresAdapter;
 import com.emmanuel.chancita.ui.rifa.adapters.GanadorInfoAdapter;
 import com.emmanuel.chancita.ui.rifa.adapters.ParticipantesAdapter;
-import com.emmanuel.chancita.ui.rifa.model.CandidatoGanador;
 import com.emmanuel.chancita.ui.rifa.model.Participante;
 import com.emmanuel.chancita.utils.Utilidades;
 import com.google.android.material.button.MaterialButton;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class RifaOrganizadorFragment extends Fragment {
@@ -213,8 +204,8 @@ public class RifaOrganizadorFragment extends Fragment {
                         if (!encontrado) {
                             processed[0]++;
                             if (processed[0] == total) {
-                                GanadorInfoAdapter ganadorInfoAdapter = new GanadorInfoAdapter(ganadorInfoList);
-                                rvGanadorInfo.setAdapter(ganadorInfoAdapter);
+                                GanadorInfoAdapter ganadorInfoParticipanteAdapter = new GanadorInfoAdapter(ganadorInfoList);
+                                rvGanadorInfo.setAdapter(ganadorInfoParticipanteAdapter);
                                 rvGanadorInfo.setVisibility(View.VISIBLE);
                                 view.findViewById(R.id.rifa_organizador_txt_seccion_ganadores)
                                         .setVisibility(View.VISIBLE);

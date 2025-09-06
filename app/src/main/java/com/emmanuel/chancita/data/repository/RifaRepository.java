@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.emmanuel.chancita.data.dao.RifaDAO;
 import com.emmanuel.chancita.data.dao.RifaGanadorDAO;
+import com.emmanuel.chancita.data.dao.UsuarioDAO;
 import com.emmanuel.chancita.data.dto.RifaDTO;
 import com.emmanuel.chancita.data.dto.UsuarioDTO;
 import com.emmanuel.chancita.data.model.MetodoEleccionGanador;
@@ -12,13 +13,16 @@ import com.emmanuel.chancita.data.model.NumeroComprado;
 import com.emmanuel.chancita.data.model.Rifa;
 import com.emmanuel.chancita.data.model.RifaEstado;
 import com.emmanuel.chancita.data.model.RifaPremio;
+import com.emmanuel.chancita.data.model.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -26,10 +30,12 @@ import java.util.stream.Collectors;
 public class RifaRepository {
     private final RifaDAO rifaDAO;
     private final RifaGanadorDAO rifaGanadorDAO;
+    private final UsuarioDAO usuarioDAO;
 
     public RifaRepository() {
         this.rifaDAO = new RifaDAO();
         this.rifaGanadorDAO = new RifaGanadorDAO();
+        this.usuarioDAO = new UsuarioDAO();
     }
 
     /**
@@ -554,6 +560,21 @@ public class RifaRepository {
         rifaDAO.asignarNumerosGanadores(rifaId, numerosGanadores, listener);
     }
 
+    public LiveData<List<Integer>> obtenerNumerosCompradosPorUsuarioActual(String rifaId) {
+        MutableLiveData<List<Integer>> liveData = new MutableLiveData<>();
+
+        rifaDAO.obtenerNumerosCompradosPorUsuarioActual(rifaId, task -> {
+            if (task.isSuccessful() && task.getResult() != null) {
+                liveData.setValue(task.getResult());
+            } else {
+                liveData.setValue(Collections.emptyList());
+            }
+        });
+
+        return liveData;
+    }
+
+
     public LiveData<List<Integer>> obtenerNumerosGanadores(String rifaId) {
         MutableLiveData<List<Integer>> liveData = new MutableLiveData<>();
 
@@ -579,6 +600,42 @@ public class RifaRepository {
 
         return liveData;
     }
+
+    public LiveData<UsuarioDTO> obtenerOrganizador(String rifaId) {
+        MutableLiveData<UsuarioDTO> liveData = new MutableLiveData<>();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        rifaDAO.obtenerUidOrganizador(rifaId, task -> {
+            if (task.isSuccessful() && task.getResult() != null) {
+                String uid = task.getResult();
+
+                // Buscar datos completos del usuario en la colección "usuarios"
+                db.collection("usuarios")
+                        .document(uid)
+                        .get()
+                        .addOnCompleteListener(userTask -> {
+                            if (userTask.isSuccessful() && userTask.getResult() != null && userTask.getResult().exists()) {
+                                DocumentSnapshot doc = userTask.getResult();
+                                UsuarioDTO organizador = new UsuarioDTO();
+                                organizador.setNombre(doc.getString("nombre"));
+                                organizador.setApellido(doc.getString("apellido"));
+                                organizador.setCorreo(doc.getString("correo"));
+                                organizador.setNroCelular(doc.getString("nroCelular"));
+                                liveData.setValue(organizador);
+                            } else {
+                                liveData.setValue(null);
+                            }
+                        });
+
+            } else {
+                liveData.setValue(null);
+            }
+        });
+
+        return liveData;
+    }
+
+
 
     /**
      * Actualiza el estado de una rifa

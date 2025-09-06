@@ -95,6 +95,28 @@
                 app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_fecha_sorteo" />
 
             <TextView
+                android:id="@+id/rifa_participante_txt_correo_organizador"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textColor="?attr/colorOnSurface"
+                android:text="Correo del creador de la rifa: Cargando..."
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_metodo_eleccion" />
+
+            <TextView
+                android:id="@+id/rifa_participante_txt_nro_celular_organizador"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textColor="?attr/colorOnSurface"
+                android:text="Celular del creador de la rifa: Cargando..."
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_correo_organizador" />
+
+            <TextView
                 android:id="@+id/rifa_participante_txt_descripcion_titulo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -104,7 +126,7 @@
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_metodo_eleccion" />
+                app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_nro_celular_organizador" />
 
             <TextView
                 android:id="@+id/rifa_participante_txt_descripcion"
@@ -137,10 +159,70 @@
                 android:layout_marginTop="8dp"
                 android:textColor="?attr/colorOnSurface"
                 android:text="Cargando..."
-                android:textStyle="bold"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_premios_titulo" />
+
+            <TextView
+                android:id="@+id/rifa_participante_txt_numeros_comprados_por_usuario_actual_titulo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:textColor="?attr/colorOnSurface"
+                android:text="Números que compraste"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_premios" />
+
+            <TextView
+                android:id="@+id/rifa_participante_txt_numeros_comprados_por_usuario_actual"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textColor="?attr/colorOnSurface"
+                android:text="Números que compraste: Cargando..."
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_numeros_comprados_por_usuario_actual_titulo" />
+
+            <TextView
+                android:id="@+id/rifa_participante_txt_numeros_ganadores"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:textColor="?attr/colorOnSurface"
+                android:text="Números ganadores: Cargando..."
+                android:visibility="gone"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_numeros_comprados_por_usuario_actual" />
+
+            <TextView
+                android:id="@+id/rifa_participante_txt_msj_resultado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textColor="?attr/colorOnSurface"
+                android:text="¡Felicidades! El creador de la rifa se pondrá en contacto contigo."
+                android:visibility="gone"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_numeros_ganadores" />
+
+            <TextView
+                android:id="@+id/rifa_participante_txt_numeros_ganadores_premios"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp"
+                android:textColor="?attr/colorOnSurface"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_msj_resultado"
+                />
 
             <TextView
                 android:id="@+id/rifa_participante_txt_comprar_numeros_titulo"
@@ -153,7 +235,7 @@
                 android:textStyle="bold"
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_premios" />
+                app:layout_constraintTop_toBottomOf="@id/rifa_participante_txt_numeros_ganadores_premios" />
 
             <TextView
                 android:id="@+id/rifa_participante_txt_comprar_numeros_descripcion"

@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Locale;
 
 public class Utilidades {
@@ -55,5 +56,20 @@ public class Utilidades {
         }
 
         return codigo.toString();
+    }
+
+    public static <T> String listaAString(List<T> lista) {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < lista.size(); i++) {
+            if (!(i == lista.size() - 1)) {
+                sb.append(lista.get(i) + ", ");
+            }
+            else {
+                sb.append(lista.get(i));
+            }
+        }
+
+        return sb.toString();
     }
 }
