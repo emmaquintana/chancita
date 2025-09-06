@@ -17,9 +17,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.emmanuel.chancita.R;
 import com.emmanuel.chancita.data.dto.GanadorInfoDTO;
+import com.emmanuel.chancita.data.dto.PremioAsignacionDTO;
 import com.emmanuel.chancita.data.dto.RifaDTO;
 import com.emmanuel.chancita.data.dto.UsuarioDTO;
 import com.emmanuel.chancita.data.model.MetodoEleccionGanador;
@@ -41,8 +43,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -105,9 +109,15 @@ public class RifaOrganizadorFragment extends Fragment {
                 if (
                         rifa.getMetodoEleccionGanador().toString().equals(MetodoEleccionGanador.DETERMINISTA.toString()) // El organizador escoge los ganadores
                         && (LocalDateTime.now().isEqual(rifa.getFechaSorteo()) || LocalDateTime.now().isAfter(rifa.getFechaSorteo())) // Llegó/pasó la fecha de sorteo
+                        && rifa.getEstado() != RifaEstado.SORTEADO
                 ) {
                     inflarEleccionGanadores(view, rifa);
                 }
+
+                /*
+                 * EL METODO PARA LA ASIGNACIÓN DE GANADORES CUANDO EL MÉTODO DE ELECCIÓN ES ALEATORIO
+                 * ESTÁ DEFINIDO EN CLOUD FUNCTIONS
+                 */
 
                 // Muestra los ganadores
                 if (rifa.getEstado() == RifaEstado.SORTEADO) {
@@ -225,30 +235,80 @@ public class RifaOrganizadorFragment extends Fragment {
     }
 
     private void inflarEleccionGanadores(View view, RifaDTO rifa) {
-        MaterialButton btnconfirmarGanadores = view.findViewById(R.id.rifa_organizador_btn_confirmar_ganadores);
-        procesarParticipantes(rifa.getNumerosComprados(), participantes -> {
-            List<CandidatoGanador> candidatosGanadores = new ArrayList<>();
-            for (Participante p : participantes) {
-                candidatosGanadores.add(new CandidatoGanador(p.getNombre(), true, p.getNumeros()));
+        MaterialButton btnConfirmar = view.findViewById(R.id.rifa_organizador_btn_confirmar_ganadores);
+        RecyclerView rvPremios = view.findViewById(R.id.recycler_view_eleccion_ganadores);
+        view.findViewById(R.id.rifa_organizador_txt_seccion_eleccion_ganadores).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.rifa_organizador_txt_eleccion_ganadores_descripcion).setVisibility(View.VISIBLE);
+        rvPremios.setVisibility(View.VISIBLE);
+        btnConfirmar.setVisibility(View.VISIBLE);
+
+        // Junta todos los números comprados
+        List<Integer> todosNumeros = new ArrayList<>();
+        for (NumeroComprado nc : rifa.getNumerosComprados()) {
+            todosNumeros.addAll(nc.getNumerosComprados());
+        }
+
+        // Mapea premios -> Asignación
+        List<PremioAsignacionDTO> asignaciones = new ArrayList<>();
+        for (RifaPremio premio : rifa.getPremios()) {
+            asignaciones.add(new PremioAsignacionDTO(premio, todosNumeros));
+        }
+
+        // Setea adapter
+        rvPremios.setLayoutManager(new LinearLayoutManager(getContext()));
+        EleccionGanadoresAdapter adapter = new EleccionGanadoresAdapter(asignaciones);
+        rvPremios.setAdapter(adapter);
+
+        // Confirma selección
+        btnConfirmar.setOnClickListener(v -> {
+            List<PremioAsignacionDTO> resultados = adapter.getResultados();
+            List<Integer> numerosGanadores = new ArrayList<>();
+            Set<Integer> usados = new HashSet<>();
+
+            // Realiza validaciones
+            for (PremioAsignacionDTO res : resultados) {
+                if (res.getNumeroSeleccionado() == null) {
+                    Toast.makeText(requireContext(), "Todos los premios deben tener un número asignado", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!usados.add(res.getNumeroSeleccionado())) {
+                    Toast.makeText(requireContext(), "No puedes asignar el mismo número a más de un premio", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                numerosGanadores.add(res.getNumeroSeleccionado());
             }
 
-            RecyclerView rvCandidatosGanadores = view.findViewById(R.id.recycler_view_eleccion_ganadores);
-            rvCandidatosGanadores.setLayoutManager(new LinearLayoutManager(getContext()));
-            EleccionGanadoresAdapter adapter = new EleccionGanadoresAdapter(candidatosGanadores);
-            rvCandidatosGanadores.setAdapter(adapter);
+            // Guarda numeros ganadores
+            rifaOrganizadorViewModel.asignarNumerosGanadores("B1EzULChLnb37D7LfC3m", numerosGanadores);
 
-            view.findViewById(R.id.rifa_organizador_txt_seccion_eleccion_ganadores).setVisibility(View.VISIBLE);
-            rvCandidatosGanadores.setVisibility(View.VISIBLE);
-            btnconfirmarGanadores.setVisibility(View.VISIBLE);
-
-            btnconfirmarGanadores.setOnClickListener(v -> {
-                List<Integer> numerosComprados = new ArrayList<>();
-                for (NumeroComprado nc : rifa.getNumerosComprados()) {
-                    for (Integer valorNumero : nc.getNumerosComprados()) {
-                        numerosComprados.add(valorNumero);
-                    }
+            // Muestra estado de carga
+            rifaOrganizadorViewModel.asignandoNumerosGanadores.observe(getViewLifecycleOwner(), asignando -> {
+                if (asignando) {
+                    btnConfirmar.setEnabled(false);
+                    btnConfirmar.setText("Cargando...");
                 }
-                rifaOrganizadorViewModel.asignarNumerosGanadores(rifa.getId(), numerosComprados);
+                else {
+                    btnConfirmar.setEnabled(true);
+                    btnConfirmar.setText("Confirmar ganadores");
+                }
+            });
+
+            // Muestra el resultado de la asignación
+            rifaOrganizadorViewModel.resultadoAsignacionNumerosGanadores.observe(getViewLifecycleOwner(), asignacionExitosa -> {
+                if (asignacionExitosa) {
+                    Toast.makeText(requireContext(), "¡Los números ganadores se han definido con éxito!", Toast.LENGTH_LONG).show();
+
+                    // Se ocultan las vistas para la elección de los ganadores
+                    view.findViewById(R.id.rifa_organizador_txt_seccion_eleccion_ganadores).setVisibility(View.GONE);
+                    view.findViewById(R.id.rifa_organizador_txt_eleccion_ganadores_descripcion).setVisibility(View.GONE);
+                    rvPremios.setVisibility(View.GONE);
+                    btnConfirmar.setVisibility(View.GONE);
+
+                    inflarGanadores(view, rifa);
+                }
+                else {
+                    Toast.makeText(requireContext(), "Algo salió mal. Intente nuevamente", Toast.LENGTH_LONG).show();
+                }
             });
         });
     }

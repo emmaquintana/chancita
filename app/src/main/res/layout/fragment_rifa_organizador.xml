@@ -130,6 +130,18 @@
                 app:layout_constraintTop_toBottomOf="@id/rifa_organizador_txt_info_metodo"
                 app:layout_constraintStart_toStartOf="parent" />
 
+            <TextView
+                android:id="@+id/rifa_organizador_txt_eleccion_ganadores_descripcion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Escoge el número ganador correspondiente a cada premio"
+                android:visibility="gone"
+                android:textSize="16sp"
+                android:textColor="?attr/colorOnSurface"
+                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_txt_seccion_eleccion_ganadores"
+                app:layout_constraintStart_toStartOf="parent" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view_eleccion_ganadores"
                 android:layout_width="match_parent"
@@ -138,7 +150,7 @@
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_txt_seccion_eleccion_ganadores" />
+                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_txt_eleccion_ganadores_descripcion" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/rifa_organizador_btn_confirmar_ganadores"

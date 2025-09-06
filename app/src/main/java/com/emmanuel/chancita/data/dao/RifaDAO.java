@@ -60,6 +60,7 @@ public class RifaDAO {
     public void asignarNumerosGanadores(String rifaId, List<Integer> numerosGanadores, OnCompleteListener<Void> listener) {
         Map<String, Object> updates = new HashMap<>();
         updates.put("numerosGanadores", numerosGanadores);
+        updates.put("estado", RifaEstado.SORTEADO.toString());
 
         db.collection("rifas")
                 .document(rifaId)

@@ -39,8 +39,9 @@ public class RifaOrganizadorViewModel extends ViewModel {
     // Asignar numeros ganadores
     private final MutableLiveData<Boolean> _asignandoNumerosGanadores = new MutableLiveData<>();
     public final LiveData<Boolean> asignandoNumerosGanadores = _asignandoNumerosGanadores;
-    private final MutableLiveData<String> _resultadoAsignacionNumerosGanadores = new MutableLiveData<>();
-    public final LiveData<String> resultadoAsignacionNumerosGanadores = _resultadoAsignacionNumerosGanadores;
+    private final MutableLiveData<Boolean> _resultadoAsignacionNumerosGanadores = new MutableLiveData<>();
+    public final LiveData<Boolean> resultadoAsignacionNumerosGanadores = _resultadoAsignacionNumerosGanadores;
+
 
 
     public RifaOrganizadorViewModel() {
@@ -88,15 +89,16 @@ public class RifaOrganizadorViewModel extends ViewModel {
         _asignandoNumerosGanadores.setValue(true);
 
         rifaRepository.asignarNumerosGanadores(rifaId, numerosGanadores, task -> {
+            _asignandoNumerosGanadores.setValue(false);
+
             if (task.isSuccessful()) {
-                _asignandoNumerosGanadores.setValue(false);
-                _resultadoAsignacionNumerosGanadores.setValue("¡Los ganadores han sido asignados con éxito!");
-            }
-            else {
-                _resultadoAsignacionNumerosGanadores.setValue("Algo salió mal. Intente nuevamente");
+                _resultadoAsignacionNumerosGanadores.setValue(true);
+            } else {
+                _resultadoAsignacionNumerosGanadores.setValue(false);
             }
         });
     }
+
 
     public LiveData<RifaDTO> obtenerRifa(String rifaId) {
         _obteniendoRifa.setValue(true);
