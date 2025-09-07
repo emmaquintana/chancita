@@ -112,7 +112,12 @@ public class RifaOrganizadorFragment extends Fragment {
             txtRifaFechaSorteo.setText("Fecha de sorteo: " + Utilidades.formatearFechaHora(rifa.getFechaSorteo(), "dd-MM-yyyy hh:mm"));
             txtRifaMetodoEleccionGanador.setText("Método de elección: " + Utilidades.capitalizar(rifa.getMetodoEleccionGanador().toString()) + (rifa.getMetodoEleccionGanador() == MetodoEleccionGanador.DETERMINISTA ? " (" + rifa.getMotivoEleccionGanador() + ")" : ""));
             txtRifaPremios.setText(formatearPremios(rifa.getPremios()));
-            txtRifaDescripcion.setText("Descripción: " + rifa.getDescripcion());
+            if (rifa.getDescripcion() != null && !rifa.getDescripcion().equals("")) {
+                txtRifaDescripcion.setText("Descripción: " + rifa.getDescripcion());
+            }
+            else {
+                txtRifaDescripcion.setVisibility(View.GONE);
+            }
             txtPrecioNumero.setText("Precio por número: $" + String.valueOf(rifa.getPrecioNumero()));
             txtRifaRecaudado.setText("Monto recaudado: $" + calcularRecaudado(rifa));
 
@@ -152,6 +157,11 @@ public class RifaOrganizadorFragment extends Fragment {
                     inflarGanadores(view, rifa);
                 }
             }
+            else {
+                // Oculta la cabecera "Nombre y apellido" - "Números comprados"
+                view.findViewById(R.id.rifa_organizador_txt_nombre_participante).setVisibility(View.GONE);
+                view.findViewById(R.id.rifa_organizador_txt_numeros_comprados_participante).setVisibility(View.GONE);
+            }
         });
     }
 
@@ -167,11 +177,19 @@ public class RifaOrganizadorFragment extends Fragment {
     private String formatearPremios(List<RifaPremio> rifaPremios) {
         StringBuilder stb = new StringBuilder();
 
-        for (RifaPremio premio : rifaPremios) {
-            stb.append("Puesto nro." + premio.getPremioOrden() + ": " + premio.getPremioTitulo() + " (" + premio.getPremioDescripcion() + ")" + "\n");
+        if (rifaPremios != null && !rifaPremios.isEmpty()) {
+            for (RifaPremio premio : rifaPremios) {
+                if (premio.getPremioDescripcion() != null && !premio.getPremioDescripcion().trim().isEmpty()) {
+                    stb.append("Puesto nro." + premio.getPremioOrden() + ": " + premio.getPremioTitulo() + " (" + premio.getPremioDescripcion() + ")" + "\n\n");
+                }
+                else {
+                    stb.append("Puesto nro." + premio.getPremioOrden() + ": " + premio.getPremioTitulo() + "\n\n");
+                }
+
+            }
         }
 
-        return stb.toString();
+        return stb.toString().substring(0, stb.toString().length() - 2); // Quita el padding bottom que se forma por el último \n\n
     }
 
     private void inflarGanadores(View view, RifaDTO rifa) {

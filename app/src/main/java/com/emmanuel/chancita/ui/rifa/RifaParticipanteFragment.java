@@ -115,7 +115,7 @@ public class RifaParticipanteFragment extends Fragment {
             txtRifaMetodoEleccionGanador.setText("Método de elección: " + Utilidades.capitalizar(rifa.getMetodoEleccionGanador().toString()) + (rifa.getMetodoEleccionGanador() == MetodoEleccionGanador.DETERMINISTA ? " (" + rifa.getMotivoEleccionGanador() + ")" : ""));
             txtRifaPremios.setText(formatearPremios(rifa.getPremios()));
             // Si no hay descripción, se oculta la sección "Descripción"
-            if (txtRifaDescripcion.getText().equals("") || txtRifaDescripcionHead.getText() == null) {
+            if (rifa.getDescripcion() == null || rifa.getDescripcion().trim().isEmpty()) {
                 txtRifaDescripcion.setVisibility(View.GONE);
                 txtRifaDescripcionHead.setVisibility(View.GONE);
             }
@@ -186,9 +186,17 @@ public class RifaParticipanteFragment extends Fragment {
                             String premioDescripcion = premios.get(i).getPremioDescripcion();
                             String numeroGanador = (i < numerosGanadores.size()) ? String.valueOf(numerosGanadores.get(i)) : "-";
 
-                            premiosText.append("Premio ").append(i + 1).append(": ")
-                                    .append(premioTitulo).append(" - ").append(premioDescripcion)
-                                    .append("\nNúmero ganador: ").append(numeroGanador).append("\n\n");
+                            if (!premioDescripcion.trim().isEmpty()) {
+                                premiosText.append("Premio ").append(i + 1).append(": ")
+                                        .append(premioTitulo).append(" - ").append(premioDescripcion)
+                                        .append("\nNúmero ganador: ").append(numeroGanador).append("\n\n");
+                            }
+                            else {
+                                premiosText.append("Premio ").append(i + 1).append(": ")
+                                        .append(premioTitulo).append(" - ")
+                                        .append("\nNúmero ganador: ").append(numeroGanador).append("\n\n");
+                            }
+
                         }
 
                         txtPremiosGanadores.setVisibility(View.VISIBLE);
@@ -335,7 +343,13 @@ public class RifaParticipanteFragment extends Fragment {
 
         if (rifaPremios != null && !rifaPremios.isEmpty()) {
             for (RifaPremio premio : rifaPremios) {
-                stb.append("Puesto nro." + premio.getPremioOrden() + ": " + premio.getPremioTitulo() + " (" + premio.getPremioDescripcion() + ")" + "\n\n");
+                if (premio.getPremioDescripcion() != null && !premio.getPremioDescripcion().trim().isEmpty()) {
+                    stb.append("Puesto nro." + premio.getPremioOrden() + ": " + premio.getPremioTitulo() + " (" + premio.getPremioDescripcion() + ")" + "\n\n");
+                }
+                else {
+                    stb.append("Puesto nro." + premio.getPremioOrden() + ": " + premio.getPremioTitulo() + "\n\n");
+                }
+
             }
         }
 

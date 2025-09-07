@@ -110,13 +110,14 @@
                 android:id="@+id/editar_perfil_btn_guardar_cambios"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
-                android:layout_marginTop="16dp"
                 android:text="@string/guardar_cambios"
                 android:textSize="18sp"
                 app:cornerRadius="28dp"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editar_perfil_til_nro_celular"
+                app:layout_constraintVertical_bias="1.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
