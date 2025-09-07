@@ -5,7 +5,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.emmanuel.chancita.data.dto.RifaDTO;
+import com.emmanuel.chancita.data.model.RifaPremio;
 import com.emmanuel.chancita.data.repository.RifaRepository;
+
+import java.util.List;
 
 public class EditarRifaViewModel extends ViewModel {
 
@@ -72,21 +75,20 @@ public class EditarRifaViewModel extends ViewModel {
             return; // El error ya se setea en validarRifaBasico
         }
 
-        // Luego validar código único
+        // Luego validar código único (asíncrono)
         validarCodigoUnico(rifa);
     }
 
     /**
-     * Validaciones básicas de la rifa
+     * Validaciones básicas de la rifa (síncronas)
      */
     private boolean validarRifaBasico(RifaDTO rifa) {
         if (rifa.getTitulo() == null || rifa.getTitulo().trim().isEmpty()) {
             _errorValidacion.setValue("El título no puede estar vacío");
             return false;
         }
-        if (rifa.getDescripcion() == null || rifa.getDescripcion().trim().isEmpty()) {
-            _errorValidacion.setValue("La descripción no puede estar vacía");
-            return false;
+        if (rifa.getDescripcion() != null && rifa.getDescripcion().trim().isEmpty()) {
+            rifa.setDescripcion(null);
         }
         if (rifa.getFechaSorteo() == null) {
             _errorValidacion.setValue("Debes seleccionar fecha de sorteo");
@@ -105,11 +107,42 @@ public class EditarRifaViewModel extends ViewModel {
             return false;
         }
 
+        // Validar premios
+        if (!validarPremios(rifa.getPremios())) {
+            return false;
+        }
+
         return true;
     }
 
     /**
-     * Valida si el código es único
+     * Valida la lista de premios
+     */
+    private boolean validarPremios(List<RifaPremio> premios) {
+        if (premios == null || premios.isEmpty()) {
+            _errorValidacion.setValue("Debes agregar al menos un premio");
+            return false;
+        }
+
+        for (int i = 0; i < premios.size(); i++) {
+            RifaPremio premio = premios.get(i);
+
+            if (premio.getPremioTitulo() == null || premio.getPremioTitulo().trim().isEmpty()) {
+                _errorValidacion.setValue("El título del premio " + (i + 1) + " no puede estar vacío");
+                return false;
+            }
+
+            // La descripción puede ser opcional, pero si se proporciona, debe tener contenido
+            if (premio.getPremioDescripcion() != null && premio.getPremioDescripcion().trim().isEmpty()) {
+                premio.setPremioDescripcion(null);
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Valida si el código es único (asíncrono)
      */
     private void validarCodigoUnico(RifaDTO rifa) {
         rifaRepository.existeRifaConCodigo(rifa.getCodigo(), rifa.getId(), exists -> {

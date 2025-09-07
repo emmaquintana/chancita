@@ -24,9 +24,11 @@ import android.widget.Toast;
 
 import com.emmanuel.chancita.R;
 import com.emmanuel.chancita.data.dto.RifaDTO;
+import com.emmanuel.chancita.data.model.RifaPremio;
 import com.emmanuel.chancita.ui.SharedViewModel;
 import com.emmanuel.chancita.ui.rifa.RifaOrganizadorFragment;
 import com.emmanuel.chancita.ui.rifa.RifaOrganizadorViewModel;
+import com.emmanuel.chancita.ui.rifa.adapters.EditarPremioAdapter;
 import com.emmanuel.chancita.ui.rifa.adapters.IngresoPremioAdapter;
 import com.emmanuel.chancita.ui.rifa.model.IngresoPremio;
 import com.emmanuel.chancita.utils.Utilidades;
@@ -41,7 +43,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class EditarRifaFragment extends Fragment {
+public class EditarRifaFragment extends Fragment implements EditarPremioAdapter.OnPremioChangedListener {
 
     private SharedViewModel sharedViewModel;
     private EditarRifaViewModel editarRifaViewModel;
@@ -53,12 +55,15 @@ public class EditarRifaFragment extends Fragment {
     // Inputs
     private TextInputEditText tietEditarRifaTitulo;
     private TextInputEditText tietEditarRifaDescripcion;
-    private TextInputEditText tietEditarRifaCantPremios;
     private TextInputEditText tietEditarRifaPrecioNumero;
     private TextInputEditText tietEditarRifaFechaSorteo;
     private TextInputEditText tietEditarRifaHoraSorteo;
     private TextInputEditText tietEditarRifaCodigo;
     private MaterialButton btnGuardar;
+
+    // RecyclerView para premios
+    private RecyclerView rvPremios;
+    private EditarPremioAdapter premiosAdapter;
 
     public static EditarRifaFragment newInstance() {
         return new EditarRifaFragment();
@@ -91,18 +96,25 @@ public class EditarRifaFragment extends Fragment {
         // Referencias a los inputs
         tietEditarRifaTitulo = view.findViewById(R.id.editar_rifa_tiet_titulo);
         tietEditarRifaDescripcion = view.findViewById(R.id.editar_rifa_tiet_descripcion);
-        tietEditarRifaCantPremios = view.findViewById(R.id.editar_rifa_tiet_premios);
         tietEditarRifaPrecioNumero = view.findViewById(R.id.editar_rifa_tiet_precio);
         tietEditarRifaFechaSorteo = view.findViewById(R.id.editar_rifa_tiet_fecha_sorteo);
         tietEditarRifaHoraSorteo = view.findViewById(R.id.editar_rifa_tiet_hora_sorteo);
         tietEditarRifaCodigo = view.findViewById(R.id.editar_rifa_tiet_codigo);
+
+        // RecyclerView para premios
+        rvPremios = view.findViewById(R.id.editar_rifa_rv_ingreso_premios);
+        setupRecyclerView();
 
         setearObservers();
 
         // Botón guardar
         btnGuardar = view.findViewById(R.id.editar_rifa_btn_guardar_cambios);
         btnGuardar.setOnClickListener(v -> guardarCambios());
+    }
 
+    private void setupRecyclerView() {
+        rvPremios.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvPremios.setHasFixedSize(true);
     }
 
     private void setearObservers() {
@@ -113,11 +125,13 @@ public class EditarRifaFragment extends Fragment {
 
             tietEditarRifaTitulo.setText(rifa.getTitulo());
             tietEditarRifaDescripcion.setText(rifa.getDescripcion());
-            tietEditarRifaCantPremios.setText(String.valueOf(rifa.getPremios().size()));
             tietEditarRifaPrecioNumero.setText(String.valueOf(rifa.getPrecioNumero()));
             tietEditarRifaCodigo.setText(rifa.getCodigo());
             tietEditarRifaFechaSorteo.setText(Utilidades.formatearFechaHora(rifa.getFechaSorteo(), "dd-MM-yyyy"));
             tietEditarRifaHoraSorteo.setText(Utilidades.formatearFechaHora(rifa.getFechaSorteo(), "HH:mm"));
+
+            // Configurar adapter de premios
+            setupPremiosAdapter(rifa.getPremios());
 
             setearListenersFechaYHora();
         });
@@ -154,8 +168,6 @@ public class EditarRifaFragment extends Fragment {
                         .show();
                 botonGuardarClicked = false;
             }
-            // Nota: Si error es null, no hacemos nada aquí,
-            // esperamos al observer rifaValidadaParaEditar
         });
 
         // Nuevo observer para cuando la rifa está validada y lista para editar
@@ -163,10 +175,20 @@ public class EditarRifaFragment extends Fragment {
             if (!botonGuardarClicked) return;
 
             if (rifaValidada != null) {
+                // Todo OK, procedemos con la edición
                 editarRifaViewModel.editarRifa(rifaValidada);
                 botonGuardarClicked = false;
             }
         });
+    }
+
+    private void setupPremiosAdapter(List<RifaPremio> premios) {
+        if (premios != null && !premios.isEmpty()) {
+            // Crear una copia mutable de la lista
+            List<RifaPremio> premiosMutable = new ArrayList<>(premios);
+            premiosAdapter = new EditarPremioAdapter(premiosMutable, this);
+            rvPremios.setAdapter(premiosAdapter);
+        }
     }
 
     private void guardarCambios() {
@@ -211,18 +233,21 @@ public class EditarRifaFragment extends Fragment {
             return;
         }
 
+        // Actualizar los premios desde el adapter
+        if (premiosAdapter != null) {
+            rifaActual.setPremios(premiosAdapter.getPremios());
+        }
+
         // Iniciar validación completa (incluye validación asíncrona del código)
         editarRifaViewModel.validarYProcesarRifa(rifaActual);
     }
 
     private void setearListenersFechaYHora() {
-
         LocalDateTime creadoEn = rifaActual.getCreadoEn();
 
         // Convierte a millis para usar en DatePicker
         ZoneId zoneId = ZoneId.systemDefault();
         long creadoEnMillis = creadoEn.atZone(zoneId).toInstant().toEpochMilli();
-
 
         Calendar calendar = Calendar.getInstance();
 
@@ -284,5 +309,13 @@ public class EditarRifaFragment extends Fragment {
             );
             timePickerDialog.show();
         });
+    }
+
+    @Override
+    public void onPremioChanged(int position, RifaPremio premio) {
+        // Este método se llama automáticamente cuando el usuario cambia algún campo
+        // Los cambios ya están reflejados en el objeto premio
+        // No es necesario hacer nada adicional aquí a menos que quieras
+        // guardar cambios automáticamente o realizar alguna validación en tiempo real
     }
 }
