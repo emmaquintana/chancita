@@ -21,10 +21,13 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class RifaRepository {
@@ -91,6 +94,9 @@ public class RifaRepository {
 
         rifaDAO.editarRifa(rifaActualizada, listener);
     }
+
+
+
 
     public void unirseARifa(String codigo, OnCompleteListener<Void> listener) {
         rifaDAO.unirseARifa(codigo, listener);
@@ -637,6 +643,10 @@ public class RifaRepository {
 
     public void comprarNumeros(String rifaId, String usuarioId, List<Integer> numeros, double precioUnitario, OnCompleteListener<Void> listener) {
         rifaDAO.comprarNumeros(rifaId, usuarioId, numeros, precioUnitario).addOnCompleteListener(listener);
+    }
+
+    public void existeRifaConCodigo(String codigo, String rifaIdActual, Consumer<Boolean> callback) {
+        rifaDAO.existeRifaConCodigo(codigo, rifaIdActual, callback);
     }
 
     /**

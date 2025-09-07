@@ -24,12 +24,6 @@ public class RifaOrganizadorViewModel extends ViewModel {
     private final MutableLiveData<String> _resultadoCreacionRifa = new MutableLiveData<>();
     public final LiveData<String> resultadoCreacionRifa = _resultadoCreacionRifa;
 
-    // Edición de rifa
-    private final MutableLiveData<Boolean> _editandoRifa = new MutableLiveData<>();
-    public final LiveData<Boolean> editandoRifa = _editandoRifa;
-    private final MutableLiveData<String> _resultadoEdicionRifa = new MutableLiveData<>();
-    public final LiveData<String> resultadoEdicionRifa = _resultadoEdicionRifa;
-
     // Obtener rifa
     private final MutableLiveData<Boolean> _obteniendoRifa = new MutableLiveData<>();
     public final LiveData<Boolean> obteniendoRifa = _obteniendoRifa;
@@ -66,20 +60,6 @@ public class RifaOrganizadorViewModel extends ViewModel {
         return usuarioRepository.obtenerUsuario(usuarioId);
     }
 
-    public void editarRifa(RifaDTO rifaDTO) {
-        _editandoRifa.setValue(true);
-
-        rifaRepository.editarRifa(rifaDTO, task -> {
-            _editandoRifa.setValue(false);
-
-            if (task.isSuccessful()) {
-                _resultadoEdicionRifa.setValue("Rifa editada con éxito!");
-            }
-            else {
-                _resultadoEdicionRifa.setValue("Algo salió mal");
-            }
-        });
-    }
 
     public LiveData<List<Integer>> obtenerNumerosGanadores(String rifaId) {
         return rifaRepository.obtenerNumerosGanadores(rifaId);

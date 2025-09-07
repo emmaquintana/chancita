@@ -23,7 +23,7 @@
                 android:layout_marginTop="15dp"
                 android:text="@string/editar_datos_de_la_rifa"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="21sp"
+                android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -92,7 +92,7 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editar_rifa_til_numeros">
+                app:layout_constraintTop_toBottomOf="@+id/editar_rifa_til_premios">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editar_rifa_tiet_precio"
@@ -101,22 +101,24 @@
                     android:inputType="numberDecimal" />
             </com.google.android.material.textfield.TextInputLayout>
 
+
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/editar_rifa_til_numeros"
+                android:id="@+id/editar_rifa_til_codigo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="@string/cant_de_numeros_max_200"
+                android:hint="@string/codigo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/editar_rifa_til_premios">
+                app:layout_constraintTop_toBottomOf="@id/editar_rifa_til_precio">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editar_rifa_tiet_numeros"
+                    android:id="@+id/editar_rifa_tiet_codigo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number" />
+                    android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
+
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/editar_rifa_til_fecha_sorteo"
@@ -128,7 +130,7 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editar_rifa_til_precio">
+                app:layout_constraintTop_toBottomOf="@+id/editar_rifa_til_codigo">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editar_rifa_tiet_fecha_sorteo"
@@ -161,23 +163,23 @@
                 android:id="@+id/editar_rifa_rv_ingreso_premios"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/editar_rifa_til_fecha_sorteo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                tools:listitem="@layout/layout_ingreso_premio"
+                app:layout_constraintTop_toBottomOf="@id/editar_rifa_til_fecha_sorteo"
                 tools:itemCount="2"
-                tools:layout_editor_absoluteY="16dp" />
+                tools:listitem="@layout/layout_ingreso_premio" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/editar_rifa_btn_guardar_cambios"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:text="@string/guardar_cambios"
-                android:layout_marginTop="16dp"
                 android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editar_rifa_rv_ingreso_premios" />
+                app:layout_constraintTop_toBottomOf="@+id/editar_rifa_rv_ingreso_premios"
+                app:layout_constraintVertical_bias="1.0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

@@ -1,7 +1,132 @@
 package com.emmanuel.chancita.ui.rifa.editar_rifa;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.emmanuel.chancita.data.dto.RifaDTO;
+import com.emmanuel.chancita.data.repository.RifaRepository;
+
 public class EditarRifaViewModel extends ViewModel {
-    // TODO: Implement the ViewModel
+
+    private final RifaRepository rifaRepository;
+
+    public EditarRifaViewModel() {
+        rifaRepository = new RifaRepository();
+    }
+
+    // Edición de rifa
+    private final MutableLiveData<Boolean> _editandoRifa = new MutableLiveData<>();
+    public final LiveData<Boolean> editandoRifa = _editandoRifa;
+    private final MutableLiveData<String> _resultadoEdicionRifa = new MutableLiveData<>();
+    public final LiveData<String> resultadoEdicionRifa = _resultadoEdicionRifa;
+
+    // Obtener rifa
+    private final MutableLiveData<Boolean> _obteniendoRifa = new MutableLiveData<>();
+    public final LiveData<Boolean> obteniendoRifa = _obteniendoRifa;
+    private final MutableLiveData<String> _resultadoObtencionRifa = new MutableLiveData<>();
+    public final LiveData<String> resultadoObtencionRifa = _resultadoObtencionRifa;
+
+    // Validación de rifa
+    private final MutableLiveData<String> _errorValidacion = new MutableLiveData<>();
+    public LiveData<String> errorValidacion = _errorValidacion;
+
+    // Nueva propiedad para indicar cuando se debe proceder con la edición
+    private final MutableLiveData<RifaDTO> _rifaValidadaParaEditar = new MutableLiveData<>();
+    public LiveData<RifaDTO> rifaValidadaParaEditar = _rifaValidadaParaEditar;
+
+    /** Valida y edita la rifa */
+    public void editarRifa(RifaDTO rifaDTO) {
+        _editandoRifa.setValue(true);
+
+        rifaRepository.editarRifa(rifaDTO, task -> {
+            _editandoRifa.setValue(false);
+
+            if (task.isSuccessful()) {
+                _resultadoEdicionRifa.setValue("Rifa editada con éxito!");
+            }
+            else {
+                _resultadoEdicionRifa.setValue("Algo salió mal");
+            }
+        });
+    }
+
+    public LiveData<RifaDTO> obtenerRifa(String rifaId) {
+        _obteniendoRifa.setValue(true);
+
+        return rifaRepository.obtenerRifa(rifaId, task -> {
+            _obteniendoRifa.setValue(false);
+
+            if (!task.isSuccessful()) {
+                _resultadoObtencionRifa.setValue("Algo salió mal");
+            }
+        });
+    }
+
+    /**
+     * Valida una rifa de forma completa (incluye validación de código único)
+     */
+    public void validarYProcesarRifa(RifaDTO rifa) {
+        // Primero validaciones básicas
+        if (!validarRifaBasico(rifa)) {
+            return; // El error ya se setea en validarRifaBasico
+        }
+
+        // Luego validar código único
+        validarCodigoUnico(rifa);
+    }
+
+    /**
+     * Validaciones básicas de la rifa
+     */
+    private boolean validarRifaBasico(RifaDTO rifa) {
+        if (rifa.getTitulo() == null || rifa.getTitulo().trim().isEmpty()) {
+            _errorValidacion.setValue("El título no puede estar vacío");
+            return false;
+        }
+        if (rifa.getDescripcion() == null || rifa.getDescripcion().trim().isEmpty()) {
+            _errorValidacion.setValue("La descripción no puede estar vacía");
+            return false;
+        }
+        if (rifa.getFechaSorteo() == null) {
+            _errorValidacion.setValue("Debes seleccionar fecha de sorteo");
+            return false;
+        }
+        if (rifa.getFechaSorteo().isBefore(rifa.getCreadoEn())) {
+            _errorValidacion.setValue("La fecha de sorteo no puede ser menor a la fecha de creación");
+            return false;
+        }
+        if (rifa.getPrecioNumero() <= 0) {
+            _errorValidacion.setValue("El precio del número debe ser mayor a 0");
+            return false;
+        }
+        if (rifa.getCodigo() == null || rifa.getCodigo().trim().isEmpty()) {
+            _errorValidacion.setValue("Debes ingresar un código para la rifa");
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Valida si el código es único
+     */
+    private void validarCodigoUnico(RifaDTO rifa) {
+        rifaRepository.existeRifaConCodigo(rifa.getCodigo(), rifa.getId(), exists -> {
+            if (exists) {
+                _errorValidacion.setValue("Ya existe una rifa con ese código");
+            } else {
+                _errorValidacion.setValue(null);
+                _rifaValidadaParaEditar.setValue(rifa);
+            }
+        });
+    }
+
+    /**
+     * Resetea el estado de validación
+     */
+    public void resetearValidacion() {
+        _errorValidacion.setValue(null);
+        _rifaValidadaParaEditar.setValue(null);
+    }
 }

@@ -36,6 +36,7 @@ import com.emmanuel.chancita.ui.rifa.adapters.ParticipantesAdapter;
 import com.emmanuel.chancita.ui.rifa.model.Participante;
 import com.emmanuel.chancita.utils.Utilidades;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -67,14 +68,13 @@ public class RifaOrganizadorFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         rifaOrganizadorViewModel = new ViewModelProvider(this).get(RifaOrganizadorViewModel.class);
-        sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         navController = NavHostFragment.findNavController(this);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-        // Obtener el rifaId del SharedViewModel AQUÍ, después de que la Activity ya se haya configurado
         rifaId = sharedViewModel.getRifaId();
         Log.d("RifaParticipanteFragment", "rifaId obtenido de SharedViewModel en onViewCreated: " + rifaId);
 
@@ -97,35 +97,41 @@ public class RifaOrganizadorFragment extends Fragment {
         TextView txtRifaPremios = view.findViewById(R.id.rifa_organizador_txt_premios); // Debe iniciar con "1er puesto: "
         TextView txtRifaDescripcion = view.findViewById(R.id.rifa_organizador_txt_info_descripcion);
         TextView txtPrecioNumero = view.findViewById(R.id.rifa_organizador_txt_info_precio); // Debe iniciar con "Precio por número: $"
-        MaterialButton btnConfirmarGanadores = view.findViewById(R.id.rifa_organizador_btn_confirmar_ganadores);
+        FloatingActionButton fab = view.findViewById(R.id.rifa_organizador_fab_editar);
+
+        fab.setOnClickListener(v ->
+                NavHostFragment.findNavController(this)
+                        .navigate(R.id.action_rifaOrganizadorFragment_to_editarRifaFragment)
+        );
 
         rifaOrganizadorViewModel.obtenerRifa(rifaId).observe(getViewLifecycleOwner(), rifa -> {
-            if (!rifa.getParticipantesIds().isEmpty()) {
-                // Si hay participantes, NO se muestra el texto "No hay participantes"
+
+            txtRifaTitulo.setText(rifa.getTitulo());
+            txtRifaEstado.setText("Estado: " + Utilidades.capitalizar(rifa.getEstado().toString()));
+            txtRifaCodigo.setText("Código: " + rifa.getCodigo());
+            txtRifaFechaSorteo.setText("Fecha de sorteo: " + Utilidades.formatearFechaHora(rifa.getFechaSorteo(), "dd-MM-yyyy hh:mm"));
+            txtRifaMetodoEleccionGanador.setText("Método de elección: " + Utilidades.capitalizar(rifa.getMetodoEleccionGanador().toString()) + (rifa.getMetodoEleccionGanador() == MetodoEleccionGanador.DETERMINISTA ? " (" + rifa.getMotivoEleccionGanador() + ")" : ""));
+            txtRifaPremios.setText(formatearPremios(rifa.getPremios()));
+            txtRifaDescripcion.setText("Descripción: " + rifa.getDescripcion());
+            txtPrecioNumero.setText("Precio por número: $" + String.valueOf(rifa.getPrecioNumero()));
+            txtRifaRecaudado.setText("Monto recaudado: $" + calcularRecaudado(rifa));
+
+            // Permite copiar el código al portapapeles
+            txtRifaCodigo.setOnClickListener(v -> {
+                String codigo = txtRifaCodigo.getText().toString().replace("Código: ", "");
+                ClipboardManager clipboard = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("Código Rifa", codigo);
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(requireContext(), "Código copiado al portapapeles", Toast.LENGTH_SHORT).show();
+            });
+
+            if (!rifa.getNumerosComprados().isEmpty()) {
+                // Si hay números comprados, NO se muestra el texto "No hay participantes"
                 TextView noHayParticipantes = view.findViewById(R.id.rifa_organizador_txt_no_hay_participantes);
                 noHayParticipantes.setVisibility(View.GONE);
 
                 // Se muestra el nombre de cada participante y sus numeros comprados
                 inflarParticipantes(view, rifa);
-
-                txtRifaTitulo.setText(rifa.getTitulo());
-                txtRifaEstado.setText("Estado: " + Utilidades.capitalizar(rifa.getEstado().toString()));
-                txtRifaCodigo.setText("Código: " + rifa.getCodigo());
-                txtRifaFechaSorteo.setText("Fecha de sorteo: " + Utilidades.formatearFechaHora(rifa.getFechaSorteo(), "dd-MM-yyyy hh:mm"));
-                txtRifaMetodoEleccionGanador.setText("Método de elección: " + Utilidades.capitalizar(rifa.getMetodoEleccionGanador().toString()) + (rifa.getMetodoEleccionGanador() == MetodoEleccionGanador.DETERMINISTA ? " (" + rifa.getMotivoEleccionGanador() + ")" : ""));
-                txtRifaPremios.setText(formatearPremios(rifa.getPremios()));
-                txtRifaDescripcion.setText("Descripción: " + rifa.getDescripcion());
-                txtPrecioNumero.setText("Precio por número: $" + String.valueOf(rifa.getPrecioNumero()));
-                txtRifaRecaudado.setText("Monto recaudado: $" + calcularRecaudado(rifa));
-
-                // Permite copiar el código al portapapeles
-                txtRifaCodigo.setOnClickListener(v -> {
-                    String codigo = txtRifaCodigo.getText().toString().replace("Código: ", "");
-                    ClipboardManager clipboard = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("Código Rifa", codigo);
-                    clipboard.setPrimaryClip(clip);
-                    Toast.makeText(requireContext(), "Código copiado al portapapeles", Toast.LENGTH_SHORT).show();
-                });
 
                 // Permite al usuario Organizador escoger los ganadores de la rifa
                 if (
@@ -147,19 +153,6 @@ public class RifaOrganizadorFragment extends Fragment {
                 }
             }
         });
-
-
-
-        // Debe permitirse navegar hacia "Editar rifa" y para ello se debe tener el FAB
-
-        /*
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                navController.navigate(R.id.action_rifaOrganizadorFragment_to_editarRifaFragment);
-            }
-        });
-        */
     }
 
     /**

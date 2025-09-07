@@ -72,4 +72,9 @@ public class Utilidades {
 
         return sb.toString();
     }
+
+    public static LocalDateTime parsearFechaHora(String fechaHoraStr, String patron) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(patron);
+        return LocalDateTime.parse(fechaHoraStr, formatter);
+    }
 }

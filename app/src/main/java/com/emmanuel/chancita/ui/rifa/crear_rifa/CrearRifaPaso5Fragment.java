@@ -45,6 +45,7 @@ public class CrearRifaPaso5Fragment extends Fragment {
 
         btnContinuar.setOnClickListener(v -> {
             Intent intent = new Intent(requireActivity(), RifaOrganizadorActivity.class);
+            intent.putExtra("rifa_id", "eQYLINdFoYT88c4JRlBZ4xklO7C2");
             startActivity(intent);
         });
     }

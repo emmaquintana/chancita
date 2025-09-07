@@ -41,4 +41,6 @@
     <string name="confirmar_contraseña">Confirmar contraseña</string>
     <string name="cargando">Cargando...</string>
     <string name="no_tienes_notificaciones">No tienes notificaciones</string>
+    <string name="editar_rifa">Editar rifa</string>
+    <string name="codigo">Código</string>
 </resources>

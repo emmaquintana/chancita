@@ -23,12 +23,14 @@ import com.google.firebase.firestore.Transaction;
 
 import org.w3c.dom.Document;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 
 public class RifaDAO {
     private final FirebaseFirestore db;
@@ -189,9 +191,31 @@ public class RifaDAO {
             throw new IllegalArgumentException("El ID de la rifa no puede ser null al editar");
         }
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+
+        Map<String, Object> datos = new HashMap<>();
+        datos.put("titulo", rifa.getTitulo());
+        datos.put("descripcion", rifa.getDescripcion());
+        datos.put("cantNumeros", rifa.getCantNumeros());
+        datos.put("creadoPor", rifa.getCreadoPor());
+        datos.put("estado", rifa.getEstado());
+        datos.put("codigo", rifa.getCodigo());
+        datos.put("precioNumero", rifa.getPrecioNumero());
+        datos.put("participantesIds", rifa.getParticipantesIds());
+        datos.put("premios", rifa.getPremios());
+        datos.put("numerosComprados", rifa.getNumerosComprados());
+
+        if (rifa.getFechaSorteo() != null) {
+            datos.put("fechaSorteo", rifa.getFechaSorteo().format(formatter));
+        }
+        if (rifa.getCreadoEn() != null) {
+            datos.put("creadoEn", rifa.getCreadoEn().format(formatter));
+        }
+
+
         db.collection("rifas")
                 .document(rifa.getId())
-                .set(rifa, SetOptions.merge()) // 👈 merge para no sobrescribir campos no enviados
+                .set(datos, SetOptions.merge())
                 .addOnCompleteListener(listener);
     }
 
@@ -355,6 +379,25 @@ public class RifaDAO {
         });
     }
 
+    public void existeRifaConCodigo(String codigo, String rifaIdActual, Consumer<Boolean> callback) {
+        db.collection("rifas")
+                .whereEqualTo("codigo", codigo)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        boolean existe = false;
+                        for (DocumentSnapshot doc : task.getResult()) {
+                            if (!doc.getId().equals(rifaIdActual)) {
+                                existe = true;
+                                break;
+                            }
+                        }
+                        callback.accept(existe);
+                    } else {
+                        callback.accept(false);
+                    }
+                });
+    }
 
 
     /** Divide una lista en chunks de tamaño n */
