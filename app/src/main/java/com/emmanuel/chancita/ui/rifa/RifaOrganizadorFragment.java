@@ -11,6 +11,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import com.emmanuel.chancita.data.model.MetodoEleccionGanador;
 import com.emmanuel.chancita.data.model.NumeroComprado;
 import com.emmanuel.chancita.data.model.RifaEstado;
 import com.emmanuel.chancita.data.model.RifaPremio;
+import com.emmanuel.chancita.ui.SharedViewModel;
 import com.emmanuel.chancita.ui.rifa.adapters.EleccionGanadoresAdapter;
 import com.emmanuel.chancita.ui.rifa.adapters.GanadorInfoAdapter;
 import com.emmanuel.chancita.ui.rifa.adapters.ParticipantesAdapter;
@@ -44,6 +46,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class RifaOrganizadorFragment extends Fragment {
 
     private RifaOrganizadorViewModel rifaOrganizadorViewModel;
+    private SharedViewModel sharedViewModel;
+    private String rifaId;
     private NavController navController;
 
     public static RifaOrganizadorFragment newInstance() {
@@ -60,11 +64,26 @@ public class RifaOrganizadorFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         rifaOrganizadorViewModel = new ViewModelProvider(this).get(RifaOrganizadorViewModel.class);
+        sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
         navController = NavHostFragment.findNavController(this);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
+        // Obtener el rifaId del SharedViewModel AQUÍ, después de que la Activity ya se haya configurado
+        rifaId = sharedViewModel.getRifaId();
+        Log.d("RifaParticipanteFragment", "rifaId obtenido de SharedViewModel en onViewCreated: " + rifaId);
+
+        // Validar que rifaId no sea null antes de hacer llamadas
+        if (rifaId == null || rifaId.trim().isEmpty()) {
+            Log.e("RifaParticipanteFragment", "Error: rifaId es null o vacío en Fragment");
+            Toast.makeText(getContext(), "Error: No se pudo cargar la rifa", Toast.LENGTH_SHORT).show();
+            if (getActivity() != null) {
+                getActivity().finish();
+            }
+            return;
+        }
 
         TextView txtRifaTitulo = view.findViewById(R.id.rifa_organizador_txt_titulo_rifa);
         TextView txtRifaRecaudado = view.findViewById(R.id.rifa_organizador_txt_monto_recaudado); // Debe iniciar con "Monto recaudado: $"
@@ -77,7 +96,7 @@ public class RifaOrganizadorFragment extends Fragment {
         TextView txtPrecioNumero = view.findViewById(R.id.rifa_organizador_txt_info_precio); // Debe iniciar con "Precio por número: $"
         MaterialButton btnConfirmarGanadores = view.findViewById(R.id.rifa_organizador_btn_confirmar_ganadores);
 
-        rifaOrganizadorViewModel.obtenerRifa("B1EzULChLnb37D7LfC3m").observe(getViewLifecycleOwner(), rifa -> {
+        rifaOrganizadorViewModel.obtenerRifa(rifaId).observe(getViewLifecycleOwner(), rifa -> {
             if (!rifa.getParticipantesIds().isEmpty()) {
                 // Si hay participantes, NO se muestra el texto "No hay participantes"
                 TextView noHayParticipantes = view.findViewById(R.id.rifa_organizador_txt_no_hay_participantes);
@@ -154,7 +173,7 @@ public class RifaOrganizadorFragment extends Fragment {
         RecyclerView rvGanadorInfo = view.findViewById(R.id.recycler_view_ganadores);
         rvGanadorInfo.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        rifaOrganizadorViewModel.obtenerNumerosGanadores("B1EzULChLnb37D7LfC3m")
+        rifaOrganizadorViewModel.obtenerNumerosGanadores(rifaId)
                 .observe(getViewLifecycleOwner(), numerosGanadores -> {
                     if (numerosGanadores == null || numerosGanadores.isEmpty()) return;
 
@@ -270,7 +289,7 @@ public class RifaOrganizadorFragment extends Fragment {
             }
 
             // Guarda numeros ganadores
-            rifaOrganizadorViewModel.asignarNumerosGanadores("B1EzULChLnb37D7LfC3m", numerosGanadores);
+            rifaOrganizadorViewModel.asignarNumerosGanadores(rifaId, numerosGanadores);
 
             // Muestra estado de carga
             rifaOrganizadorViewModel.asignandoNumerosGanadores.observe(getViewLifecycleOwner(), asignando -> {

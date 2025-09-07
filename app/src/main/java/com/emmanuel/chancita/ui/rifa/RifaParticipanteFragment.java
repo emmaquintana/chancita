@@ -9,16 +9,19 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.emmanuel.chancita.R;
 import com.emmanuel.chancita.data.dto.RifaDTO;
 import com.emmanuel.chancita.data.model.MetodoEleccionGanador;
 import com.emmanuel.chancita.data.model.NumeroComprado;
 import com.emmanuel.chancita.data.model.RifaPremio;
+import com.emmanuel.chancita.ui.SharedViewModel;
 import com.emmanuel.chancita.ui.rifa.adapters.NumerosAdapter;
 import com.emmanuel.chancita.utils.Utilidades;
 import com.google.android.material.button.MaterialButton;
@@ -32,7 +35,9 @@ import java.util.List;
 public class RifaParticipanteFragment extends Fragment {
 
     private RifaParticipanteViewModel rifaParticipanteViewModel;
+    private SharedViewModel sharedViewModel;
     private RifaDTO rifa;
+    private String rifaId;
 
     public static RifaParticipanteFragment newInstance() {
         return new RifaParticipanteFragment();
@@ -42,6 +47,8 @@ public class RifaParticipanteFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         rifaParticipanteViewModel = new ViewModelProvider(this).get(RifaParticipanteViewModel.class);
+
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
     }
 
     @Override
@@ -51,6 +58,19 @@ public class RifaParticipanteFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        // Obtener el rifaId del SharedViewModel AQUÍ, después de que la Activity ya se haya configurado
+        rifaId = sharedViewModel.getRifaId();
+        Log.d("RifaParticipanteFragment", "rifaId obtenido de SharedViewModel en onViewCreated: " + rifaId);
+
+        // Validar que rifaId no sea null antes de hacer llamadas
+        if (rifaId == null || rifaId.trim().isEmpty()) {
+            Log.e("RifaParticipanteFragment", "Error: rifaId es null o vacío en Fragment");
+            Toast.makeText(getContext(), "Error: No se pudo cargar la rifa", Toast.LENGTH_SHORT).show();
+            if (getActivity() != null) {
+                getActivity().finish();
+            }
+            return;
+        }
 
         TextView txtRifaTitulo = view.findViewById(R.id.rifa_participante_txt_titulo_rifa);
         TextView txtRifaEstado = view.findViewById(R.id.rifa_participante_txt_estado_rifa); // Debe iniciar con "Estado: "
@@ -62,7 +82,7 @@ public class RifaParticipanteFragment extends Fragment {
         TextView txtRifaDescripcionHead = view.findViewById(R.id.rifa_participante_txt_descripcion_titulo);
         TextView txtPrecioNumero = view.findViewById(R.id.rifa_participante_txt_precio_numero); // Debe iniciar con "Precio por número: $"
 
-        rifaParticipanteViewModel.obtenerRifa("B1EzULChLnb37D7LfC3m").observe(getViewLifecycleOwner(), rifa -> {
+        rifaParticipanteViewModel.obtenerRifa(rifaId).observe(getViewLifecycleOwner(), rifa -> {
             this.rifa = rifa;
             // Permite al usuario comprar números si la fecha de sorteo aún no llega
             if (LocalDateTime.now().isBefore(rifa.getFechaSorteo())) {
@@ -86,7 +106,7 @@ public class RifaParticipanteFragment extends Fragment {
                 txtRifaDescripcion.setText(rifa.getDescripcion());
             }
 
-            rifaParticipanteViewModel.obenerOrganizador("B1EzULChLnb37D7LfC3m").observe(getViewLifecycleOwner(), organizador -> {
+            rifaParticipanteViewModel.obenerOrganizador(rifaId).observe(getViewLifecycleOwner(), organizador -> {
                 TextView txtCorreoOrganizador = view.findViewById(R.id.rifa_participante_txt_correo_organizador);
                 TextView txtCelularOrganizador = view.findViewById(R.id.rifa_participante_txt_nro_celular_organizador);
 
@@ -95,7 +115,7 @@ public class RifaParticipanteFragment extends Fragment {
             });
         });
 
-        rifaParticipanteViewModel.obtenerNumerosCompradosPorUsuarioActual("B1EzULChLnb37D7LfC3m").observe(getViewLifecycleOwner(), numerosComprados -> {
+        rifaParticipanteViewModel.obtenerNumerosCompradosPorUsuarioActual(rifaId).observe(getViewLifecycleOwner(), numerosComprados -> {
             TextView txtNumerosCompradosPorUsuarioActual = view.findViewById(R.id.rifa_participante_txt_numeros_comprados_por_usuario_actual);
 
             if (numerosComprados.isEmpty()) {
@@ -105,7 +125,7 @@ public class RifaParticipanteFragment extends Fragment {
             }
         });
 
-        rifaParticipanteViewModel.obtenerNumerosGanadores("B1EzULChLnb37D7LfC3m")
+        rifaParticipanteViewModel.obtenerNumerosGanadores(rifaId)
                 .observe(getViewLifecycleOwner(), numerosGanadores -> {
                     if (numerosGanadores != null && !numerosGanadores.isEmpty()) {
 
@@ -206,7 +226,7 @@ public class RifaParticipanteFragment extends Fragment {
 
         btnComprarNumeros.setOnClickListener(v -> {
             rifaParticipanteViewModel.comprarNumeros(
-                    "B1EzULChLnb37D7LfC3m",
+                    rifaId,
                     FirebaseAuth.getInstance().getCurrentUser().getUid(),
                     numerosSeleccionadosPorUsuario,
                     precioNumero
@@ -235,7 +255,7 @@ public class RifaParticipanteFragment extends Fragment {
 
                 // NUEVO: Actualizar la lista de números comprados
                 // Opción 1: Recargar toda la rifa (recomendado si es rápido)
-                rifaParticipanteViewModel.obtenerRifa("B1EzULChLnb37D7LfC3m").observe(getViewLifecycleOwner(), rifaActualizada -> {
+                rifaParticipanteViewModel.obtenerRifa(rifaId).observe(getViewLifecycleOwner(), rifaActualizada -> {
                     if (rifaActualizada != null) {
                         adapter.actualizarNumerosComprados(rifaActualizada.getNumerosComprados());
                     }

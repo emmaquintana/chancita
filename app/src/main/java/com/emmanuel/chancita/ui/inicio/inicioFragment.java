@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.InputType;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -108,7 +109,6 @@ public class inicioFragment extends Fragment {
                 TextView msgNoRifasCreadas = view.findViewById(R.id.inicio_txt_no_rifas_creadas);
                 msgNoRifasCreadas.setVisibility(View.GONE);
 
-                /*
                 // Si se "toca" una rifa, se redirige a la actividad correspondiente a esa rifa
                 RifaAdapter.OnItemClickListener rifaCreadaListener = new RifaAdapter.OnItemClickListener() {
                     @Override
@@ -118,11 +118,10 @@ public class inicioFragment extends Fragment {
                         startActivity(intent);
                     }
                 };
-*/
 
                 // Genera el layout
                 rvRifasCreadas.setLayoutManager(new LinearLayoutManager(getContext()));
-                RifaAdapter rifasAdapter = new RifaAdapter(listaRifa, null);
+                RifaAdapter rifasAdapter = new RifaAdapter(listaRifa, rifaCreadaListener);
                 rvRifasCreadas.setAdapter(rifasAdapter);
             }
             else {

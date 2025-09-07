@@ -60,7 +60,7 @@ public class RifaAdapter extends RecyclerView.Adapter<RifaAdapter.RaffleViewHold
                 holder.estadoRifa.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.green));
                 break;
             case CERRADO:
-
+                holder.estadoRifa.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.md_theme_error));
                 break;
             case SORTEADO:
                 holder.estadoRifa.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.md_theme_error));

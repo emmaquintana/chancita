@@ -8,5 +8,10 @@
         android:id="@+id/rifaParticipanteFragment"
         android:name="com.emmanuel.chancita.ui.rifa.RifaParticipanteFragment"
         android:label="fragment_rifa_participante"
-        tools:layout="@layout/fragment_rifa_participante" />
+        tools:layout="@layout/fragment_rifa_participante" >
+
+        <argument
+            android:name="rifa_id"
+            app:argType="string" />
+    </fragment>
 </navigation>

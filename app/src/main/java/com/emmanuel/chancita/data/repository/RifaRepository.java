@@ -106,7 +106,7 @@ public class RifaRepository {
             if (task.isSuccessful() && task.getResult().exists()) {
                 DocumentSnapshot doc = task.getResult();
 
-                String id = doc.getString("id");
+                String id = doc.getId();
                 String titulo = doc.getString("titulo");
                 String descripcion = doc.getString("descripcion");
                 int cantNumeros = doc.getLong("cantNumeros").intValue();
@@ -335,7 +335,7 @@ public class RifaRepository {
             if (task.isSuccessful()) {
                 List<RifaDTO> rifas = task.getResult().getDocuments().stream()
                         .map(document -> {
-                            String id = document.getString("id");
+                            String id = document.getId();
                             String titulo = document.getString("titulo");
                             String descripcion = document.getString("descripcion");
                             int cantNumeros = document.getLong("cantNumeros").intValue();
@@ -426,7 +426,7 @@ public class RifaRepository {
             if (task.isSuccessful()) {
                 List<RifaDTO> rifas = task.getResult().getDocuments().stream()
                         .map(document -> {
-                            String id = document.getString("id");
+                            String id = document.getId();
                             String titulo = document.getString("titulo");
                             String descripcion = document.getString("descripcion");
                             int cantNumeros = document.getLong("cantNumeros").intValue();
