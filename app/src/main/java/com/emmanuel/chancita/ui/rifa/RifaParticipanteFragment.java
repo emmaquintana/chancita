@@ -220,8 +220,6 @@ public class RifaParticipanteFragment extends Fragment {
 
     }
 
-// Actualización del método inflarSeccionNumeros en tu Fragment
-
     /** Infla los numeros de los cuales el usuario participante podrá elegir cuál comprar */
     private void inflarSeccionNumeros(View view, int cantNumeros, List<NumeroComprado> numerosComprados, double precioNumero) {
         MaterialButton btnComprarNumeros = view.findViewById(R.id.rifa_participante_btn_comprar_numeros);
@@ -275,18 +273,28 @@ public class RifaParticipanteFragment extends Fragment {
         // Observer para el resultado de la compra
         rifaParticipanteViewModel.compraNumerosExitosa.observe(getViewLifecycleOwner(), compraExitosa -> {
             if (compraExitosa != null && compraExitosa) {
+                Toast.makeText(getContext(), "¡Números comprados con éxito!", Toast.LENGTH_LONG).show();
                 // Limpiar selección después de compra exitosa
                 adapter.limpiarSeleccion();
                 numerosSeleccionadosPorUsuario.clear();
                 actualizarEstadoBotonComprar(btnComprarNumeros, numerosSeleccionadosPorUsuario, precioNumero);
 
-                // NUEVO: Actualizar la lista de números comprados
-                // Opción 1: Recargar toda la rifa (recomendado si es rápido)
                 rifaParticipanteViewModel.obtenerRifa(rifaId).observe(getViewLifecycleOwner(), rifaActualizada -> {
                     if (rifaActualizada != null) {
                         adapter.actualizarNumerosComprados(rifaActualizada.getNumerosComprados());
                     }
                 });
+
+                rifaParticipanteViewModel
+                        .obtenerNumerosCompradosPorUsuarioActual(rifaId)
+                        .observe(getViewLifecycleOwner(), numerosCompradosPorUsuarioActual -> {
+                            TextView txtNumerosCompradosPorUsuarioActual = getView().findViewById(R.id.rifa_participante_txt_numeros_comprados_por_usuario_actual);
+                            if (numerosCompradosPorUsuarioActual.isEmpty()) {
+                                txtNumerosCompradosPorUsuarioActual.setText("Aún no compraste números");
+                            } else {
+                                txtNumerosCompradosPorUsuarioActual.setText("Números que compraste: " + Utilidades.listaAString(numerosCompradosPorUsuarioActual));
+                            }
+                        });
 
                 // Resetear el estado para evitar múltiples ejecuciones
                 rifaParticipanteViewModel.resetCompraExitosa();
