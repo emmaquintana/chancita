@@ -249,7 +249,7 @@ public class RifaRepository {
                 DocumentSnapshot doc = task.getResult().getDocuments().get(0);
 
                 // Mapear campos manualmente
-                String id = doc.getString("id");
+                String id = doc.getId();
                 String titulo = doc.getString("titulo");
                 String descripcion = doc.getString("descripcion");
                 int cantNumeros = doc.getLong("cantNumeros").intValue();
