@@ -149,9 +149,8 @@ public class CrearRifaPaso2Fragment extends Fragment {
             return false;
         }
 
-        if (descripcion.isEmpty()) {
-            mostrarError("La descripción es obligatoria");
-            return false;
+        if (descripcion.trim().isEmpty()) {
+            descripcion = null;
         }
 
         if (premiosStr.isEmpty()) {
