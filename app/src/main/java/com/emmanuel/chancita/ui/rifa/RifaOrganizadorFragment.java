@@ -1,5 +1,8 @@
 package com.emmanuel.chancita.ui.rifa;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -114,6 +117,15 @@ public class RifaOrganizadorFragment extends Fragment {
                 txtRifaDescripcion.setText("Descripción: " + rifa.getDescripcion());
                 txtPrecioNumero.setText("Precio por número: $" + String.valueOf(rifa.getPrecioNumero()));
                 txtRifaRecaudado.setText("Monto recaudado: $" + calcularRecaudado(rifa));
+
+                // Permite copiar el código al portapapeles
+                txtRifaCodigo.setOnClickListener(v -> {
+                    String codigo = txtRifaCodigo.getText().toString().replace("Código: ", "");
+                    ClipboardManager clipboard = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("Código Rifa", codigo);
+                    clipboard.setPrimaryClip(clip);
+                    Toast.makeText(requireContext(), "Código copiado al portapapeles", Toast.LENGTH_SHORT).show();
+                });
 
                 // Permite al usuario Organizador escoger los ganadores de la rifa
                 if (
