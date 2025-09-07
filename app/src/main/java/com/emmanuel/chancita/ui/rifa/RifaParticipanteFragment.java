@@ -1,5 +1,12 @@
 package com.emmanuel.chancita.ui.rifa;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -82,6 +90,15 @@ public class RifaParticipanteFragment extends Fragment {
         TextView txtRifaDescripcionHead = view.findViewById(R.id.rifa_participante_txt_descripcion_titulo);
         TextView txtPrecioNumero = view.findViewById(R.id.rifa_participante_txt_precio_numero); // Debe iniciar con "Precio por número: $"
 
+        // Permite copiar el código al portapapeles
+        txtRifaCodigo.setOnClickListener(v -> {
+            String codigo = txtRifaCodigo.getText().toString().replace("Código: ", "");
+            ClipboardManager clipboard = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("Código Rifa", codigo);
+            clipboard.setPrimaryClip(clip);
+            Toast.makeText(requireContext(), "Código copiado al portapapeles", Toast.LENGTH_SHORT).show();
+        });
+
         rifaParticipanteViewModel.obtenerRifa(rifaId).observe(getViewLifecycleOwner(), rifa -> {
             this.rifa = rifa;
             // Permite al usuario comprar números si la fecha de sorteo aún no llega
@@ -112,6 +129,16 @@ public class RifaParticipanteFragment extends Fragment {
 
                 txtCorreoOrganizador.setText("Correo del creador de la rifa: " + organizador.getCorreo());
                 txtCelularOrganizador.setText("Nro. celular del creador de la rifa: " + organizador.getNroCelular());
+
+
+                Linkify.addLinks(
+                        txtCelularOrganizador,
+                        Linkify.PHONE_NUMBERS);
+
+                Linkify.addLinks(
+                        txtCorreoOrganizador,
+                        Linkify.EMAIL_ADDRESSES
+                );
             });
         });
 
