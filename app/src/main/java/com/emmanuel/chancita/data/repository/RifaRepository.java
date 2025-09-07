@@ -635,7 +635,9 @@ public class RifaRepository {
         return liveData;
     }
 
-
+    public void comprarNumeros(String rifaId, String usuarioId, List<Integer> numeros, double precioUnitario, OnCompleteListener<Void> listener) {
+        rifaDAO.comprarNumeros(rifaId, usuarioId, numeros, precioUnitario).addOnCompleteListener(listener);
+    }
 
     /**
      * Actualiza el estado de una rifa

@@ -1,5 +1,7 @@
 package com.emmanuel.chancita.data.dao;
 
+import android.util.Log;
+
 import com.emmanuel.chancita.data.dto.UsuarioDTO;
 import com.emmanuel.chancita.data.model.Rifa;
 import com.emmanuel.chancita.data.model.RifaEstado;
@@ -9,12 +11,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.firestore.Transaction;
 
 import org.w3c.dom.Document;
 
@@ -286,6 +291,71 @@ public class RifaDAO {
             }
         });
     }
+
+    public Task<Void> comprarNumeros(String rifaId, String usuarioId, List<Integer> numeros, double precioUnitario) {
+        DocumentReference rifaRef = db.collection("rifas").document(rifaId);
+
+        return db.runTransaction((Transaction.Function<Void>) transaction -> {
+            DocumentSnapshot snapshot = transaction.get(rifaRef);
+
+            Long cantNumeros = snapshot.getLong("cantNumeros");
+            String estado = snapshot.getString("estado");
+            if ("CERRADO".equals(estado) || "SORTEADO".equals(estado)) {
+                throw new FirebaseFirestoreException("Rifa no disponible", FirebaseFirestoreException.Code.ABORTED);
+            }
+
+            // Leer compras actuales
+            List<Map<String, Object>> compras = (List<Map<String, Object>>) snapshot.get("numerosComprados");
+            if (compras == null) compras = new ArrayList<>();
+
+            int max = cantNumeros.intValue();
+            boolean[] taken = new boolean[max + 1]; // +1 para incluir el número máximo
+            int usados = 0;
+            for (Map<String, Object> c : compras) {
+                List<Long> valor = (List<Long>) c.get("valor");
+                if (valor != null) {
+                    usados += valor.size();
+                    for (Long n : valor) {
+                        int i = n.intValue();
+                        if (i >= 1 && i <= max) {
+                            taken[i] = true; // Usar el número directamente como índice
+                        }
+                    }
+                }
+            }
+
+            // Validar entrada y convertir a Long
+            List<Long> numerosLong = new ArrayList<>(numeros.size());
+            for (Integer n : numeros) {
+                if (n == null || n < 1 || n > max)
+                    throw new FirebaseFirestoreException("Número fuera de rango: " + n, FirebaseFirestoreException.Code.ABORTED);
+                if (taken[n])
+                    throw new FirebaseFirestoreException("Número ya vendido: " + n, FirebaseFirestoreException.Code.ABORTED);
+                numerosLong.add(n.longValue());
+            }
+
+            if (usados + numerosLong.size() > cantNumeros)
+                throw new FirebaseFirestoreException("No quedan suficientes números", FirebaseFirestoreException.Code.ABORTED);
+
+            // Agregar compra
+            Map<String, Object> nuevaCompra = new HashMap<>();
+            nuevaCompra.put("usuarioId", usuarioId);
+            nuevaCompra.put("precioUnitario", precioUnitario);
+            nuevaCompra.put("valor", numerosLong);
+
+            compras.add(nuevaCompra);
+            transaction.update(rifaRef, "numerosComprados", compras);
+
+            // Cerrar si se llegó al máximo
+            if (usados + numerosLong.size() == cantNumeros) {
+                transaction.update(rifaRef, "estado", "CERRADO");
+            }
+
+            return null;
+        });
+    }
+
+
 
     /** Divide una lista en chunks de tamaño n */
     private <T> List<List<T>> chunkList(List<T> list, int n) {

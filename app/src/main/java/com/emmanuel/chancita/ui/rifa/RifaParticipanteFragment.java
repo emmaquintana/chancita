@@ -173,49 +173,91 @@ public class RifaParticipanteFragment extends Fragment {
 
     }
 
+// Actualización del método inflarSeccionNumeros en tu Fragment
+
     /** Infla los numeros de los cuales el usuario participante podrá elegir cuál comprar */
     private void inflarSeccionNumeros(View view, int cantNumeros, List<NumeroComprado> numerosComprados, double precioNumero) {
-        MaterialButton btnContinuar = view.findViewById(R.id.rifa_participante_btn_comprar_numeros);
+        MaterialButton btnComprarNumeros = view.findViewById(R.id.rifa_participante_btn_comprar_numeros);
         RecyclerView rvNumeros = view.findViewById(R.id.rifa_participante_rv_numeros);
         view.findViewById(R.id.rifa_participante_txt_comprar_numeros_titulo).setVisibility(View.VISIBLE);
         view.findViewById(R.id.rifa_participante_txt_comprar_numeros_descripcion).setVisibility(View.VISIBLE);
         view.findViewById(R.id.rifa_participante_txt_aclaracion_comision).setVisibility(View.VISIBLE);
         rvNumeros.setVisibility(View.VISIBLE);
-        btnContinuar.setVisibility(View.VISIBLE);
-        List<Integer> numeros;
+        btnComprarNumeros.setVisibility(View.VISIBLE);
 
-        numeros = new ArrayList<>();
+        List<Integer> numeros = new ArrayList<>();
+        List<Integer> numerosSeleccionadosPorUsuario = new ArrayList<>();
+
         for (int i = 1; i <= cantNumeros; i++) {
             numeros.add(i);
         }
 
-        NumerosAdapter adapter = new NumerosAdapter(numeros, numerosComprados, FirebaseAuth.getInstance().getCurrentUser().getUid(), numerosSeleccionados -> {
-            if (numerosSeleccionados.size() > 0) {
-                btnContinuar.setEnabled(true);
-            }
-            else {
-                btnContinuar.setEnabled(false);
-            }
+        NumerosAdapter adapter = new NumerosAdapter(numeros, numerosComprados, numerosSeleccionados -> {
+            numerosSeleccionadosPorUsuario.clear();
+            numerosSeleccionadosPorUsuario.addAll(numerosSeleccionados);
 
-
-            if (numerosSeleccionados.isEmpty()) {
-                btnContinuar.setText("Comprar número/s");
-            }
-            else if (numerosSeleccionados.size() == 1) {
-                btnContinuar.setText("Comprar número ($" + calcularPrecio(numerosSeleccionados.size(), precioNumero, 2.2) + ")");
-            }
-            else if (numerosSeleccionados.size() > 1) {
-                btnContinuar.setText("Comprar números ($" + calcularPrecio(numerosSeleccionados.size(), precioNumero, 2.2) + ")");
-            }
+            // Actualizar estado del botón basado en la selección
+            actualizarEstadoBotonComprar(btnComprarNumeros, numerosSeleccionados, precioNumero);
         });
-        // Distribuye los items en una grilla
-        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 5); // 5 columnas
+
+        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 5);
         rvNumeros.setLayoutManager(layoutManager);
         rvNumeros.setAdapter(adapter);
 
-        btnContinuar.setOnClickListener(v -> {
-
+        btnComprarNumeros.setOnClickListener(v -> {
+            rifaParticipanteViewModel.comprarNumeros(
+                    "B1EzULChLnb37D7LfC3m",
+                    FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                    numerosSeleccionadosPorUsuario,
+                    precioNumero
+            );
         });
+
+        // Observer para el estado de carga
+        rifaParticipanteViewModel.comprandoNumeros.observe(getViewLifecycleOwner(), comprandoNumeros -> {
+            if (comprandoNumeros) {
+                btnComprarNumeros.setEnabled(false);
+                btnComprarNumeros.setText("Comprando...");
+            } else {
+                // Solo habilitar si hay números seleccionados
+                btnComprarNumeros.setEnabled(!numerosSeleccionadosPorUsuario.isEmpty());
+                actualizarEstadoBotonComprar(btnComprarNumeros, numerosSeleccionadosPorUsuario, precioNumero);
+            }
+        });
+
+        // Observer para el resultado de la compra
+        rifaParticipanteViewModel.compraNumerosExitosa.observe(getViewLifecycleOwner(), compraExitosa -> {
+            if (compraExitosa != null && compraExitosa) {
+                // Limpiar selección después de compra exitosa
+                adapter.limpiarSeleccion();
+                numerosSeleccionadosPorUsuario.clear();
+                actualizarEstadoBotonComprar(btnComprarNumeros, numerosSeleccionadosPorUsuario, precioNumero);
+
+                // NUEVO: Actualizar la lista de números comprados
+                // Opción 1: Recargar toda la rifa (recomendado si es rápido)
+                rifaParticipanteViewModel.obtenerRifa("B1EzULChLnb37D7LfC3m").observe(getViewLifecycleOwner(), rifaActualizada -> {
+                    if (rifaActualizada != null) {
+                        adapter.actualizarNumerosComprados(rifaActualizada.getNumerosComprados());
+                    }
+                });
+
+                // Resetear el estado para evitar múltiples ejecuciones
+                rifaParticipanteViewModel.resetCompraExitosa();
+            }
+        });
+    }
+    private void actualizarEstadoBotonComprar(MaterialButton btnComprarNumeros, List<Integer> numerosSeleccionados, double precioNumero) {
+        if (numerosSeleccionados.isEmpty()) {
+            btnComprarNumeros.setEnabled(false);
+            btnComprarNumeros.setText("Comprar número/s");
+        } else {
+            btnComprarNumeros.setEnabled(true);
+            if (numerosSeleccionados.size() == 1) {
+                btnComprarNumeros.setText("Comprar número ($" + calcularPrecio(numerosSeleccionados.size(), precioNumero, 2.2) + ")");
+            } else {
+                btnComprarNumeros.setText("Comprar números ($" + calcularPrecio(numerosSeleccionados.size(), precioNumero, 2.2) + ")");
+            }
+        }
     }
 
     private double calcularPrecio(double cantNumerosSeleccionados, double precioNumero, double comision) {

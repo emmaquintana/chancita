@@ -19,7 +19,6 @@ public class NumerosAdapter extends RecyclerView.Adapter<NumerosAdapter.NumeroVi
     private List<Integer> numeros;
     private List<Integer> numerosSeleccionados;
     private List<NumeroComprado> numerosComprados;
-    private String usuarioActualId;
     private OnNumeroClickListener listener;
 
     public interface OnNumeroClickListener {
@@ -28,13 +27,36 @@ public class NumerosAdapter extends RecyclerView.Adapter<NumerosAdapter.NumeroVi
 
     public NumerosAdapter(List<Integer> numeros,
                           List<NumeroComprado> numerosComprados,
-                          String usuarioActualId,
                           OnNumeroClickListener listener) {
         this.numeros = numeros != null ? numeros : new ArrayList<>();
         this.numerosComprados = numerosComprados != null ? numerosComprados : new ArrayList<>();
-        this.usuarioActualId = usuarioActualId;
         this.listener = listener;
         this.numerosSeleccionados = new ArrayList<>();
+    }
+
+    /**
+     * Método para limpiar la selección de números
+     */
+    public void limpiarSeleccion() {
+        if (!numerosSeleccionados.isEmpty()) {
+            numerosSeleccionados.clear();
+            notifyDataSetChanged(); // Actualizar toda la vista para reflejar los cambios
+        }
+    }
+
+    /**
+     * NUEVO: Método para actualizar la lista de números comprados
+     */
+    public void actualizarNumerosComprados(List<NumeroComprado> nuevosNumerosComprados) {
+        this.numerosComprados = nuevosNumerosComprados != null ? nuevosNumerosComprados : new ArrayList<>();
+        notifyDataSetChanged(); // Refrescar toda la vista para mostrar los números recién comprados como bloqueados
+    }
+
+    /**
+     * Método para obtener la lista actual de números seleccionados
+     */
+    public List<Integer> getNumerosSeleccionados() {
+        return new ArrayList<>(numerosSeleccionados);
     }
 
     @NonNull
@@ -68,22 +90,21 @@ public class NumerosAdapter extends RecyclerView.Adapter<NumerosAdapter.NumeroVi
             btnNumero.setText(String.valueOf(numero));
 
             // Verificar si el número está comprado por cualquier usuario
-            boolean comprado = false;
-            for (NumeroComprado nc : numerosComprados) {
-                if (nc.getNumerosComprados() != null && nc.getNumerosComprados().contains(numero)) {
-                    comprado = true;
-                    break;
-                }
-            }
+            boolean comprado = isNumeroComprado(numero);
 
             if (comprado) {
                 btnNumero.setEnabled(false);
                 btnNumero.setChecked(false);
+                // Cambiar el estilo visual para números comprados
+                btnNumero.setAlpha(0.5f);
+                // Limpiar el listener para evitar clics accidentales
+                btnNumero.setOnClickListener(null);
                 return;
             }
 
             // Número disponible
             btnNumero.setEnabled(true);
+            btnNumero.setAlpha(1.0f);
             btnNumero.setChecked(numerosSeleccionados.contains(numero));
 
             btnNumero.setOnClickListener(v -> {
@@ -95,10 +116,27 @@ public class NumerosAdapter extends RecyclerView.Adapter<NumerosAdapter.NumeroVi
                 } else {
                     numerosSeleccionados.add(numero);
                 }
+
+                // Actualizar solo este item específico
                 notifyItemChanged(pos);
-                listener.onNumeroClick(numerosSeleccionados);
+
+                // Notificar al listener
+                if (listener != null) {
+                    listener.onNumeroClick(new ArrayList<>(numerosSeleccionados));
+                }
             });
         }
 
+        /**
+         * Método auxiliar para verificar si un número está comprado
+         */
+        private boolean isNumeroComprado(int numero) {
+            for (NumeroComprado nc : numerosComprados) {
+                if (nc.getNumerosComprados() != null && nc.getNumerosComprados().contains(numero)) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

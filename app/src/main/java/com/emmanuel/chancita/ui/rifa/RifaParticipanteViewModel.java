@@ -18,6 +18,11 @@ public class RifaParticipanteViewModel extends ViewModel {
     private final MutableLiveData<String> _resultadoObtencionRifa = new MutableLiveData<>();
     public final LiveData<String> resultadoObtencionRifa = _resultadoObtencionRifa;
 
+    private final MutableLiveData<Boolean> _comprandoNumeros = new MutableLiveData<>();
+    public final LiveData<Boolean> comprandoNumeros = _comprandoNumeros;
+    private final MutableLiveData<Boolean> _compraNumerosExitosa = new MutableLiveData<>();
+    public final LiveData<Boolean> compraNumerosExitosa = _compraNumerosExitosa;
+
     public RifaParticipanteViewModel() {
         this.rifaRepository = new RifaRepository();
     }
@@ -44,5 +49,26 @@ public class RifaParticipanteViewModel extends ViewModel {
 
     public LiveData<UsuarioDTO> obenerOrganizador(String rifaId) {
         return rifaRepository.obtenerOrganizador(rifaId);
+    }
+
+    public void comprarNumeros(String rifaId, String usuarioId, List<Integer> numeros, double precioUnitario) {
+        _comprandoNumeros.setValue(true);
+
+        rifaRepository.comprarNumeros(rifaId, usuarioId, numeros, precioUnitario, task -> {
+            _comprandoNumeros.setValue(false);
+            if (task.isSuccessful()) {
+                _compraNumerosExitosa.setValue(true);
+            }
+            else {
+                _compraNumerosExitosa.setValue(false);
+            }
+        });
+    }
+
+    /**
+     * Método para resetear el estado de compra exitosa
+     */
+    public void resetCompraExitosa() {
+        _compraNumerosExitosa.setValue(null);
     }
 }

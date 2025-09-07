@@ -19,7 +19,8 @@
         android:id="@+id/participante_txt_numeros_comprados"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="?attr/colorOnSurface"
-        android:text="Números" />
+        android:layout_marginStart="16dp"
+        android:text="Números"
+        android:textColor="?attr/colorOnSurface" />
 
 </LinearLayout>
