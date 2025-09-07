@@ -53,32 +53,5 @@ public class CrearRifaPaso1Fragment extends Fragment {
             // (En realidad, debería ser un deep link)
             navController.navigate(R.id.action_crearRifaPaso1Fragment_to_crearRifaPaso2Fragment);
         });
-
-        mostrarDialog();
     }
-
-    private void mostrarDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-
-        // Crear TextView para el mensaje
-        TextView mensaje = new TextView(requireContext());
-        mensaje.setText("Sepase que la creación de la rifa aún no está implementada para el usuario aunque bien se tengan los DAOs y repositorios");
-        mensaje.setPadding(
-                (int) (16 * getResources().getDisplayMetrics().density),
-                (int) (16 * getResources().getDisplayMetrics().density),
-                (int) (16 * getResources().getDisplayMetrics().density),
-                (int) (16 * getResources().getDisplayMetrics().density)
-        );
-        mensaje.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-        mensaje.setLineSpacing(0, 1.2f);
-        mensaje.setEllipsize(null); // Evita recortar
-        mensaje.setMovementMethod(new ScrollingMovementMethod());
-
-        builder.setView(mensaje);
-        builder.setPositiveButton("Ok", (dialog, which) -> dialog.dismiss());
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
 }

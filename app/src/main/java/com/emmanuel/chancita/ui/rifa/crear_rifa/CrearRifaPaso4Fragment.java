@@ -1,10 +1,12 @@
 package com.emmanuel.chancita.ui.rifa.crear_rifa;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -12,17 +14,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.emmanuel.chancita.R;
+import com.emmanuel.chancita.data.model.MetodoEleccionGanador;
+import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class CrearRifaPaso4Fragment extends Fragment {
 
-    private CrearRifaPaso4ViewModel mViewModel;
+    private CrearRifaSharedViewModel sharedViewModel;
     private NavController navController;
 
-    public static CrearRifaPaso4Fragment newInstance() {
-        return new CrearRifaPaso4Fragment();
-    }
+    // Views
+    private RadioGroup rgMetodoSeleccion;
+    private RadioButton rbAleatorio;
+    private RadioButton rbDeterminista;
+    private MaterialButton btnContinuar;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -33,24 +42,133 @@ public class CrearRifaPaso4Fragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(CrearRifaSharedViewModel.class);
         navController = NavHostFragment.findNavController(this);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Button btnContinuar = view.findViewById(R.id.crear_rifa_paso_4_btn_continuar);
+        super.onViewCreated(view, savedInstanceState);
 
-        boolean metodoDeterminista = true;
+        initViews(view);
+        setupContinueButton();
+        observeViewModel();
+    }
 
+    private void initViews(View view) {
+        rgMetodoSeleccion = view.findViewById(R.id.crear_rifa_paso_4_rg_metodo_seleccion);
+        rbAleatorio = view.findViewById(R.id.crear_rifa_paso_4_rb_aleatorio);
+        rbDeterminista = view.findViewById(R.id.crear_rifa_paso_4_rb_determinista);
+        btnContinuar = view.findViewById(R.id.crear_rifa_paso_4_btn_continuar);
+    }
+
+    private void setupContinueButton() {
         btnContinuar.setOnClickListener(v -> {
-            if (metodoDeterminista) {
-                navController.navigate(R.id.action_crearRifaPaso4Fragment_to_crearRifaPaso5Fragment);
-            }
-            else {
-                // Muestra la rifa creada
+            MetodoEleccionGanador metodoSeleccionado = getMetodoSeleccionado();
+
+            if (metodoSeleccionado == null) {
+                mostrarError("Debes seleccionar un método de elección");
+                return;
             }
 
+            // Actualizar método en el ViewModel
+            sharedViewModel.actualizarMetodoEleccion(metodoSeleccionado);
+
+            // Navegar según el método seleccionado
+            if (metodoSeleccionado == MetodoEleccionGanador.DETERMINISTA) {
+                // Si es determinista, ir al paso 5 para describir el método
+                navController.navigate(R.id.action_crearRifaPaso4Fragment_to_crearRifaPaso5Fragment);
+            } else {
+                // Si es aleatorio, crear la rifa directamente
+                crearRifaFinal();
+            }
         });
     }
 
+    private MetodoEleccionGanador getMetodoSeleccionado() {
+        int selectedId = rgMetodoSeleccion.getCheckedRadioButtonId();
+
+        if (selectedId == R.id.crear_rifa_paso_4_rb_aleatorio) {
+            return MetodoEleccionGanador.ALEATORIO;
+        } else if (selectedId == R.id.crear_rifa_paso_4_rb_determinista) {
+            return MetodoEleccionGanador.DETERMINISTA;
+        }
+
+        return null;
+    }
+
+    private void crearRifaFinal() {
+        // Para método aleatorio, no necesita descripción adicional
+        sharedViewModel.actualizarDescripcionMetodo("Selección aleatoria automática");
+
+        // Obtener el usuario actual (necesitarás implementar esto según tu sistema de autenticación)
+        String usuarioActual = obtenerUsuarioActual();
+
+        if (usuarioActual == null) {
+            mostrarError("Error: No se pudo identificar el usuario actual");
+            return;
+        }
+
+        // Crear la rifa
+        sharedViewModel.crearRifa(usuarioActual);
+    }
+
+    private String obtenerUsuarioActual() {
+        String idUsuarioActual = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        return idUsuarioActual;
+    }
+
+    private void mostrarError(String mensaje) {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Error")
+                .setMessage(mensaje)
+                .setPositiveButton("Aceptar", null)
+                .show();
+    }
+
+    private void observeViewModel() {
+        // Observar estado de creación de rifa
+        sharedViewModel.creandoRifa.observe(getViewLifecycleOwner(), creando -> {
+            btnContinuar.setEnabled(!creando);
+            if (creando) {
+                btnContinuar.setText("Creando rifa...");
+            } else {
+                btnContinuar.setText("Continuar");
+            }
+        });
+
+        // Observar resultado de creación
+        sharedViewModel.resultadoCreacion.observe(getViewLifecycleOwner(), resultado -> {
+            if (resultado != null) {
+                if (resultado.contains("éxito")) {
+                    mostrarExitoYSalir(resultado);
+                } else {
+                    mostrarError(resultado);
+                }
+            }
+        });
+
+        // Restaurar selección previa si existe
+        sharedViewModel.rifaEnConstruccion.observe(getViewLifecycleOwner(), rifa -> {
+            if (rifa != null && rifa.getMetodoEleccionGanador() != null) {
+                if (rifa.getMetodoEleccionGanador() == MetodoEleccionGanador.ALEATORIO) {
+                    rbAleatorio.setChecked(true);
+                } else if (rifa.getMetodoEleccionGanador() == MetodoEleccionGanador.DETERMINISTA) {
+                    rbDeterminista.setChecked(true);
+                }
+            }
+        });
+    }
+
+    private void mostrarExitoYSalir(String mensaje) {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("¡Éxito!")
+                .setMessage(mensaje)
+                .setPositiveButton("Aceptar", (dialog, which) -> {
+                    // Volver a la pantalla principal o lista de rifas
+                    requireActivity().finish();
+                })
+                .setCancelable(false)
+                .show();
+    }
 }
