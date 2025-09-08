@@ -41,6 +41,7 @@ public class InicioSesionViewModel extends ViewModel {
                     if (task.isSuccessful()) {
                         _inicioSesionExitoso.setValue(true);
                     } else {
+                        _inicioSesionExitoso.setValue(false);
                         _resultadoInicioSesion.setValue("Error al iniciar sesión. Verifique su correo y contraseña.");
                     }
                 });

@@ -18,6 +18,8 @@ public class CrearCuentaViewModel extends ViewModel {
     public LiveData<Boolean> estaRegistrandose = _estaRegistrandose;
     private final MutableLiveData<String> _resultadoRegistro = new MutableLiveData<>();
     public LiveData<String> resultadoRegistro = _resultadoRegistro;
+    private final MutableLiveData<Boolean> _registroExitoso = new MutableLiveData<>();
+    public LiveData<Boolean> registroExitoso = _registroExitoso;
 
     public CrearCuentaViewModel() {
         this.usuarioRepository = new UsuarioRepository();
@@ -48,9 +50,11 @@ public class CrearCuentaViewModel extends ViewModel {
             _estaRegistrandose.postValue(false);
             if (task.isSuccessful()) {
                 _resultadoRegistro.setValue("¡El usuario ha sido creado con éxito!");
+                _registroExitoso.setValue(true);
             }
             else {
                 Exception e = task.getException();
+                _registroExitoso.setValue(false);
 
                 if (e != null) {
                     if (e instanceof FirebaseAuthUserCollisionException) {

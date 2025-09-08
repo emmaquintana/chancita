@@ -89,7 +89,15 @@ public class InicioSesionFragment extends Fragment {
 
     private void setupObservers() {
         inicioSesionViewModel.estaIniciandoSesion.observe(getViewLifecycleOwner(), isLoggingIn -> {
-            // Manejar el estado de carga (por ejemplo, mostrar un ProgressBar)
+            if (isLoggingIn) {
+                binding.loginBtnContinuar.setEnabled(false);
+                binding.loginBtnContinuar.setText("Iniciando sesión...");
+            }
+            else {
+                binding.loginBtnContinuar.setEnabled(true);
+                binding.loginBtnContinuar.setText("Iniciar sesión");
+            }
+
         });
 
         inicioSesionViewModel.resultadoInicioSesion.observe(getViewLifecycleOwner(), result -> {
@@ -100,6 +108,9 @@ public class InicioSesionFragment extends Fragment {
 
         inicioSesionViewModel.inicioSesionExitoso.observe(getViewLifecycleOwner(), success -> {
             if (success) {
+                // Mantener el botón inhabilitado
+                binding.loginBtnContinuar.setEnabled(false);
+                binding.loginBtnContinuar.setText("Iniciando sesión...");
                 if (binding.loginCbRecordarme.isChecked()) {
                     sharedPreferences.edit().putBoolean("is_logged_in", true).apply();
                 }

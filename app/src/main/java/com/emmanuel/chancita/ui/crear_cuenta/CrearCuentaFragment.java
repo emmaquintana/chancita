@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +41,7 @@ public class CrearCuentaFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        crearCuentaViewModel = new ViewModelProvider(this).get(CrearCuentaViewModel.class);
         postponeEnterTransition();
     }
 
@@ -59,8 +62,6 @@ public class CrearCuentaFragment extends Fragment {
                 return true;
             }
         });
-
-        crearCuentaViewModel = new ViewModelProvider(this).get(CrearCuentaViewModel.class);
 
         setupListeners();
         setupObservers();
@@ -84,16 +85,25 @@ public class CrearCuentaFragment extends Fragment {
     private void setupObservers() {
         crearCuentaViewModel.estaRegistrandose.observe(getViewLifecycleOwner(), isRegistering -> {
             if (isRegistering) {
-                // Botón cargando y deshabilitado
+                binding.registrarseBtnContinuar.setEnabled(false);
+                binding.registrarseBtnContinuar.setText("Creando cuenta...");
             }
             else {
-                // Botón normal
+                binding.registrarseBtnContinuar.setEnabled(true);
+                binding.registrarseBtnContinuar.setText("Continuar");
             }
         });
 
         crearCuentaViewModel.resultadoRegistro.observe(getViewLifecycleOwner(), result -> {
             if (result != null) {
                 Toast.makeText(requireContext(), result, Toast.LENGTH_LONG).show();
+            }
+        });
+
+        crearCuentaViewModel.registroExitoso.observe(getViewLifecycleOwner(), registroExitoso -> {
+            if (registroExitoso) {
+                NavController navController = NavHostFragment.findNavController(this);
+                navController.popBackStack();
             }
         });
     }
