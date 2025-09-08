@@ -38,6 +38,8 @@ import com.emmanuel.chancita.ui.rifa.RifaParticipanteActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -87,8 +89,16 @@ public class inicioFragment extends Fragment {
         TextView btnUnirseRifa = view.findViewById(R.id.inicio_btn_unirse_a_rifa);
 
         btnCrearRifa.setOnClickListener(view1 -> {
-            Intent intent = new Intent(requireActivity(), CrearRifaActivity.class);
-            startActivity(intent);
+            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+            FirebaseFirestore.getInstance().collection("mercado_pago_tokens").document(userId).get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        Intent intent = new Intent(requireActivity(), CrearRifaActivity.class);
+                        if (documentSnapshot.exists()) {
+                            intent.putExtra("startStep2", true);
+                        }
+                        startActivity(intent);
+                    });
         });
 
         btnUnirseRifa.setOnClickListener(view1 -> {

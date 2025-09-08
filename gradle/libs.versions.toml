@@ -1,5 +1,6 @@
 [versions]
 agp = "8.5.2"
+browser = "1.4.0"
 firebaseBom = "34.1.0"
 fragment = "1.8.9"
 junit = "4.13.2"
@@ -17,10 +18,12 @@ lifecycleLivedataKtx = "2.9.2"
 lifecycleViewmodelKtx = "2.9.2"
 
 [libraries]
+browser = { module = "androidx.browser:browser", version.ref = "browser" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-auth = { module = "com.google.firebase:firebase-auth" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-firestore = { module = "com.google.firebase:firebase-firestore" }
+firebase-functions = { module = "com.google.firebase:firebase-functions" }
 fragment = { module = "androidx.fragment:fragment", version.ref = "fragment" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

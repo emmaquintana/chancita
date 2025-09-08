@@ -35,10 +35,13 @@ import com.emmanuel.chancita.utils.Utilidades;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.functions.FirebaseFunctions;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RifaParticipanteFragment extends Fragment {
 
@@ -257,14 +260,26 @@ public class RifaParticipanteFragment extends Fragment {
         rvNumeros.setLayoutManager(layoutManager);
         rvNumeros.setAdapter(adapter);
 
-        btnComprarNumeros.setOnClickListener(v -> {
-            rifaParticipanteViewModel.comprarNumeros(
-                    rifaId,
-                    FirebaseAuth.getInstance().getCurrentUser().getUid(),
-                    numerosSeleccionadosPorUsuario,
-                    precioNumero
-            );
-        });
+
+            btnComprarNumeros.setOnClickListener(v -> {
+                Map<String, Object> data = new HashMap<>();
+                data.put("organizerId", rifa.getCreadoPor()); // el UID del dueño de la rifa
+                data.put("tituloRifa", "Rifa " + rifaId);
+                data.put("precio", precioNumero);
+                data.put("cantidad", numerosSeleccionadosPorUsuario.size());
+
+                FirebaseFunctions.getInstance()
+                        .getHttpsCallable("createPreference")
+                        .call(data)
+                        .addOnSuccessListener(result -> {
+                            String initPoint = (String) ((HashMap) result.getData()).get("init_point");
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(initPoint));
+                            startActivity(browserIntent);
+                        })
+                        .addOnFailureListener(e ->
+                                Log.e("MP", "Error creando preferencia", e)
+                        );
+            });
 
         // Observer para el estado de carga
         rifaParticipanteViewModel.comprandoNumeros.observe(getViewLifecycleOwner(), comprandoNumeros -> {
