@@ -196,14 +196,14 @@ public class RifaParticipanteFragment extends Fragment {
                             String premioDescripcion = premios.get(i).getPremioDescripcion();
                             String numeroGanador = (i < numerosGanadores.size()) ? String.valueOf(numerosGanadores.get(i)) : "-";
 
-                            if (!premioDescripcion.trim().isEmpty()) {
+                            if (premioDescripcion != null && !premioDescripcion.trim().isEmpty()) {
                                 premiosText.append("Premio ").append(i + 1).append(": ")
                                         .append(premioTitulo).append(" - ").append(premioDescripcion)
                                         .append("\nNúmero ganador: ").append(numeroGanador).append("\n\n");
                             }
                             else {
                                 premiosText.append("Premio ").append(i + 1).append(": ")
-                                        .append(premioTitulo).append(" - ")
+                                        .append(premioTitulo)
                                         .append("\nNúmero ganador: ").append(numeroGanador).append("\n\n");
                             }
 

@@ -33,6 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:text="+ Crear rifa"
+                android:textSize="18sp"
                 android:textColor="?attr/colorPrimary"
                 android:textStyle="bold"
                 android:layout_marginTop="-24dp" />
@@ -70,6 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:text="+ Unirse a rifa"
+                android:textSize="18sp"
                 android:textColor="?attr/colorPrimary"
                 android:textStyle="bold"
                 android:layout_marginTop="-24dp" />

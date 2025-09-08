@@ -1,9 +1,15 @@
 package com.emmanuel.chancita.ui;
 
+import android.Manifest;
 import android.app.AlertDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -17,11 +23,15 @@ import com.emmanuel.chancita.data.model.RifaEstado;
 import com.emmanuel.chancita.data.model.RifaPremio;
 import com.emmanuel.chancita.ui.rifa.RifaOrganizadorViewModel;
 import com.emmanuel.chancita.utils.Utilidades;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavOptions;
@@ -32,6 +42,9 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.emmanuel.chancita.databinding.ActivityMainBinding;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -43,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private NavController navController;
     private SharedViewModel sharedViewModel;
     private Toolbar toolbar;
+    private static final int PERMISSION_REQUEST_CODE = 1001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +116,101 @@ public class MainActivity extends AppCompatActivity {
 
         rifaOrganizadorViewModel.crearRifa(nuevaRifa);
 */
+// Solicitar permiso de notificaciones si es Android 13+
+        // Solicitar permiso de notificaciones si es Android 13+
+        solicitarPermisoNotificaciones();
 
+        // Inicializar Firebase Messaging
+        inicializarFirebaseMessaging();
+    }
+
+    private void solicitarPermisoNotificaciones() {
+        // Solo para Android 13+ (API 33+)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                // Solicitar el permiso
+                requestPermissions(
+                        new String[]{Manifest.permission.POST_NOTIFICATIONS},
+                        PERMISSION_REQUEST_CODE
+                );
+            }
+        }
+    }
+
+    private void inicializarFirebaseMessaging() {
+        // Obtener el token FCM
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("FCM", "Error al obtener token FCM", task.getException());
+                            return;
+                        }
+
+                        // Obtener el token
+                        String token = task.getResult();
+                        Log.d("FCM", "Token FCM: " + token);
+
+                        // Guardar el token en Firestore
+                        guardarTokenFCM(token);
+                    }
+                });
+
+        // Crear canal de notificaciones para Android 8+
+        crearCanalNotificaciones();
+    }
+
+    private void guardarTokenFCM(String token) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            FirebaseFirestore.getInstance()
+                    .collection("usuarios")
+                    .document(user.getUid())
+                    .update("fcmToken", token)
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d("FCM", "Token FCM guardado exitosamente");
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e("FCM", "Error al guardar token FCM", e);
+                    });
+        }
+    }
+
+    private void crearCanalNotificaciones() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    "rifas_channel",
+                    "Notificaciones de Rifas",
+                    NotificationManager.IMPORTANCE_HIGH
+            );
+            channel.setDescription("Notificaciones sobre rifas y sorteos");
+            channel.enableLights(true);
+            channel.setLightColor(Color.BLUE);
+            channel.enableVibration(true);
+            channel.setShowBadge(true);
+
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            if (manager != null) {
+                manager.createNotificationChannel(channel);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Permiso de notificaciones concedido", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Permiso de notificaciones denegado", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override

@@ -10,7 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.emmanuel.chancita.R;
 import com.emmanuel.chancita.data.model.Notificacion;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class NotificacionAdapter extends RecyclerView.Adapter<NotificacionAdapter.NotificationViewHolder> {
 
@@ -30,10 +32,15 @@ public class NotificacionAdapter extends RecyclerView.Adapter<NotificacionAdapte
 
     @Override
     public void onBindViewHolder(@NonNull NotificationViewHolder holder, int position) {
-        Notificacion notification = notificaciones.get(position);
-        holder.fecha.setText(notification.getFecha());
-        holder.titulo.setText(notification.getTitulo());
-        holder.cuerpo.setText(notification.getCuerpo());
+        Notificacion notificacion = notificaciones.get(position);
+
+        // Formatear fecha
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
+        String fechaStr = sdf.format(notificacion.getFecha());
+
+        holder.fecha.setText(fechaStr);
+        holder.titulo.setText(notificacion.getTitulo());
+        holder.cuerpo.setText(notificacion.getCuerpo());
     }
 
     @Override
