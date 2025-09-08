@@ -121,7 +121,7 @@ public class RifaParticipanteFragment extends Fragment {
             txtRifaEstado.setText("Estado: " + rifa.getEstado());
             txtRifaCodigo.setText("Código: " + rifa.getCodigo());
             txtPrecioNumero.setText("Precio por número: $" + rifa.getPrecioNumero());
-            txtRifaFechaSorteo.setText("Fecha de sorteo: " + Utilidades.formatearFechaHora(rifa.getFechaSorteo(), "dd/MM/yyyy hh:mm"));
+            txtRifaFechaSorteo.setText("Fecha de sorteo: " + Utilidades.formatearFechaHora(rifa.getFechaSorteo(), "dd/MM/yyyy HH:mm"));
             txtRifaMetodoEleccionGanador.setText("Método de elección: " + Utilidades.capitalizar(rifa.getMetodoEleccionGanador().toString()) + (rifa.getMetodoEleccionGanador() == MetodoEleccionGanador.DETERMINISTA ? " (" + rifa.getMotivoEleccionGanador() + ")" : ""));
             txtRifaPremios.setText(formatearPremios(rifa.getPremios()));
             // Si no hay descripción, se oculta la sección "Descripción"

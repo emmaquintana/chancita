@@ -109,7 +109,7 @@ public class RifaOrganizadorFragment extends Fragment {
             txtRifaTitulo.setText(rifa.getTitulo());
             txtRifaEstado.setText("Estado: " + Utilidades.capitalizar(rifa.getEstado().toString()));
             txtRifaCodigo.setText("Código: " + rifa.getCodigo());
-            txtRifaFechaSorteo.setText("Fecha de sorteo: " + Utilidades.formatearFechaHora(rifa.getFechaSorteo(), "dd-MM-yyyy hh:mm"));
+            txtRifaFechaSorteo.setText("Fecha de sorteo: " + Utilidades.formatearFechaHora(rifa.getFechaSorteo(), "dd-MM-yyyy HH:mm"));
             txtRifaMetodoEleccionGanador.setText("Método de elección: " + Utilidades.capitalizar(rifa.getMetodoEleccionGanador().toString()) + (rifa.getMetodoEleccionGanador() == MetodoEleccionGanador.DETERMINISTA ? " (" + rifa.getMotivoEleccionGanador() + ")" : ""));
             txtRifaPremios.setText(formatearPremios(rifa.getPremios()));
             if (rifa.getDescripcion() != null && !rifa.getDescripcion().equals("")) {
