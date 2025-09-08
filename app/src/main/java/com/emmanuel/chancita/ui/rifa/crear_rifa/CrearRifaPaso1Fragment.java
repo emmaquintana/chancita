@@ -31,7 +31,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class CrearRifaPaso1Fragment extends Fragment {
 
-    private CrearRifaPaso1ViewModel mViewModel;
     private NavController navController;
     private FirebaseFirestore db;
     private boolean tokenCheckCompleted = false;
