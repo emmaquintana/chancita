@@ -5,6 +5,7 @@ Chancita es una aplicación móvil nativa para **Android** que permite a los usu
 La app gestiona la autenticación de usuarios y persistencia de datos con **Firebase**, mientras que los pagos se procesan de forma segura mediante **Mercado Pago**.
 
 ***❗Nota: El proyecto está en frases tempranas de desarrollo, por lo que muchas de las funcionalidades mencionadas puede que aún no estén implementadas.***
+***❗Nota 2: Actualmente la aplicación posee mejor soporte para modo claro. En modo oscuro pueden llegar a presentarse algunas inconsistencias.***
 
 # Arquitectura del Proyecto
 
