@@ -1,13 +1,18 @@
 package com.emmanuel.chancita.ui;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -28,31 +33,124 @@ public class DeepLinkActivity extends AppCompatActivity {
             Log.d("DeepLinkActivity", "Deep link recibido: " + data.toString());
 
             if (host.equals("oauth-success")) {
-                // Obtener el userId del parámetro step2 si existe
-                String userId = data.getQueryParameter("userId");
-
-                Intent intent = new Intent(this, CrearRifaActivity.class);
-                intent.setData(data); // Pass the deep link data
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                // Si tenemos userId, podemos agregarlo como extra también
-                if (userId != null) {
-                    intent.putExtra("userId", userId);
-                    intent.putExtra("fromOAuth", true);
-                }
-
-                startActivity(intent);
+                // Manejar éxito de OAuth
+                handleOAuthSuccess(data);
 
             } else if (host.equals("oauth-failure")) {
                 // Manejar error de OAuth
-                String error = data.getQueryParameter("error");
-                Log.e("DeepLinkActivity", "OAuth failed: " + error);
+                handleOAuthFailure(data);
 
-                // Podrías mostrar un Toast o navegar a una pantalla de error
-                Toast.makeText(this, "Error en la vinculación: " + error, Toast.LENGTH_LONG).show();
+            } else if (host.equals("pago-exitoso")) {
+                // Pago exitoso
+                handlePagoExitoso(data);
+
+            } else if (host.equals("pago-fallido")) {
+                // Pago fallido
+                handlePagoFallido(data);
+
+            } else if (host.equals("pago-pendiente")) {
+                // Pago pendiente
+                handlePagoPendiente(data);
             }
         }
 
         finish();
+    }
+
+    private void handleOAuthSuccess(Uri data) {
+        String userId = data.getQueryParameter("userId");
+
+        Intent intent = new Intent(this, CrearRifaActivity.class);
+        intent.setData(data);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        if (userId != null) {
+            intent.putExtra("userId", userId);
+            intent.putExtra("fromOAuth", true);
+        }
+
+        startActivity(intent);
+        Toast.makeText(this, "✅ Cuenta vinculada exitosamente", Toast.LENGTH_LONG).show();
+    }
+
+    private void handleOAuthFailure(Uri data) {
+        String error = data.getQueryParameter("error");
+        Log.e("DeepLinkActivity", "OAuth failed: " + error);
+
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+
+        Toast.makeText(this, "❌ Error en vinculación: " + error, Toast.LENGTH_LONG).show();
+    }
+
+    private void handlePagoExitoso(Uri data) {
+        Log.d("DeepLinkActivity", "Pago exitoso");
+
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("pagoExitoso", true);
+
+        // Puedes agregar más información si viene en la URL
+        String preferenceId = data.getQueryParameter("preference_id");
+        String paymentId = data.getQueryParameter("payment_id");
+
+        if (preferenceId != null) {
+            intent.putExtra("preferenceId", preferenceId);
+        }
+        if (paymentId != null) {
+            intent.putExtra("paymentId", paymentId);
+        }
+
+        startActivity(intent);
+
+        // Mostrar notificación
+        showPaymentNotification("✅ Pago exitoso", "Tu compra se realizó correctamente");
+    }
+
+    private void handlePagoFallido(Uri data) {
+        Log.e("DeepLinkActivity", "Pago fallido");
+
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("pagoFallido", true);
+        startActivity(intent);
+
+        showPaymentNotification("❌ Pago fallido", "El pago no pudo procesarse");
+    }
+
+    private void handlePagoPendiente(Uri data) {
+        Log.d("DeepLinkActivity", "Pago pendiente");
+
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("pagoPendiente", true);
+        startActivity(intent);
+
+        showPaymentNotification("⏳ Pago pendiente", "Estamos procesando tu pago");
+    }
+
+    private void showPaymentNotification(String title, String message) {
+        // Crear notificación
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "pago_channel")
+                .setSmallIcon(R.drawable.ic_notification)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setAutoCancel(true);
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    "pago_channel",
+                    "Pagos",
+                    NotificationManager.IMPORTANCE_HIGH
+            );
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        notificationManager.notify((int) System.currentTimeMillis(), builder.build());
     }
 }

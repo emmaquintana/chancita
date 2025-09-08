@@ -2,6 +2,7 @@ package com.emmanuel.chancita.ui.rifa;
 
 import static androidx.core.content.ContextCompat.getSystemService;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -33,15 +34,21 @@ import com.emmanuel.chancita.ui.SharedViewModel;
 import com.emmanuel.chancita.ui.rifa.adapters.NumerosAdapter;
 import com.emmanuel.chancita.utils.Utilidades;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.functions.FirebaseFunctions;
+import com.google.firebase.functions.FirebaseFunctionsException;
+import com.google.firebase.functions.HttpsCallableOptions;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class RifaParticipanteFragment extends Fragment {
 
@@ -113,7 +120,7 @@ public class RifaParticipanteFragment extends Fragment {
             txtRifaTitulo.setText(rifa.getTitulo());
             txtRifaEstado.setText("Estado: " + rifa.getEstado());
             txtRifaCodigo.setText("Código: " + rifa.getCodigo());
-            txtPrecioNumero.setText("Precio por número: $" + rifa.getPrecioNumero() + " + 2.2% comisión");
+            txtPrecioNumero.setText("Precio por número: $" + rifa.getPrecioNumero());
             txtRifaFechaSorteo.setText("Fecha de sorteo: " + Utilidades.formatearFechaHora(rifa.getFechaSorteo(), "dd/MM/yyyy hh:mm"));
             txtRifaMetodoEleccionGanador.setText("Método de elección: " + Utilidades.capitalizar(rifa.getMetodoEleccionGanador().toString()) + (rifa.getMetodoEleccionGanador() == MetodoEleccionGanador.DETERMINISTA ? " (" + rifa.getMotivoEleccionGanador() + ")" : ""));
             txtRifaPremios.setText(formatearPremios(rifa.getPremios()));
@@ -237,7 +244,6 @@ public class RifaParticipanteFragment extends Fragment {
         RecyclerView rvNumeros = view.findViewById(R.id.rifa_participante_rv_numeros);
         view.findViewById(R.id.rifa_participante_txt_comprar_numeros_titulo).setVisibility(View.VISIBLE);
         view.findViewById(R.id.rifa_participante_txt_comprar_numeros_descripcion).setVisibility(View.VISIBLE);
-        view.findViewById(R.id.rifa_participante_txt_aclaracion_comision).setVisibility(View.VISIBLE);
         rvNumeros.setVisibility(View.VISIBLE);
         btnComprarNumeros.setVisibility(View.VISIBLE);
 
@@ -261,25 +267,83 @@ public class RifaParticipanteFragment extends Fragment {
         rvNumeros.setAdapter(adapter);
 
 
-            btnComprarNumeros.setOnClickListener(v -> {
+        btnComprarNumeros.setOnClickListener(v -> {
+            btnComprarNumeros.setEnabled(false);
+            if (numerosSeleccionadosPorUsuario.isEmpty()) {
+                Toast.makeText(getContext(), "Selecciona al menos un número", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user == null) {
+                Toast.makeText(getContext(), "Error: no estás autenticado", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Obtiene el token ID actualizado
+            user.getIdToken(true).addOnCompleteListener(task -> {
+                if (!task.isSuccessful()) {
+                    Log.e("MP_AUTH", "Error obteniendo token", task.getException());
+                    Toast.makeText(getContext(), "Error de autenticación", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                String idToken = task.getResult().getToken();
+                Log.d("MP_AUTH", "Token obtenido: " + idToken);
+
                 Map<String, Object> data = new HashMap<>();
-                data.put("organizerId", rifa.getCreadoPor()); // el UID del dueño de la rifa
-                data.put("tituloRifa", "Rifa " + rifaId);
+                data.put("tituloRifa", rifa.getTitulo() != null ? rifa.getTitulo() : "Rifa sin título");
                 data.put("precio", precioNumero);
                 data.put("cantidad", numerosSeleccionadosPorUsuario.size());
+                data.put("numeros", numerosSeleccionadosPorUsuario);
+                data.put("compradorId", user.getUid());
+                data.put("compradorEmail", user.getEmail());
+                data.put("organizerId", rifa.getCreadoPor());
+                data.put("rifaId", rifaId);
+                data.put("idToken", idToken);
 
-                FirebaseFunctions.getInstance()
+
+                Log.d("MP_COMPRA", "Datos enviados a la función: " + data);
+
+                // Llama a la función de Firebase
+                FirebaseFunctions.getInstance("us-central1")
                         .getHttpsCallable("createPreference")
                         .call(data)
                         .addOnSuccessListener(result -> {
-                            String initPoint = (String) ((HashMap) result.getData()).get("init_point");
+                            Map<String, Object> resultData = (Map<String, Object>) result.getData();
+                            String initPoint = (String) resultData.get("init_point");
+                            String preferenceId = (String) resultData.get("preference_id");
+                            double precioTotal = ((Number) resultData.get("precio_total")).doubleValue();
+
+                            // Guardar compra pendiente
+                            FirebaseFirestore.getInstance()
+                                    .collection("compras")
+                                    .document(preferenceId)
+                                    .set(new HashMap<String, Object>() {{
+                                        put("rifaId", rifaId);
+                                        put("compradorId", user.getUid());
+                                        put("compradorEmail", user.getEmail());
+                                        put("numeros", numerosSeleccionadosPorUsuario);
+                                        put("cantidad", numerosSeleccionadosPorUsuario.size());
+                                        put("precioTotal", precioTotal);
+                                        put("estado", "pendiente");
+                                        put("preferenceId", preferenceId);
+                                        put("organizerId", rifa.getCreadoPor());
+                                        put("createdAt", FieldValue.serverTimestamp());
+                                    }})
+                                    .addOnSuccessListener(aVoid -> Log.d("MP_COMPRA", "Compra guardada como pendiente"));
+
+                            // Abrir checkout de Mercado Pago
                             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(initPoint));
                             startActivity(browserIntent);
                         })
-                        .addOnFailureListener(e ->
-                                Log.e("MP", "Error creando preferencia", e)
-                        );
+                        .addOnFailureListener(e -> {
+                            Log.e("MP_COMPRA", "Error en la función", e);
+                            Toast.makeText(getContext(), "Error al procesar la compra: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        });
             });
+        });
+
 
         // Observer para el estado de carga
         rifaParticipanteViewModel.comprandoNumeros.observe(getViewLifecycleOwner(), comprandoNumeros -> {
@@ -324,6 +388,40 @@ public class RifaParticipanteFragment extends Fragment {
             }
         });
     }
+
+    // Método para verificar autenticación completa
+    private void verificarAutenticacionCompleta(Runnable onSuccess) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user == null) {
+            Toast.makeText(getContext(), "Error: No estás autenticado", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        Log.d("AUTH_CHECK", "Usuario: " + user.getUid());
+        Log.d("AUTH_CHECK", "Email: " + user.getEmail());
+        Log.d("AUTH_CHECK", "Verificado: " + user.isEmailVerified());
+
+        // Forzar renovación del token
+        user.getIdToken(true)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        String idToken = task.getResult().getToken();
+                        Log.d("AUTH_CHECK", "Token renovado exitosamente");
+                        Log.d("AUTH_CHECK", "Token length: " + (idToken != null ? idToken.length() : 0));
+
+                        // Ahora sí ejecutar la función
+                        onSuccess.run();
+
+                    } else {
+                        Log.e("AUTH_CHECK", "Error renovando token", task.getException());
+                        Toast.makeText(getContext(), "Error de autenticación: " +
+                                task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+
+
     private void actualizarEstadoBotonComprar(MaterialButton btnComprarNumeros, List<Integer> numerosSeleccionados, double precioNumero) {
         if (numerosSeleccionados.isEmpty()) {
             btnComprarNumeros.setEnabled(false);
@@ -331,16 +429,11 @@ public class RifaParticipanteFragment extends Fragment {
         } else {
             btnComprarNumeros.setEnabled(true);
             if (numerosSeleccionados.size() == 1) {
-                btnComprarNumeros.setText("Comprar número ($" + calcularPrecio(numerosSeleccionados.size(), precioNumero, 2.2) + ")");
+                btnComprarNumeros.setText("Comprar número ($" + precioNumero + ")");
             } else {
-                btnComprarNumeros.setText("Comprar números ($" + calcularPrecio(numerosSeleccionados.size(), precioNumero, 2.2) + ")");
+                btnComprarNumeros.setText("Comprar números ($" + numerosSeleccionados.size() * precioNumero + ")");
             }
         }
-    }
-
-    private double calcularPrecio(double cantNumerosSeleccionados, double precioNumero, double comision) {
-        double precioBase = cantNumerosSeleccionados * precioNumero;
-        return precioBase + (precioBase * comision / 100.0);
     }
 
 
@@ -369,5 +462,50 @@ public class RifaParticipanteFragment extends Fragment {
         }
 
         return stb.toString().substring(0, stb.toString().length() - 2); // Quita el padding bottom que se forma por el último \n\n
+    }
+
+    private void debugFirebaseAuth() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            Log.d("AUTH_DEBUG", "Usuario autenticado: " + user.getUid());
+            Log.d("AUTH_DEBUG", "Email: " + user.getEmail());
+
+            // Obtener token manualmente para debug
+            user.getIdToken(false)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            String idToken = task.getResult().getToken();
+                            Log.d("AUTH_DEBUG", "Token obtenido: " + (idToken != null ? "SÍ" : "NO"));
+                            Log.d("AUTH_DEBUG", "Token length: " + (idToken != null ? idToken.length() : 0));
+                        } else {
+                            Log.e("AUTH_DEBUG", "Error obteniendo token", task.getException());
+                        }
+                    });
+        } else {
+            Log.e("AUTH_DEBUG", "Usuario NO autenticado");
+        }
+    }
+
+    // En tu Fragment donde está el botón de comprar
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Verificar si regresamos de un pago
+        Activity activity = getActivity();
+        if (activity != null) {
+            Intent intent = activity.getIntent();
+            if (intent.getBooleanExtra("pagoExitoso", false)) {
+                Toast.makeText  (getContext(), "¡Pago realizado con éxito!", Toast.LENGTH_LONG).show();
+                // Aquí puedes refrescar la rifa o navegar a otra pantalla
+                intent.removeExtra("pagoExitoso");
+            } else if (intent.getBooleanExtra("pagoFallido", false)) {
+                Toast.makeText(getContext(), "El pago no se pudo completar", Toast.LENGTH_LONG).show();
+                intent.removeExtra("pagoFallido");
+            } else if (intent.getBooleanExtra("pagoPendiente", false)) {
+                Toast.makeText(getContext(), "Pago pendiente de aprobación", Toast.LENGTH_LONG).show();
+                intent.removeExtra("pagoPendiente");
+            }
+        }
     }
 }

@@ -8,6 +8,7 @@
         </intent>
     </queries>
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -28,6 +29,26 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="chancita" android:host="oauth-success" />
                 <data android:scheme="chancita" android:host="oauth-failure" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="chancita" android:host="pago-exitoso" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="chancita" android:host="pago-fallido" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="chancita" android:host="pago-pendiente" />
             </intent-filter>
         </activity>
         <activity

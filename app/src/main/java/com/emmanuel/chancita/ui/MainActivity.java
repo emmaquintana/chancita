@@ -1,5 +1,6 @@
 package com.emmanuel.chancita.ui;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -46,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Verificar si venimos de un deep link
+        checkDeepLinkIntent(getIntent());
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -99,6 +103,49 @@ public class MainActivity extends AppCompatActivity {
         rifaOrganizadorViewModel.crearRifa(nuevaRifa);
 */
 
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        checkDeepLinkIntent(intent);
+    }
+
+    private void checkDeepLinkIntent(Intent intent) {
+        if (intent != null) {
+            if (intent.getBooleanExtra("pagoExitoso", false)) {
+                String preferenceId = intent.getStringExtra("preferenceId");
+                showPagoExitosoDialog(preferenceId);
+            } else if (intent.getBooleanExtra("pagoFallido", false)) {
+                showPagoFallidoDialog();
+            } else if (intent.getBooleanExtra("pagoPendiente", false)) {
+                showPagoPendienteDialog();
+            }
+        }
+    }
+
+    private void showPagoExitosoDialog(String preferenceId) {
+        new AlertDialog.Builder(this)
+                .setTitle("✅ Pago Exitoso")
+                .setMessage("Tu compra se realizó correctamente. Los números han sido reservados para ti.")
+                .setPositiveButton("Ok", null)
+                .show();
+    }
+
+    private void showPagoFallidoDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("❌ Pago Fallido")
+                .setMessage("El pago no pudo procesarse. Por favor, intenta nuevamente.")
+                .setPositiveButton("Aceptar", null)
+                .show();
+    }
+
+    private void showPagoPendienteDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("⏳ Pago Pendiente")
+                .setMessage("Estamos procesando tu pago. Te notificaremos cuando se complete.")
+                .setPositiveButton("Aceptar", null)
+                .show();
     }
 
     @Override
