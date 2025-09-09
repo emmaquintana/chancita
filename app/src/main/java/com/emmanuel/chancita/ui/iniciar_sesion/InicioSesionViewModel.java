@@ -46,25 +46,4 @@ public class InicioSesionViewModel extends ViewModel {
                     }
                 });
     }
-
-    /**
-     * Envía un correo de restablecimiento de contraseña.
-     *
-     * @param email El correo electrónico del usuario.
-     */
-    public void enviarRestablecimientoDeContraseña(String email) {
-        if (email.isEmpty()) {
-            _resultadoInicioSesion.setValue("Por favor, ingrese su correo para restablecer la contraseña.");
-            return;
-        }
-
-        firebaseAuth.sendPasswordResetEmail(email)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        _resultadoInicioSesion.setValue("Se ha enviado un correo electrónico para restablecer su contraseña.");
-                    } else {
-                        _resultadoInicioSesion.setValue("Error al enviar el correo. Verifique que el correo sea válido.");
-                    }
-                });
-    }
 }

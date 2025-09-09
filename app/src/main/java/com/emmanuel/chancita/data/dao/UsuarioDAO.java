@@ -145,8 +145,6 @@ public class UsuarioDAO {
     }
 
     public void obtenerParticipantes(List<String> participanteIds, OnCompleteListener<QuerySnapshot> listener) {
-        // Firestore solo permite 10 elementos en la lista de 'whereIn'
-        // Si tu lista puede ser más grande, necesitarías un manejo adicional (ej. paginación o múltiples consultas).
         if (participanteIds == null || participanteIds.isEmpty()) {
             return;
         }

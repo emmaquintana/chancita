@@ -81,8 +81,6 @@ public class InicioSesionFragment extends Fragment {
         });
 
         binding.loginTxtContraseAOlvidada.setOnClickListener(v -> {
-            String email = binding.loginTietEmail.getText().toString();
-            inicioSesionViewModel.enviarRestablecimientoDeContraseña(email);
             navController.navigate(R.id.action_loginFragment_to_resetPasswordFragment);
         });
     }

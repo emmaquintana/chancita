@@ -5,70 +5,35 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class RestablecerContraseñaViewModel extends ViewModel {
     private final FirebaseAuth firebaseAuth;
-    private final MutableLiveData<Boolean> _estaRestableciendo = new MutableLiveData<>();
-    public LiveData<Boolean> estaRestableciendo = _estaRestableciendo;
-    private final MutableLiveData<String> _resultadoRestablecimiento = new MutableLiveData<>();
-    public LiveData<String> resultadoRestablecimiento = _resultadoRestablecimiento;
-    private final MutableLiveData<Boolean> _restablecimientoExitoso = new MutableLiveData<>();
-    public LiveData<Boolean> restablecimientoExitoso = _restablecimientoExitoso;
+    private final MutableLiveData<Boolean> _estaEnviando = new MutableLiveData<>();
+    public LiveData<Boolean> estaEnviando = _estaEnviando;
+    private final MutableLiveData<Boolean> _envioExitoso = new MutableLiveData<>();
+    public LiveData<Boolean> envioExitoso = _envioExitoso;
 
     public RestablecerContraseñaViewModel() {
         this.firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth.setLanguageCode("es");
     }
 
     /**
-     * Valida y actualiza la contraseña del usuario.
+     * Actualiza la contraseña del usuario mediante un mail que se le manda
      *
-     * @param newPassword La nueva contraseña.
-     * @param confirmPassword La confirmación de la nueva contraseña.
-     */
-    public void restablecerContraseña(String newPassword, String confirmPassword) {
-        _estaRestableciendo.setValue(true);
-        _restablecimientoExitoso.setValue(false);
+     * @param email El mail del usuario
+     * */
+    public void restablecerContraseña(String email) {
+        _estaEnviando.setValue(true);
 
-        if (!validarContraseñas(newPassword, confirmPassword)) {
-            _estaRestableciendo.setValue(false);
-            return;
-        }
-
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        if (user != null) {
-            user.updatePassword(newPassword)
+        firebaseAuth.sendPasswordResetEmail(email)
                     .addOnCompleteListener(task -> {
-                        _estaRestableciendo.setValue(false);
+                        _estaEnviando.setValue(false);
                         if (task.isSuccessful()) {
-                            _resultadoRestablecimiento.setValue("Contraseña restablecida exitosamente.");
-                            _restablecimientoExitoso.setValue(true);
+                            _envioExitoso.setValue(true);
                         } else {
-                            _resultadoRestablecimiento.setValue("Error al restablecer la contraseña. Por favor, vuelva a iniciar sesión.");
+                            _envioExitoso.setValue(false);
                         }
                     });
-        } else {
-            _estaRestableciendo.setValue(false);
-            _resultadoRestablecimiento.setValue("No se encontró un usuario autenticado.");
-        }
-    }
-
-    private boolean validarContraseñas(String newPassword, String confirmPassword) {
-        if (newPassword.isEmpty() || confirmPassword.isEmpty()) {
-            _resultadoRestablecimiento.setValue("Todos los campos son obligatorios.");
-            return false;
-        }
-
-        if (newPassword.length() < 6) {
-            _resultadoRestablecimiento.setValue("La contraseña debe tener al menos 6 caracteres.");
-            return false;
-        }
-
-        if (!newPassword.equals(confirmPassword)) {
-            _resultadoRestablecimiento.setValue("Las contraseñas no coinciden.");
-            return false;
-        }
-
-        return true;
     }
 }
