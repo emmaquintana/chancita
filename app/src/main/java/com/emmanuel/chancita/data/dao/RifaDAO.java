@@ -204,6 +204,7 @@ public class RifaDAO {
         datos.put("participantesIds", rifa.getParticipantesIds());
         datos.put("premios", rifa.getPremios());
         datos.put("numerosComprados", rifa.getNumerosComprados());
+        datos.put("motivoEleccionGanador", rifa.getMotivoEleccionGanador());
 
         if (rifa.getFechaSorteo() != null) {
             datos.put("fechaSorteo", rifa.getFechaSorteo().format(formatter));

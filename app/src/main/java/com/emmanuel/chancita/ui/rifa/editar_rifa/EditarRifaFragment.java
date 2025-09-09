@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.emmanuel.chancita.R;
 import com.emmanuel.chancita.data.dto.RifaDTO;
+import com.emmanuel.chancita.data.model.MetodoEleccionGanador;
 import com.emmanuel.chancita.data.model.RifaPremio;
 import com.emmanuel.chancita.ui.SharedViewModel;
 import com.emmanuel.chancita.ui.rifa.RifaOrganizadorFragment;
@@ -59,6 +60,7 @@ public class EditarRifaFragment extends Fragment implements EditarPremioAdapter.
     private TextInputEditText tietEditarRifaFechaSorteo;
     private TextInputEditText tietEditarRifaHoraSorteo;
     private TextInputEditText tietEditarRifaCodigo;
+    private TextInputEditText tietEditarRifaMotivoEleccionGanador;
     private MaterialButton btnGuardar;
 
     // RecyclerView para premios
@@ -100,6 +102,8 @@ public class EditarRifaFragment extends Fragment implements EditarPremioAdapter.
         tietEditarRifaFechaSorteo = view.findViewById(R.id.editar_rifa_tiet_fecha_sorteo);
         tietEditarRifaHoraSorteo = view.findViewById(R.id.editar_rifa_tiet_hora_sorteo);
         tietEditarRifaCodigo = view.findViewById(R.id.editar_rifa_tiet_codigo);
+        tietEditarRifaMotivoEleccionGanador = view.findViewById(R.id.editar_rifa_tiet_motivo_eleccion_ganador);
+
 
         // RecyclerView para premios
         rvPremios = view.findViewById(R.id.editar_rifa_rv_ingreso_premios);
@@ -129,6 +133,13 @@ public class EditarRifaFragment extends Fragment implements EditarPremioAdapter.
             tietEditarRifaCodigo.setText(rifa.getCodigo());
             tietEditarRifaFechaSorteo.setText(Utilidades.formatearFechaHora(rifa.getFechaSorteo(), "dd-MM-yyyy"));
             tietEditarRifaHoraSorteo.setText(Utilidades.formatearFechaHora(rifa.getFechaSorteo(), "HH:mm"));
+
+            if (rifa.getMetodoEleccionGanador() == MetodoEleccionGanador.DETERMINISTA) {
+                tietEditarRifaMotivoEleccionGanador.setText(rifa.getMotivoEleccionGanador());
+            }
+            else {
+                tietEditarRifaMotivoEleccionGanador.setVisibility(View.GONE);
+            }
 
             // Configurar adapter de premios
             setupPremiosAdapter(rifa.getPremios());
@@ -201,7 +212,13 @@ public class EditarRifaFragment extends Fragment implements EditarPremioAdapter.
 
         // Actualizar datos de la rifa
         rifaActual.setTitulo(tietEditarRifaTitulo.getText().toString().trim());
-        rifaActual.setDescripcion(tietEditarRifaDescripcion.getText().toString().trim());
+        if (tietEditarRifaDescripcion.getText() != null) {
+            rifaActual.setDescripcion(tietEditarRifaDescripcion.getText().toString().trim());
+        }
+        if (tietEditarRifaMotivoEleccionGanador.getText() != null) {
+            System.out.println("Entra a setear motivo");
+            rifaActual.setMotivoEleccionGanador(tietEditarRifaMotivoEleccionGanador.getText().toString().trim());
+        }
 
         try {
             rifaActual.setPrecioNumero(Double.parseDouble(tietEditarRifaPrecioNumero.getText().toString().trim()));

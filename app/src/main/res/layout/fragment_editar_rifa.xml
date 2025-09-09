@@ -161,13 +161,31 @@
                     android:focusable="false" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/editar_rifa_til_motivo_eleccion_ganador"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="Motivo para elección del ganador"
+                app:layout_constraintTop_toBottomOf="@id/editar_rifa_til_hora_sorteo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editar_rifa_tiet_motivo_eleccion_ganador"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top"
+                    android:inputType="textMultiLine"
+                    android:lines="3" />
+            </com.google.android.material.textfield.TextInputLayout>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/editar_rifa_rv_ingreso_premios"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/editar_rifa_til_fecha_sorteo"
+                app:layout_constraintTop_toBottomOf="@id/editar_rifa_til_motivo_eleccion_ganador"
                 tools:itemCount="2"
                 tools:listitem="@layout/layout_ingreso_premio" />
 

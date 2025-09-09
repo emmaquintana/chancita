@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.emmanuel.chancita.data.dto.RifaDTO;
+import com.emmanuel.chancita.data.model.MetodoEleccionGanador;
 import com.emmanuel.chancita.data.model.RifaPremio;
 import com.emmanuel.chancita.data.repository.RifaRepository;
 
@@ -104,6 +105,13 @@ public class EditarRifaViewModel extends ViewModel {
         }
         if (rifa.getCodigo() == null || rifa.getCodigo().trim().isEmpty()) {
             _errorValidacion.setValue("Debes ingresar un código para la rifa");
+            return false;
+        }
+        if (
+                rifa.getMetodoEleccionGanador() == MetodoEleccionGanador.DETERMINISTA
+                        && (rifa.getMotivoEleccionGanador() == null || rifa.getMotivoEleccionGanador().trim().isEmpty())
+        ) {
+            _errorValidacion.setValue("Debes indicar el motivo que usarás para seleccionar al ganador");
             return false;
         }
 
