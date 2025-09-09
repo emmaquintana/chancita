@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.TooltipCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -14,12 +15,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.emmanuel.chancita.R;
 import com.emmanuel.chancita.data.model.MetodoEleccionGanador;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class CrearRifaPaso4Fragment extends Fragment {
@@ -32,6 +36,7 @@ public class CrearRifaPaso4Fragment extends Fragment {
     private RadioButton rbAleatorio;
     private RadioButton rbDeterminista;
     private MaterialButton btnContinuar;
+    private LinearLayout infoMetodos;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -53,6 +58,8 @@ public class CrearRifaPaso4Fragment extends Fragment {
         initViews(view);
         setupContinueButton();
         observeViewModel();
+
+        infoMetodos.setOnClickListener(v -> showMetodosInfoDialog());
     }
 
     private void initViews(View view) {
@@ -60,6 +67,7 @@ public class CrearRifaPaso4Fragment extends Fragment {
         rbAleatorio = view.findViewById(R.id.crear_rifa_paso_4_rb_aleatorio);
         rbDeterminista = view.findViewById(R.id.crear_rifa_paso_4_rb_determinista);
         btnContinuar = view.findViewById(R.id.crear_rifa_paso_4_btn_continuar);
+        infoMetodos = view.findViewById(R.id.crear_rifa_paso_4_ll_info_metodos);
     }
 
     private void setupContinueButton() {
@@ -169,6 +177,25 @@ public class CrearRifaPaso4Fragment extends Fragment {
                     requireActivity().finish();
                 })
                 .setCancelable(false)
+                .show();
+    }
+
+    private void showMetodosInfoDialog() {
+        String message = "Elige el método que prefieras para determinar los ganadores:\n\n" +
+                "ALEATORIO\n" +
+                "• El sistema selecciona automáticamente los números ganadores\n" +
+                "• Se ejecuta en la fecha y hora programada\n" +
+                "• No requiere tu intervención\n\n" +
+                "DETERMINISTA\n" +
+                "• Tú eliges manualmente los números ganadores\n" +
+                "• Tienes control total sobre la selección\n" +
+                "• En el siguiente paso, has de indicar qué criterio usarás para escoger uno o varios ganadores";
+
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Métodos de Selección")
+                .setMessage(message)
+                .setPositiveButton("Entendido", (dialog, which) -> dialog.dismiss())
+                .setIcon(R.drawable.ic_info_outline)
                 .show();
     }
 }

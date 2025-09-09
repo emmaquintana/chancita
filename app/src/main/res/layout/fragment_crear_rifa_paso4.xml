@@ -44,6 +44,7 @@
                     android:layout_height="wrap_content"
                     android:checked="true"
                     android:text="Aleatorio"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="16sp" />
 
                 <RadioButton
@@ -51,8 +52,41 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Determinista"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="16sp" />
             </RadioGroup>
+
+            <LinearLayout
+                android:id="@+id/crear_rifa_paso_4_ll_info_metodos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:foreground="?attr/selectableItemBackground"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/crear_rifa_paso_4_rg_metodo_seleccion">
+
+                <ImageView
+                    android:id="@+id/crear_rifa_paso_4_info_metodos"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="4dp"
+                    android:src="@drawable/ic_info_outline"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Información sobre métodos de selección"
+                    app:tint="?attr/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/crear_rifa_paso_4_txt_dar_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="¿Qué es esto?"
+                    android:textSize="16dp"
+                    android:layout_marginStart="4dp"
+                    android:textColor="?attr/colorOnSurface"
+                    />
+
+            </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/crear_rifa_paso_4_btn_continuar"
