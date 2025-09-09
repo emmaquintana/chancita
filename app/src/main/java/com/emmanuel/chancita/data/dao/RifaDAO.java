@@ -196,14 +196,9 @@ public class RifaDAO {
         Map<String, Object> datos = new HashMap<>();
         datos.put("titulo", rifa.getTitulo());
         datos.put("descripcion", rifa.getDescripcion());
-        datos.put("cantNumeros", rifa.getCantNumeros());
-        datos.put("creadoPor", rifa.getCreadoPor());
-        datos.put("estado", rifa.getEstado());
         datos.put("codigo", rifa.getCodigo());
         datos.put("precioNumero", rifa.getPrecioNumero());
-        datos.put("participantesIds", rifa.getParticipantesIds());
         datos.put("premios", rifa.getPremios());
-        datos.put("numerosComprados", rifa.getNumerosComprados());
         datos.put("motivoEleccionGanador", rifa.getMotivoEleccionGanador());
 
         if (rifa.getFechaSorteo() != null) {
