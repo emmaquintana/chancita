@@ -26,6 +26,12 @@ public class RestablecerContraseñaViewModel extends ViewModel {
     public void restablecerContraseña(String email) {
         _estaEnviando.setValue(true);
 
+        if (email == null) {
+            _envioExitoso.setValue(false);
+            _estaEnviando.setValue(false);
+            return;
+        }
+
         firebaseAuth.sendPasswordResetEmail(email)
                     .addOnCompleteListener(task -> {
                         _estaEnviando.setValue(false);

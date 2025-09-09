@@ -44,10 +44,17 @@ public class RestablecerContraseñaFragment extends Fragment {
 
     private void setupListeners() {
         binding.restablecerContraseABtnRestablecerContraseA.setOnClickListener(v -> {
-            String correo = binding.restablecerContraseATietCorreo.getText().toString();
+            String correo = binding.restablecerContraseATietCorreo.getText().toString().trim();
+
+            if (correo.isEmpty()) {
+                binding.restablecerContraseATietCorreo.setError("Ingrese un correo válido");
+                return;
+            }
+
             restablecerContraseñaViewModel.restablecerContraseña(correo);
         });
     }
+
 
     private void setupObservers() {
         restablecerContraseñaViewModel.estaEnviando.observe(getViewLifecycleOwner(), estaEnviando -> {
