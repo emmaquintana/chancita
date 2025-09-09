@@ -4,45 +4,67 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rifa_nav_graph"
     app:startDestination="@id/crearRifaPaso1Fragment">
+
     <fragment
         android:id="@+id/crearRifaPaso1Fragment"
         android:name="com.emmanuel.chancita.ui.rifa.crear_rifa.CrearRifaPaso1Fragment"
         android:label="fragment_crear_rifa_paso1"
-        tools:layout="@layout/fragment_crear_rifa_paso1" >
+        tools:layout="@layout/fragment_crear_rifa_paso1">
         <action
             android:id="@+id/action_crearRifaPaso1Fragment_to_crearRifaPaso2Fragment"
-            app:destination="@id/crearRifaPaso2Fragment" />
+            app:destination="@id/crearRifaPaso2Fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
+
     <fragment
         android:id="@+id/crearRifaPaso2Fragment"
         android:name="com.emmanuel.chancita.ui.rifa.crear_rifa.CrearRifaPaso2Fragment"
         android:label="fragment_crear_rifa_paso2"
-        tools:layout="@layout/fragment_crear_rifa_paso2" >
+        tools:layout="@layout/fragment_crear_rifa_paso2">
         <action
             android:id="@+id/action_crearRifaPaso2Fragment_to_crearRifaPaso3Fragment"
-            app:destination="@id/crearRifaPaso3Fragment" />
+            app:destination="@id/crearRifaPaso3Fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
+
     <fragment
         android:id="@+id/crearRifaPaso3Fragment"
         android:name="com.emmanuel.chancita.ui.rifa.crear_rifa.CrearRifaPaso3Fragment"
         android:label="fragment_crear_rifa_paso3"
-        tools:layout="@layout/fragment_crear_rifa_paso3" >
+        tools:layout="@layout/fragment_crear_rifa_paso3">
         <action
             android:id="@+id/action_crearRifaPaso3Fragment_to_crearRifaPaso4Fragment"
-            app:destination="@id/crearRifaPaso4Fragment" />
+            app:destination="@id/crearRifaPaso4Fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
+
     <fragment
         android:id="@+id/crearRifaPaso4Fragment"
         android:name="com.emmanuel.chancita.ui.rifa.crear_rifa.CrearRifaPaso4Fragment"
         android:label="fragment_crear_rifa_paso4"
-        tools:layout="@layout/fragment_crear_rifa_paso4" >
+        tools:layout="@layout/fragment_crear_rifa_paso4">
         <action
             android:id="@+id/action_crearRifaPaso4Fragment_to_crearRifaPaso5Fragment"
-            app:destination="@id/crearRifaPaso5Fragment" />
+            app:destination="@id/crearRifaPaso5Fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
+
     <fragment
         android:id="@+id/crearRifaPaso5Fragment"
         android:name="com.emmanuel.chancita.ui.rifa.crear_rifa.CrearRifaPaso5Fragment"
         android:label="fragment_crear_rifa_paso5"
         tools:layout="@layout/fragment_crear_rifa_paso5" />
+
 </navigation>
