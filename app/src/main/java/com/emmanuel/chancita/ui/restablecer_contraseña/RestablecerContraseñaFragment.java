@@ -64,10 +64,10 @@ public class RestablecerContraseñaFragment extends Fragment {
             if (success) {
                 new AlertDialog.Builder(requireContext())
                         .setTitle("Correo enviado")
-                        .setMessage("Hemos enviado un correo para restablecer tu contraseña. Por favor, revisa tu bandeja de entrada o la carpeta de spam.")
+                        .setMessage("Si la dirección ingresada está registrada, se te enviará un mail para restablecer tu contraseña. Por favor, revisa tu bandeja de entrada o la carpeta de spam.")
                         .setPositiveButton("Aceptar", (dialog, which) -> {
                             dialog.dismiss();
-                            navController.navigate(R.id.action_resetPasswordFragment_to_loginFragment);
+                            navController.popBackStack();
                         })
                         .show();
             }
