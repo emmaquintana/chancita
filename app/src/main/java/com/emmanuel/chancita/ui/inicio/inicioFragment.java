@@ -1,9 +1,8 @@
 package com.emmanuel.chancita.ui.inicio;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
-
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -36,6 +35,7 @@ import com.emmanuel.chancita.ui.inicio.adapters.RifaAdapter;
 import com.emmanuel.chancita.ui.rifa.RifaOrganizadorActivity;
 import com.emmanuel.chancita.ui.rifa.RifaParticipanteActivity;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -182,7 +182,7 @@ public class inicioFragment extends Fragment {
         MaterialButton btnCancelar = view.findViewById(R.id.dialog_unirse_rifa_btn_cancelar);
         MaterialButton btnUnirse = view.findViewById(R.id.dialog_unirse_rifa_btn_unirse);
 
-        AlertDialog dialog = new AlertDialog.Builder(requireContext())
+        AlertDialog dialog = new MaterialAlertDialogBuilder(requireContext())
                 .setView(view)
                 .create();
 

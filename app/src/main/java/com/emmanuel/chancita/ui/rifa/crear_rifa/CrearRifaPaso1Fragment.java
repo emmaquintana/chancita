@@ -1,6 +1,6 @@
 package com.emmanuel.chancita.ui.rifa.crear_rifa;
 
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;

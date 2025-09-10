@@ -1,6 +1,6 @@
 package com.emmanuel.chancita.ui.rifa.crear_rifa;
 
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -19,6 +19,7 @@ import android.widget.Button;
 import com.emmanuel.chancita.R;
 import com.emmanuel.chancita.ui.rifa.RifaOrganizadorActivity;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -97,7 +98,7 @@ public class CrearRifaPaso5Fragment extends Fragment {
     }
 
     private void mostrarError(String mensaje) {
-        new AlertDialog.Builder(requireContext())
+        new MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Error de validación")
                 .setMessage(mensaje)
                 .setPositiveButton("Aceptar", null)
@@ -135,7 +136,7 @@ public class CrearRifaPaso5Fragment extends Fragment {
     }
 
     private void mostrarExitoYSalir(String mensaje) {
-        new AlertDialog.Builder(requireContext())
+        new MaterialAlertDialogBuilder(requireContext())
                 .setTitle("¡Éxito!")
                 .setMessage(mensaje)
                 .setPositiveButton("Aceptar", (dialog, which) -> {

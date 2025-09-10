@@ -1,6 +1,6 @@
 package com.emmanuel.chancita.ui.rifa.editar_rifa;
 
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
@@ -34,6 +34,7 @@ import com.emmanuel.chancita.ui.rifa.adapters.IngresoPremioAdapter;
 import com.emmanuel.chancita.ui.rifa.model.IngresoPremio;
 import com.emmanuel.chancita.utils.Utilidades;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.SimpleDateFormat;
@@ -172,7 +173,7 @@ public class EditarRifaFragment extends Fragment implements EditarPremioAdapter.
 
             if (error != null) {
                 // Mostrar error y resetear flag
-                new AlertDialog.Builder(requireContext())
+                new MaterialAlertDialogBuilder(requireContext())
                         .setTitle("Error de validación")
                         .setMessage(error)
                         .setPositiveButton("Aceptar", null)
@@ -223,7 +224,7 @@ public class EditarRifaFragment extends Fragment implements EditarPremioAdapter.
         try {
             rifaActual.setPrecioNumero(Double.parseDouble(tietEditarRifaPrecioNumero.getText().toString().trim()));
         } catch (NumberFormatException e) {
-            new AlertDialog.Builder(requireContext())
+            new MaterialAlertDialogBuilder(requireContext())
                     .setTitle("Error de validación")
                     .setMessage("El precio del número debe ser un valor numérico válido")
                     .setPositiveButton("Aceptar", null)
@@ -241,7 +242,7 @@ public class EditarRifaFragment extends Fragment implements EditarPremioAdapter.
             LocalDateTime fechaSorteo = Utilidades.parsearFechaHora(fechaStr + " " + horaStr, "dd-MM-yyyy HH:mm");
             rifaActual.setFechaSorteo(fechaSorteo);
         } catch (Exception e) {
-            new AlertDialog.Builder(requireContext())
+            new MaterialAlertDialogBuilder(requireContext())
                     .setTitle("Error de validación")
                     .setMessage("La fecha y hora ingresadas no son válidas")
                     .setPositiveButton("Aceptar", null)
@@ -311,7 +312,7 @@ public class EditarRifaFragment extends Fragment implements EditarPremioAdapter.
                         );
 
                         if (seleccionada.isBefore(creadoEn)) {
-                            new AlertDialog.Builder(requireContext())
+                            new MaterialAlertDialogBuilder(requireContext())
                                     .setTitle("Fecha/hora inválida")
                                     .setMessage("La fecha/hora de sorteo no puede ser menor a la fecha de creación de la rifa")
                                     .setPositiveButton("Aceptar", null)

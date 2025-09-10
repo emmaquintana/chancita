@@ -1,6 +1,6 @@
 package com.emmanuel.chancita.ui.rifa.crear_rifa;
 
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
@@ -20,12 +20,19 @@ import android.widget.Button;
 import com.emmanuel.chancita.R;
 import com.emmanuel.chancita.utils.Utilidades;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.DateValidatorPointForward;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.timepicker.MaterialTimePicker;
+import com.google.android.material.timepicker.TimeFormat;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class CrearRifaPaso2Fragment extends Fragment {
 
@@ -79,50 +86,74 @@ public class CrearRifaPaso2Fragment extends Fragment {
     }
 
     private void setupDateTimePickers() {
-        // Date picker
+        // === DATE PICKER (MaterialDatePicker) ===
         tietFechaSorteo.setOnClickListener(v -> {
-            int year = calendar.get(Calendar.YEAR);
-            int month = calendar.get(Calendar.MONTH);
-            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            // Fecha mínima: hoy (sin importar la hora)
+            Calendar today = Calendar.getInstance();
+            today.set(Calendar.HOUR_OF_DAY, 0);
+            today.set(Calendar.MINUTE, 0);
+            today.set(Calendar.SECOND, 0);
+            today.set(Calendar.MILLISECOND, 0);
+            long minDateMillis = today.getTimeInMillis();
 
-            DatePickerDialog datePickerDialog = new DatePickerDialog(
-                    requireContext(),
-                    (view1, year1, month1, dayOfMonth) -> {
-                        calendar.set(Calendar.YEAR, year1);
-                        calendar.set(Calendar.MONTH, month1);
-                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            CalendarConstraints constraints = new CalendarConstraints.Builder()
+                    .setStart(minDateMillis)
+                    .setValidator(DateValidatorPointForward.now())
+                    .build();
 
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-                        tietFechaSorteo.setText(sdf.format(calendar.getTime()));
-                    },
-                    year, month, day
-            );
+            MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
+                    .setTitleText("Seleccionar fecha")
+                    .setCalendarConstraints(constraints)
+                    .build();
 
-            // Fecha mínima: mañana
-            Calendar minDate = Calendar.getInstance();
-            minDate.add(Calendar.DAY_OF_MONTH, 1);
-            datePickerDialog.getDatePicker().setMinDate(minDate.getTimeInMillis());
+            datePicker.addOnPositiveButtonClickListener(selection -> {
+                // Solución: usar UTC para evitar problemas de zona horaria
+                Calendar selected = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                selected.setTimeInMillis(selection);
 
-            datePickerDialog.show();
+                // Convertir a zona horaria local para mostrar
+                Calendar localCalendar = Calendar.getInstance();
+                localCalendar.set(Calendar.YEAR, selected.get(Calendar.YEAR));
+                localCalendar.set(Calendar.MONTH, selected.get(Calendar.MONTH));
+                localCalendar.set(Calendar.DAY_OF_MONTH, selected.get(Calendar.DAY_OF_MONTH));
+
+                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+                tietFechaSorteo.setText(sdf.format(localCalendar.getTime()));
+
+                // Actualizar el calendar principal
+                calendar.set(Calendar.YEAR, localCalendar.get(Calendar.YEAR));
+                calendar.set(Calendar.MONTH, localCalendar.get(Calendar.MONTH));
+                calendar.set(Calendar.DAY_OF_MONTH, localCalendar.get(Calendar.DAY_OF_MONTH));
+            });
+
+            datePicker.show(getChildFragmentManager(), "MATERIAL_DATE_PICKER");
         });
 
-        // Time picker
+        // === TIME PICKER (MaterialTimePicker) ===
         tietHoraSorteo.setOnClickListener(v -> {
-            int hour = calendar.get(Calendar.HOUR_OF_DAY);
-            int minute = calendar.get(Calendar.MINUTE);
+            int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
+            int currentMinute = calendar.get(Calendar.MINUTE);
 
-            TimePickerDialog timePickerDialog = new TimePickerDialog(
-                    requireContext(),
-                    (view12, hourOfDay, minute1) -> {
-                        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                        calendar.set(Calendar.MINUTE, minute1);
+            MaterialTimePicker timePicker = new MaterialTimePicker.Builder()
+                    .setTimeFormat(TimeFormat.CLOCK_24H)
+                    .setHour(currentHour)
+                    .setMinute(currentMinute)
+                    .setTitleText("Seleccionar hora")
+                    .build();
 
-                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
-                        tietHoraSorteo.setText(sdf.format(calendar.getTime()));
-                    },
-                    hour, minute, true
-            );
-            timePickerDialog.show();
+            timePicker.addOnPositiveButtonClickListener(dialog -> {
+                int selectedHour = timePicker.getHour();
+                int selectedMinute = timePicker.getMinute();
+
+                calendar.set(Calendar.HOUR_OF_DAY, selectedHour);
+                calendar.set(Calendar.MINUTE, selectedMinute);
+
+                // Formato HH:mm
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
+                tietHoraSorteo.setText(sdf.format(calendar.getTime()));
+            });
+
+            timePicker.show(getChildFragmentManager(), "MATERIAL_TIME_PICKER");
         });
     }
 
@@ -216,7 +247,7 @@ public class CrearRifaPaso2Fragment extends Fragment {
     }
 
     private void mostrarError(String mensaje) {
-        new AlertDialog.Builder(requireContext())
+        new MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Error de validación")
                 .setMessage(mensaje)
                 .setPositiveButton("Aceptar", null)

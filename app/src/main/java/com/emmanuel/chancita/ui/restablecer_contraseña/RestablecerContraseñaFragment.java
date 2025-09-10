@@ -2,7 +2,7 @@ package com.emmanuel.chancita.ui.restablecer_contraseña;
 
 import androidx.lifecycle.ViewModelProvider;
 
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.emmanuel.chancita.R;
 import com.emmanuel.chancita.databinding.FragmentRestablecerContrasenaBinding;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class RestablecerContraseñaFragment extends Fragment {
 
@@ -69,7 +70,7 @@ public class RestablecerContraseñaFragment extends Fragment {
 
         restablecerContraseñaViewModel.envioExitoso.observe(getViewLifecycleOwner(), success -> {
             if (success) {
-                new AlertDialog.Builder(requireContext())
+                new MaterialAlertDialogBuilder(requireContext())
                         .setTitle("Correo enviado")
                         .setMessage("Si la dirección ingresada está registrada, se te enviará un mail para restablecer tu contraseña. Por favor, revisa tu bandeja de entrada o la carpeta de spam.")
                         .setPositiveButton("Aceptar", (dialog, which) -> {
@@ -79,7 +80,7 @@ public class RestablecerContraseñaFragment extends Fragment {
                         .show();
             }
             else {
-                new AlertDialog.Builder(requireContext())
+                new MaterialAlertDialogBuilder(requireContext())
                         .setTitle("Error")
                         .setMessage("No pudimos enviar el correo. Verifica la dirección ingresada o inténtalo nuevamente.")
                         .setPositiveButton("Entendido", (dialog, which) -> {

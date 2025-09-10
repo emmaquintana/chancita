@@ -1,6 +1,6 @@
 package com.emmanuel.chancita.ui.rifa.crear_rifa;
 
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,6 +23,7 @@ import com.emmanuel.chancita.ui.rifa.adapters.EditarPremioAdapter;
 import com.emmanuel.chancita.ui.rifa.adapters.IngresoPremioAdapter;
 import com.emmanuel.chancita.ui.rifa.model.IngresoPremio;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,7 +113,7 @@ public class CrearRifaPaso3Fragment extends Fragment implements EditarPremioAdap
     }
 
     private void mostrarError(String mensaje) {
-        new AlertDialog.Builder(requireContext())
+        new MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Error de validación")
                 .setMessage(mensaje)
                 .setPositiveButton("Aceptar", null)

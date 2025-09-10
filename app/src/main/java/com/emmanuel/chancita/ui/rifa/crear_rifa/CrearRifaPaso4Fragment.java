@@ -1,6 +1,6 @@
 package com.emmanuel.chancita.ui.rifa.crear_rifa;
 
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -127,7 +127,7 @@ public class CrearRifaPaso4Fragment extends Fragment {
     }
 
     private void mostrarError(String mensaje) {
-        new AlertDialog.Builder(requireContext())
+        new MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Error")
                 .setMessage(mensaje)
                 .setPositiveButton("Aceptar", null)
@@ -169,7 +169,7 @@ public class CrearRifaPaso4Fragment extends Fragment {
     }
 
     private void mostrarExitoYSalir(String mensaje) {
-        new AlertDialog.Builder(requireContext())
+        new MaterialAlertDialogBuilder(requireContext())
                 .setTitle("¡Éxito!")
                 .setMessage(mensaje)
                 .setPositiveButton("Aceptar", (dialog, which) -> {

@@ -1,7 +1,7 @@
 package com.emmanuel.chancita.ui;
 
 import android.Manifest;
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -25,6 +25,7 @@ import com.emmanuel.chancita.ui.rifa.RifaOrganizadorViewModel;
 import com.emmanuel.chancita.utils.Utilidades;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
@@ -41,6 +42,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.emmanuel.chancita.databinding.ActivityMainBinding;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -55,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private NavController navController;
     private SharedViewModel sharedViewModel;
-    private Toolbar toolbar;
+    private MaterialToolbar toolbar;
     private static final int PERMISSION_REQUEST_CODE = 1001;
 
     @Override
@@ -233,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showPagoExitosoDialog(String preferenceId) {
-        new AlertDialog.Builder(this)
+        new MaterialAlertDialogBuilder(this)
                 .setTitle("✅ Pago Exitoso")
                 .setMessage("Tu compra se realizó correctamente. Los números han sido reservados para ti.")
                 .setPositiveButton("Ok", null)
@@ -241,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showPagoFallidoDialog() {
-        new AlertDialog.Builder(this)
+        new MaterialAlertDialogBuilder(this)
                 .setTitle("❌ Pago Fallido")
                 .setMessage("El pago no pudo procesarse. Por favor, intenta nuevamente.")
                 .setPositiveButton("Aceptar", null)
@@ -249,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showPagoPendienteDialog() {
-        new AlertDialog.Builder(this)
+        new MaterialAlertDialogBuilder(this)
                 .setTitle("⏳ Pago Pendiente")
                 .setMessage("Estamos procesando tu pago. Te notificaremos cuando se complete.")
                 .setPositiveButton("Aceptar", null)
