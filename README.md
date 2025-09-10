@@ -4,8 +4,6 @@ Chancita es una aplicación móvil nativa para **Android** que permite a los usu
 
 La app gestiona la autenticación de usuarios y persistencia de datos con **Firebase**, mientras que los pagos se procesan de forma segura mediante **Mercado Pago**.
 
-***❗Nota: Actualmente la aplicación posee mejor soporte para modo claro. En modo oscuro pueden llegar a presentarse algunas inconsistencias.***
-
 # Arquitectura del Proyecto
 
 La arquitectura se basa en un frontend móvil en **Android**, con backend serverless en **Firebase** y **Mercado Pago** como pasarela de pagos:
@@ -21,6 +19,6 @@ La arquitectura se basa en un frontend móvil en **Android**, con backend server
 **❗Tengase en cuenta que Mercado Pago cobra una comisión del 2.2% cuyo costo se cobra al participante de la rifa.**
 
 ## Requisitos para ejecución en entorno de desarrollo
-- Android Studio con un dispositivo/emulador API 26 o mayor.
+- Android Studio 2024.1.1 con un dispositivo/emulador API 26 o mayor con servicios de Google y Mercado Pago instalados. 
 - Java 1.8.
 - Cuenta de Mercado Pago.
