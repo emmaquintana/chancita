@@ -213,6 +213,10 @@ public class CrearRifaPaso2Fragment extends Fragment {
                 mostrarError("La cantidad de premios debe ser mayor a 0");
                 return false;
             }
+            if (cantPremios > 10) {
+                mostrarError("La cantidad de premios no debe ser mayor a 10");
+                return false;
+            }
 
             if (cantNumeros <= 0 || cantNumeros > 200) {
                 mostrarError("La cantidad de números debe estar entre 1 y 200");
@@ -221,6 +225,11 @@ public class CrearRifaPaso2Fragment extends Fragment {
 
             if (precio <= 0) {
                 mostrarError("El precio debe ser mayor a 0");
+                return false;
+            }
+
+            if (cantNumeros < cantPremios) {
+                mostrarError("La cantidad de números no debe ser menor que la cantidad de premios");
                 return false;
             }
 
