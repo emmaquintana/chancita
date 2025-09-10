@@ -9,6 +9,7 @@ import com.emmanuel.chancita.data.model.MetodoEleccionGanador;
 import com.emmanuel.chancita.data.model.RifaPremio;
 import com.emmanuel.chancita.data.repository.RifaRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class EditarRifaViewModel extends ViewModel {
@@ -112,6 +113,11 @@ public class EditarRifaViewModel extends ViewModel {
                         && (rifa.getMotivoEleccionGanador() == null || rifa.getMotivoEleccionGanador().trim().isEmpty())
         ) {
             _errorValidacion.setValue("Debes indicar el motivo que usarás para seleccionar al ganador");
+            return false;
+        }
+
+        if (rifa.getFechaSorteo().isBefore(LocalDateTime.now().plusHours(1))) {
+            _errorValidacion.setValue("La fecha de sorteo debe ser al menos 1 hora en el futuro");
             return false;
         }
 
