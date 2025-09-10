@@ -218,8 +218,8 @@ public class CrearRifaPaso2Fragment extends Fragment {
                 return false;
             }
 
-            if (cantNumeros <= 0 || cantNumeros > 200) {
-                mostrarError("La cantidad de números debe estar entre 1 y 200");
+            if (cantNumeros <= 1 || cantNumeros > 200) {
+                mostrarError("La cantidad de números debe estar entre 2 y 200");
                 return false;
             }
 

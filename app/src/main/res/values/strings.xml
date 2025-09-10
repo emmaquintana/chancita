@@ -26,9 +26,9 @@
     <string name="crear_rifa_paso_2_descripcion_2">Si ya tienes una cuenta, inicia sesión. Si no, puedes crear una nueva cuenta en muy pocos minutos.</string>
     <string name="hora_de_sorteo">Hora de sorteo</string>
     <string name="fecha_de_sorteo">Fecha de sorteo</string>
-    <string name="cant_de_numeros_max_200">Cant. de números (máx. 200)</string>
+    <string name="cant_de_numeros_max_200">Cant. de números (min.2, máx. 200)</string>
     <string name="precio">Precio</string>
-    <string name="cant_de_premios_min_1">Cant. de premios (mín. 1)</string>
+    <string name="cant_de_premios_min_1">Cant. de premios (mín. 1, máx. 10)</string>
     <string name="descripcion_opcional">Descripción (opcional)</string>
     <string name="titulo">Título</string>
     <string name="ingresa_informacion_de_la_rifa_que_quieres_crear">Ingresa información de la rifa que quieres crear</string>
