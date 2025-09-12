@@ -95,9 +95,6 @@ public class RifaRepository {
         rifaDAO.editarRifa(rifaActualizada, listener);
     }
 
-
-
-
     public void unirseARifa(String codigo, OnCompleteListener<Void> listener) {
         rifaDAO.unirseARifa(codigo, listener);
     }
@@ -654,5 +651,20 @@ public class RifaRepository {
      */
     public void actualizarEstadoRifa(String rifaId, RifaEstado nuevoEstado, OnCompleteListener<Void> listener) {
         rifaDAO.actualizarEstadoRifa(rifaId, nuevoEstado, listener);
+    }
+
+    public LiveData<Boolean> usuarioActualPoseeTokenMercadoPago() {
+        MutableLiveData<Boolean> poseeToken = new MutableLiveData<>();
+
+        rifaDAO.obtenerTokenMercadoPagoDeUsuarioActual().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                poseeToken.setValue(true);
+            }
+            else {
+                poseeToken.setValue(false);
+            }
+        });
+
+        return poseeToken;
     }
 }

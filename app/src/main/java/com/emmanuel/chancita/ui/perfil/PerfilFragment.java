@@ -29,6 +29,7 @@ public class PerfilFragment extends Fragment {
     private TextView edad;
     private TextView correoElectronico;
     private TextView numeroCelular;
+    private MaterialButton btnEditarPerfil;
 
     public static PerfilFragment newInstance() {
         return new PerfilFragment();
@@ -66,17 +67,21 @@ public class PerfilFragment extends Fragment {
         edad = view.findViewById(R.id.perfil_txt_edad);
         correoElectronico = view.findViewById(R.id.perfil_txt_email);
         numeroCelular = view.findViewById(R.id.perfil_txt_celular);
-        MaterialButton btnEditarPerfil = view.findViewById(R.id.perfil_btn_editar);
+        btnEditarPerfil = view.findViewById(R.id.perfil_btn_editar);
 
+        setearObservers();
+        setearListeners();
+    }
+
+    private void setearObservers() {
         perfilViewModel.obtenerUsuarioActual().observe(getViewLifecycleOwner(), usuario -> {
             if (usuario != null) {
                 actualizarUI(usuario);
             }
-            else {
-                Log.println(Log.WARN, "WARN", "USUARIO NULO");
-            }
         });
+    }
 
+    private void setearListeners() {
         btnEditarPerfil.setOnClickListener(v -> {
             Intent intent = new Intent(requireActivity(), EditarPerfilActivity.class);
             startActivity(intent);

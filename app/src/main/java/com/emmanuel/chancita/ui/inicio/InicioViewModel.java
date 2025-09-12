@@ -5,13 +5,16 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.emmanuel.chancita.data.dto.RifaDTO;
+import com.emmanuel.chancita.data.model.Usuario;
 import com.emmanuel.chancita.data.repository.RifaRepository;
+import com.emmanuel.chancita.data.repository.UsuarioRepository;
 
 import java.util.List;
 
 public class InicioViewModel extends ViewModel {
 
     private final RifaRepository rifaRepository;
+    private final UsuarioRepository usuarioRepository;
 
     // Obtener rifas creadas por el usuario actual
     private final MutableLiveData<Boolean> _obteniendoRifasCreadas = new MutableLiveData<>();
@@ -27,6 +30,7 @@ public class InicioViewModel extends ViewModel {
 
     public InicioViewModel() {
         this.rifaRepository = new RifaRepository();
+        this.usuarioRepository = new UsuarioRepository();
     }
 
     public LiveData<RifaDTO> obtenerRifa(String rifaId) {
@@ -71,5 +75,13 @@ public class InicioViewModel extends ViewModel {
 
     public LiveData<RifaDTO> obtenerRifaPorCodigo(String codigo) {
         return rifaRepository.obtenerRifaPorCodigo(codigo, null);
+    }
+
+    public LiveData<Usuario> obtenerUsuarioActual() {
+        return usuarioRepository.obtenerUsuarioActual();
+    }
+
+    public LiveData<Boolean> usuarioActualPoseeTokenMercadoPago() {
+        return rifaRepository.usuarioActualPoseeTokenMercadoPago();
     }
 }

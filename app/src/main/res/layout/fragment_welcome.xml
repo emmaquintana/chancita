@@ -33,7 +33,7 @@
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:layout_marginEnd="8dp"
-                android:src="@drawable/vector"
+                android:src="@drawable/logo"
                 app:tint="@color/md_theme_primary" />
 
             <TextView

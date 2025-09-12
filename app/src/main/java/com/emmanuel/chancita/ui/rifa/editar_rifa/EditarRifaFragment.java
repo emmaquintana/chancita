@@ -341,9 +341,6 @@ public class EditarRifaFragment extends Fragment implements EditarPremioAdapter.
 
     @Override
     public void onPremioChanged(int position, RifaPremio premio) {
-        // Este método se llama automáticamente cuando el usuario cambia algún campo
-        // Los cambios ya están reflejados en el objeto premio
-        // No es necesario hacer nada adicional aquí a menos que quieras
-        // guardar cambios automáticamente o realizar alguna validación en tiempo real
+
     }
 }

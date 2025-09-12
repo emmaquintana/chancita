@@ -20,6 +20,13 @@ public class EditarPerfilFragment extends Fragment {
 
     private PerfilViewModel perfilViewModel;
 
+    // Vistas
+    private MaterialButton btnGuardarCambios;
+    private TextInputEditText tietNombreCompleto;
+    private TextInputEditText tietApellidoCompleto;
+    private TextInputEditText tietCorreoElectronico;
+    private TextInputEditText tietNroCelular;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,13 +43,17 @@ public class EditarPerfilFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        btnGuardarCambios = view.findViewById(R.id.editar_perfil_btn_guardar_cambios);
+        tietNombreCompleto = view.findViewById(R.id.editar_perfil_tiet_nombre_completo);
+        tietApellidoCompleto = view.findViewById(R.id.editar_perfil_tiet_apellido_completo);
+        tietCorreoElectronico = view.findViewById(R.id.editar_perfil_tiet_email);
+        tietNroCelular = view.findViewById(R.id.editar_perfil_tiet_nro_celular);
 
-        MaterialButton btnGuardarCambios = view.findViewById(R.id.editar_perfil_btn_guardar_cambios);
-        TextInputEditText tietNombreCompleto = view.findViewById(R.id.editar_perfil_tiet_nombre_completo);
-        TextInputEditText tietApellidoCompleto = view.findViewById(R.id.editar_perfil_tiet_apellido_completo);
-        TextInputEditText tietCorreoElectronico = view.findViewById(R.id.editar_perfil_tiet_email);
-        TextInputEditText tietNroCelular = view.findViewById(R.id.editar_perfil_tiet_nro_celular);
+        setearObservers();
+        setearListeners();
+    }
 
+    private void setearObservers() {
         perfilViewModel.obtenerUsuarioActual().observe(getViewLifecycleOwner(), usuario -> {
             tietNombreCompleto.setText(usuario.getNombre());
             tietApellidoCompleto.setText(usuario.getApellido());
@@ -50,6 +61,12 @@ public class EditarPerfilFragment extends Fragment {
             tietNroCelular.setText(usuario.getNroCelular());
         });
 
+        perfilViewModel.resultadoActualizacion.observe(getViewLifecycleOwner(), mensaje -> {
+            Toast.makeText(requireContext(), mensaje, Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private void setearListeners() {
         btnGuardarCambios.setOnClickListener(v -> {
             String nombre = tietNombreCompleto.getText().toString();
             String apellido = tietApellidoCompleto.getText().toString();
@@ -57,10 +74,6 @@ public class EditarPerfilFragment extends Fragment {
             String numCelular = tietNroCelular.getText().toString();
 
             perfilViewModel.actualizarUsuarioActual(nombre, apellido, correo, numCelular);
-        });
-
-        perfilViewModel.resultadoActualizacion.observe(getViewLifecycleOwner(), mensaje -> {
-            Toast.makeText(requireContext(), mensaje, Toast.LENGTH_SHORT).show();
         });
     }
 }

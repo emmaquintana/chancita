@@ -395,6 +395,11 @@ public class RifaDAO {
                 });
     }
 
+    public Task<DocumentSnapshot> obtenerTokenMercadoPagoDeUsuarioActual() {
+        return db.collection("mercado_pago_tokens")
+                .document(auth.getUid())
+                .get();
+    }
 
     /** Divide una lista en chunks de tamaño n */
     private <T> List<List<T>> chunkList(List<T> list, int n) {

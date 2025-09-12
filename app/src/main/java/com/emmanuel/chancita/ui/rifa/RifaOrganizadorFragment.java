@@ -37,6 +37,7 @@ import com.emmanuel.chancita.ui.rifa.model.Participante;
 import com.emmanuel.chancita.utils.Utilidades;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -81,7 +82,7 @@ public class RifaOrganizadorFragment extends Fragment {
         // Validar que rifaId no sea null antes de hacer llamadas
         if (rifaId == null || rifaId.trim().isEmpty()) {
             Log.e("RifaParticipanteFragment", "Error: rifaId es null o vacío en Fragment");
-            Toast.makeText(getContext(), "Error: No se pudo cargar la rifa", Toast.LENGTH_SHORT).show();
+            Snackbar.make(getView(), "Error: No se pudo cargar la rifa", Snackbar.LENGTH_SHORT).show();
             if (getActivity() != null) {
                 getActivity().finish();
             }
@@ -329,7 +330,7 @@ public class RifaOrganizadorFragment extends Fragment {
             // Muestra el resultado de la asignación
             rifaOrganizadorViewModel.resultadoAsignacionNumerosGanadores.observe(getViewLifecycleOwner(), asignacionExitosa -> {
                 if (asignacionExitosa) {
-                    Toast.makeText(requireContext(), "¡Los números ganadores se han definido con éxito!", Toast.LENGTH_LONG).show();
+                    Snackbar.make(getView(), "¡Los números ganadores se han definido con éxito!", Snackbar.LENGTH_LONG).show();
 
                     // Se ocultan las vistas para la elección de los ganadores
                     view.findViewById(R.id.rifa_organizador_txt_seccion_eleccion_ganadores).setVisibility(View.GONE);
