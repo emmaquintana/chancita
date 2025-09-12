@@ -1,5 +1,6 @@
 package com.emmanuel.chancita.ui.rifa.adapters;
 
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,25 +40,69 @@ public class EleccionGanadoresAdapter extends RecyclerView.Adapter<EleccionGanad
         holder.txtPremioTitulo.setText(asignacion.getPremio().getPremioTitulo());
         holder.txtPremioDescripcion.setText(asignacion.getPremio().getPremioDescripcion());
 
-        ArrayAdapter<Integer> adapter = new ArrayAdapter<>(
+        // Obtener el color correcto del tema Material Design 3
+        TypedValue typedValue = new TypedValue();
+        holder.itemView.getContext().getTheme().resolveAttribute(
+                com.google.android.material.R.attr.colorOnSurface,
+                typedValue,
+                true
+        );
+        int textColor = typedValue.data;
+
+        ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(
                 holder.itemView.getContext(),
                 android.R.layout.simple_spinner_item,
                 asignacion.getNumerosDisponibles()
-        );
+        ) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                setTextColor(view, textColor);
+                return view;
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                setTextColor(view, textColor);
+                return view;
+            }
+
+            private void setTextColor(View view, int color) {
+                if (view instanceof TextView) {
+                    TextView textView = (TextView) view;
+                    textView.setTextColor(color);
+                }
+            }
+        };
+
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         holder.spinnerNumeros.setAdapter(adapter);
 
         // Si ya se seleccionó antes
         if (asignacion.getNumeroSeleccionado() != null) {
             int index = asignacion.getNumerosDisponibles().indexOf(asignacion.getNumeroSeleccionado());
-            if (index >= 0) holder.spinnerNumeros.setSelection(index);
+            if (index >= 0) {
+                holder.spinnerNumeros.setSelection(index);
+                // Forzar color del texto seleccionado
+                View selectedView = holder.spinnerNumeros.getSelectedView();
+                if (selectedView instanceof TextView) {
+                    ((TextView) selectedView).setTextColor(textColor);
+                }
+            }
         }
 
         holder.spinnerNumeros.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                if (view instanceof TextView) {
+                    ((TextView) view).setTextColor(textColor);
+                }
                 asignacion.setNumeroSeleccionado(asignacion.getNumerosDisponibles().get(pos));
             }
-            @Override public void onNothingSelected(AdapterView<?> parent) {}
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
     }
 

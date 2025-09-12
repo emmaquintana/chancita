@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.emmanuel.chancita.R;
 import com.emmanuel.chancita.data.dto.RifaDTO;
 import com.emmanuel.chancita.data.model.Rifa;
+import com.emmanuel.chancita.utils.Utilidades;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -53,17 +54,20 @@ public class RifaAdapter extends RecyclerView.Adapter<RifaAdapter.RaffleViewHold
         holder.fechaSorteoRifa.setText("Sorteo: " + fechaFormateada);
 
         // Cambiar el texto y el color del estado
-        holder.estadoRifa.setText(rifa.getEstado().toString());
+        holder.estadoRifa.setText(Utilidades.capitalizar(rifa.getEstado().toString()));
 
         switch (rifa.getEstado()) {
             case ABIERTO:
                 holder.estadoRifa.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.green));
+                holder.estadoRifa.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.lightgreen));
                 break;
             case CERRADO:
                 holder.estadoRifa.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.md_theme_error));
+                holder.estadoRifa.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.md_theme_errorContainer));
                 break;
             case SORTEADO:
                 holder.estadoRifa.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.md_theme_error));
+                holder.estadoRifa.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.md_theme_errorContainer));
                 break;
         }
 

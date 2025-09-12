@@ -118,11 +118,11 @@ public class RifaParticipanteFragment extends Fragment {
 
             // Setea la información de la rifa
             txtRifaTitulo.setText(rifa.getTitulo());
-            txtRifaEstado.setText("Estado: " + rifa.getEstado());
-            txtRifaCodigo.setText("Código: " + rifa.getCodigo());
-            txtPrecioNumero.setText("Precio por número: $" + rifa.getPrecioNumero());
-            txtRifaFechaSorteo.setText("Fecha de sorteo: " + Utilidades.formatearFechaHora(rifa.getFechaSorteo(), "dd/MM/yyyy HH:mm"));
-            txtRifaMetodoEleccionGanador.setText("Método de elección: " + Utilidades.capitalizar(rifa.getMetodoEleccionGanador().toString()) + (rifa.getMetodoEleccionGanador() == MetodoEleccionGanador.DETERMINISTA ? " (" + rifa.getMotivoEleccionGanador() + ")" : ""));
+            txtRifaEstado.setText(rifa.getEstado().toString());
+            txtRifaCodigo.setText(rifa.getCodigo());
+            txtPrecioNumero.setText("$" + rifa.getPrecioNumero());
+            txtRifaFechaSorteo.setText(Utilidades.formatearFechaHora(rifa.getFechaSorteo(), "dd/MM/yyyy HH:mm"));
+            txtRifaMetodoEleccionGanador.setText(Utilidades.capitalizar(rifa.getMetodoEleccionGanador().toString()) + (rifa.getMetodoEleccionGanador() == MetodoEleccionGanador.DETERMINISTA ? " (" + rifa.getMotivoEleccionGanador() + ")" : ""));
             txtRifaPremios.setText(formatearPremios(rifa.getPremios()));
             // Si no hay descripción, se oculta la sección "Descripción"
             if (rifa.getDescripcion() == null || rifa.getDescripcion().trim().isEmpty()) {
@@ -137,8 +137,8 @@ public class RifaParticipanteFragment extends Fragment {
                 TextView txtCorreoOrganizador = view.findViewById(R.id.rifa_participante_txt_correo_organizador);
                 TextView txtCelularOrganizador = view.findViewById(R.id.rifa_participante_txt_nro_celular_organizador);
 
-                txtCorreoOrganizador.setText("Correo del creador de la rifa: " + organizador.getCorreo());
-                txtCelularOrganizador.setText("Nro. celular del creador de la rifa: " + organizador.getNroCelular());
+                txtCorreoOrganizador.setText(organizador.getCorreo());
+                txtCelularOrganizador.setText(organizador.getNroCelular());
 
 
                 Linkify.addLinks(
@@ -171,7 +171,6 @@ public class RifaParticipanteFragment extends Fragment {
                         view.findViewById(R.id.rifa_participante_rv_numeros).setVisibility(View.GONE);
                         view.findViewById(R.id.rifa_participante_txt_comprar_numeros_titulo).setVisibility(View.GONE);
                         view.findViewById(R.id.rifa_participante_txt_comprar_numeros_descripcion).setVisibility(View.GONE);
-                        view.findViewById(R.id.rifa_participante_txt_aclaracion_comision).setVisibility(View.GONE);
 
                         // Se oculta la sección de premios, pues después se muestra otra sección con premios pero que indica
                         // el número ganador correspondiente al premio
@@ -497,7 +496,6 @@ public class RifaParticipanteFragment extends Fragment {
             Intent intent = activity.getIntent();
             if (intent.getBooleanExtra("pagoExitoso", false)) {
                 Toast.makeText  (getContext(), "¡Pago realizado con éxito!", Toast.LENGTH_LONG).show();
-                // Aquí puedes refrescar la rifa o navegar a otra pantalla
                 intent.removeExtra("pagoExitoso");
             } else if (intent.getBooleanExtra("pagoFallido", false)) {
                 Toast.makeText(getContext(), "El pago no se pudo completar", Toast.LENGTH_LONG).show();

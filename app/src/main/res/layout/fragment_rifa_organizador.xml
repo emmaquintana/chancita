@@ -9,281 +9,506 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:background="?attr/colorSurfaceContainerLowest">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp">
 
-            <TextView
-                android:id="@+id/rifa_organizador_txt_titulo_rifa"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Cargando..."
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:textColor="?attr/colorOnSurface"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
-                android:id="@+id/rifa_organizador_txt_monto_recaudado"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Monto recaudado: Cargando..."
-                android:textSize="20sp"
-                android:textColor="?attr/colorOnSurface"
-                android:textStyle="bold"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_txt_titulo_rifa"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
-                android:id="@+id/rifa_organizador_txt_seccion_informacion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Información"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="?attr/colorOnSurface"
-                android:layout_marginTop="24dp"
-                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_txt_monto_recaudado"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
-                android:id="@+id/rifa_organizador_txt_info_estado"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:textColor="?attr/colorOnSurface"
-                android:text="Estado: Cargando..."
-                android:textSize="16sp"
-                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_txt_seccion_informacion"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
-                android:id="@+id/rifa_organizador_txt_info_descripcion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="16sp"
-                android:text="Descripción: Cargando..."
-                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_txt_info_estado"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
-                android:id="@+id/rifa_organizador_txt_info_codigo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Código: Cargando..."
-                android:drawableEnd="@drawable/ic_copy"
-                android:drawablePadding="8dp"
-                android:drawableTint="?attr/colorOnSurface"
-                android:foreground="?attr/selectableItemBackground"
-                android:textSize="16sp"
-                android:textColor="?attr/colorOnSurface"
-                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_txt_info_descripcion"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
-                android:id="@+id/rifa_organizador_txt_info_fecha"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:textSize="16sp"
-                android:text="Fecha de sorteo: Cargando..."
-                android:textColor="?attr/colorOnSurface"
-                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_txt_info_codigo"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
-                android:id="@+id/rifa_organizador_txt_info_precio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Precio de número: Cargando..."
-                android:textSize="16sp"
-                android:textColor="?attr/colorOnSurface"
-                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_txt_info_fecha"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
-                android:id="@+id/rifa_organizador_txt_info_metodo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Método de elección: Cargando..."
-                android:textSize="16sp"
-                android:textColor="?attr/colorOnSurface"
-                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_txt_info_precio"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
-                android:id="@+id/rifa_organizador_txt_seccion_eleccion_ganadores"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Elección de ganadores"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="?attr/colorOnSurface"
-                android:visibility="gone"
-                android:layout_marginTop="24dp"
-                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_txt_info_metodo"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
-                android:id="@+id/rifa_organizador_txt_eleccion_ganadores_descripcion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Escoge el número ganador correspondiente a cada premio"
-                android:visibility="gone"
-                android:textSize="16sp"
-                android:textColor="?attr/colorOnSurface"
-                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_txt_seccion_eleccion_ganadores"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view_eleccion_ganadores"
+            <!-- Header Section -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/rifa_organizador_mcv_head"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_txt_eleccion_ganadores_descripcion" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/rifa_organizador_btn_confirmar_ganadores"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Confirmar ganadores"
-                android:textSize="18sp"
-                android:visibility="gone"
-                app:cornerRadius="28dp"
-                app:layout_constraintTop_toBottomOf="@id/recycler_view_eleccion_ganadores"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-            <TextView
-                android:id="@+id/rifa_organizador_txt_seccion_ganadores"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ganadores"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="?attr/colorOnSurface"
-                android:layout_marginTop="24dp"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_btn_confirmar_ganadores"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <LinearLayout
-                android:id="@+id/rifa_organizador_ll_ganadores_info"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_txt_seccion_ganadores"
+                app:cardElevation="1dp"
+                app:cardCornerRadius="12dp"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_view_ganadores"
-                    android:visibility="gone"
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/rifa_organizador_txt_seccion_participantes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Participantes"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="?attr/colorOnSurface"
-                android:layout_marginTop="24dp"
-                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_ll_ganadores_info"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
-                android:id="@+id/rifa_organizador_txt_nombre_participante"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Nombre y apellido"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:textColor="?attr/colorOnSurface"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rifa_organizador_txt_seccion_participantes" />
-
-            <TextView
-                android:id="@+id/rifa_organizador_txt_numeros_comprados_participante"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:text="Números comprados"
-                android:textColor="?attr/colorOnSurface"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rifa_organizador_txt_seccion_participantes" />
-
-            <LinearLayout
-                android:id="@+id/rifa_organizador_ll_participantes_list"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-
-                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_txt_nombre_participante"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
-
-                <TextView
-                    android:id="@+id/rifa_organizador_txt_no_hay_participantes"
                     android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:text="Aún no hay participantes"
-                    android:textSize="16sp"
-                    android:textColor="?attr/colorOnSurface"
-                    />
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_view_participantes"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/rifa_organizador_txt_titulo_rifa"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Cargando..."
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSurface"
+                        android:gravity="center"
+                        android:layout_marginBottom="8dp"/>
 
-            <TextView
-                android:id="@+id/rifa_organizador_txt_seccion_premios"
-                android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/rifa_organizador_txt_monto_recaudado"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Monto recaudado: Cargando..."
+                        android:textSize="18sp"
+                        android:textColor="?attr/colorPrimary"
+                        android:textStyle="bold"
+                        android:gravity="center" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Info Section -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/rifa_organizador_mcv_info"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Premios"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="?attr/colorOnSurface"
-                android:layout_marginTop="24dp"
-                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_ll_participantes_list"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:cardElevation="1dp"
+                app:cardCornerRadius="12dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@+id/rifa_organizador_mcv_head"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
-            <TextView
-                android:id="@+id/rifa_organizador_txt_premios"
-                android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/rifa_organizador_txt_seccion_informacion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="📋 Información"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSurface"
+                        android:layout_marginBottom="12dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="8dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Estado:"
+                            android:textSize="16sp"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:id="@+id/rifa_organizador_txt_info_estado"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Cargando..."
+                            android:textSize="16sp"
+                            android:textColor="?attr/colorOnSurface"
+                            android:gravity="end"/>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="?attr/colorOutlineVariant"
+                        android:layout_marginVertical="4dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="8dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Descripción:"
+                            android:textSize="16sp"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:id="@+id/rifa_organizador_txt_info_descripcion"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Cargando..."
+                            android:textSize="16sp"
+                            android:textColor="?attr/colorOnSurface"
+                            android:gravity="end"
+                            />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="?attr/colorOutlineVariant"
+                        android:layout_marginVertical="4dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="8dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Código:"
+                            android:textSize="16sp"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:id="@+id/rifa_organizador_txt_info_codigo"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Cargando..."
+                            android:textSize="16sp"
+                            android:textColor="?attr/colorOnSurface"
+                            android:gravity="end"
+                            android:drawableEnd="@drawable/ic_copy"
+                            android:drawablePadding="8dp"
+                            android:drawableTint="?attr/colorPrimary"
+                            android:foreground="?attr/selectableItemBackground"/>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="?attr/colorOutlineVariant"
+                        android:layout_marginVertical="4dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="8dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Fecha de sorteo:"
+                            android:textSize="16sp"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:id="@+id/rifa_organizador_txt_info_fecha"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Cargando..."
+                            android:textSize="16sp"
+                            android:textColor="?attr/colorOnSurface"
+                            android:gravity="end"/>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="?attr/colorOutlineVariant"
+                        android:layout_marginVertical="4dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="8dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Precio:"
+                            android:textSize="16sp"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:id="@+id/rifa_organizador_txt_info_precio"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Cargando..."
+                            android:textSize="16sp"
+                            android:textColor="?attr/colorOnSurface"
+                            android:gravity="end"/>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="?attr/colorOutlineVariant"
+                        android:layout_marginVertical="4dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Método:"
+                            android:textSize="16sp"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:id="@+id/rifa_organizador_txt_info_metodo"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Cargando..."
+                            android:textSize="16sp"
+                            android:textColor="?attr/colorOnSurface"
+                            android:gravity="end"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Sección Elección de Ganadores -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/rifa_organizador_mcv_eleccion_ganadores"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:paddingBottom="128dp"
-                android:text="Cargando..."
-                android:textSize="16sp"
-                android:textColor="?attr/colorOnSurface"
-                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_txt_seccion_premios"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:cardElevation="1dp"
+                app:cardCornerRadius="12dp"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_mcv_info"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/rifa_organizador_txt_seccion_eleccion_ganadores"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="🎯 Elección de ganadores"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSurface"
+                        android:layout_marginBottom="8dp"/>
+
+                    <TextView
+                        android:id="@+id/rifa_organizador_txt_eleccion_ganadores_descripcion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Escoge el número ganador correspondiente a cada premio"
+                        android:textSize="16sp"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:layout_marginBottom="16dp"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_view_eleccion_ganadores"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:listitem="@layout/layout_eleccion_ganador"
+                        tools:itemCount="2"
+                        android:layout_marginBottom="16dp"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/rifa_organizador_btn_confirmar_ganadores"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Confirmar ganadores"
+                        android:textSize="16sp"
+                        app:cornerRadius="8dp"/>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Sección Ganadores -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/rifa_organizador_mcv_ganadores"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="0dp"
+                app:cardCornerRadius="12dp"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_mcv_eleccion_ganadores"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/rifa_organizador_txt_seccion_ganadores"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="🏆 Ganadores"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSurface"
+                        android:layout_marginBottom="16dp"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_view_ganadores"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Sección Participantes -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/rifa_organizador_mcv_participantes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="1dp"
+                app:cardCornerRadius="12dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@id/rifa_organizador_mcv_ganadores"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/rifa_organizador_txt_seccion_participantes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="👥 Participantes"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSurface"
+                        android:layout_marginBottom="16dp"/>
+
+                    <!-- Header de la tabla de participantes -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="8dp">
+
+                        <TextView
+                            android:id="@+id/rifa_organizador_txt_nombre_participante"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Nombre"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="?attr/colorOnSurfaceVariant"/>
+
+                        <TextView
+                            android:id="@+id/rifa_organizador_txt_numeros_comprados_participante"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Números"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:layout_marginStart="16dp"/>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="?attr/colorOutlineVariant"
+                        android:layout_marginBottom="8dp"/>
+
+                    <TextView
+                        android:id="@+id/rifa_organizador_txt_no_hay_participantes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Aún no hay participantes"
+                        android:textSize="16sp"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:gravity="center"
+                        android:padding="16dp"
+                        android:visibility="gone"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_view_participantes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:itemCount="5"
+                        tools:listitem="@layout/layout_participante"/>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/rifa_organizador_mcv_premios"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="1dp"
+                app:cardCornerRadius="12dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@+id/rifa_organizador_mcv_participantes"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/rifa_organizador_txt_seccion_premios"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="🏆 Premios"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSurface"
+                        android:layout_marginBottom="12dp"/>
+
+                    <TextView
+                        android:id="@+id/rifa_organizador_txt_premios"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Cargando..."
+                        android:textSize="16sp"
+                        android:textColor="?attr/colorOnSurface"
+                        android:lineSpacingMultiplier="1.2"/>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                app:layout_constraintTop_toBottomOf="@+id/rifa_organizador_mcv_premios"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/rifa_organizador_fab_editar"
@@ -293,7 +518,8 @@
                 app:srcCompat="@drawable/ic_edit"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_margin="16dp"/>
+                android:layout_margin="16dp"
+                app:tint="?attr/colorOnPrimary"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

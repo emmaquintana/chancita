@@ -7,9 +7,8 @@
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp"
     app:cardCornerRadius="8dp"
-    app:cardBackgroundColor="@color/md_theme_background"
-    app:strokeColor="?attr/colorOnSurface"
-    app:strokeWidth="1dp">
+    app:cardBackgroundColor="@color/md_theme_surfaceContainerLowest"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -42,13 +41,15 @@
             android:textColor="?attr/colorOnSurface"
             android:layout_marginTop="4dp" />
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/rifa_txt_estado_rifa"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
             android:text="Abierto"
-            android:textStyle="bold"
-            android:textColor="@color/green" />
+            android:layout_gravity="end"
+            android:padding="4dp"
+            android:textColor="@color/green"
+            android:clickable="false"
+            android:backgroundTint="@color/lightgreen" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

@@ -36,6 +36,7 @@ import com.emmanuel.chancita.ui.rifa.adapters.ParticipantesAdapter;
 import com.emmanuel.chancita.ui.rifa.model.Participante;
 import com.emmanuel.chancita.utils.Utilidades;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -108,18 +109,18 @@ public class RifaOrganizadorFragment extends Fragment {
         rifaOrganizadorViewModel.obtenerRifa(rifaId).observe(getViewLifecycleOwner(), rifa -> {
 
             txtRifaTitulo.setText(rifa.getTitulo());
-            txtRifaEstado.setText("Estado: " + Utilidades.capitalizar(rifa.getEstado().toString()));
-            txtRifaCodigo.setText("Código: " + rifa.getCodigo());
-            txtRifaFechaSorteo.setText("Fecha de sorteo: " + Utilidades.formatearFechaHora(rifa.getFechaSorteo(), "dd-MM-yyyy HH:mm"));
-            txtRifaMetodoEleccionGanador.setText("Método de elección: " + Utilidades.capitalizar(rifa.getMetodoEleccionGanador().toString()) + (rifa.getMetodoEleccionGanador() == MetodoEleccionGanador.DETERMINISTA ? " (" + rifa.getMotivoEleccionGanador() + ")" : ""));
+            txtRifaEstado.setText(Utilidades.capitalizar(rifa.getEstado().toString()));
+            txtRifaCodigo.setText(rifa.getCodigo());
+            txtRifaFechaSorteo.setText(Utilidades.formatearFechaHora(rifa.getFechaSorteo(), "dd-MM-yyyy HH:mm"));
+            txtRifaMetodoEleccionGanador.setText(Utilidades.capitalizar(rifa.getMetodoEleccionGanador().toString()) + (rifa.getMetodoEleccionGanador() == MetodoEleccionGanador.DETERMINISTA ? " (" + rifa.getMotivoEleccionGanador() + ")" : ""));
             txtRifaPremios.setText(formatearPremios(rifa.getPremios()));
             if (rifa.getDescripcion() != null && !rifa.getDescripcion().equals("")) {
-                txtRifaDescripcion.setText("Descripción: " + rifa.getDescripcion());
+                txtRifaDescripcion.setText(rifa.getDescripcion());
             }
             else {
                 txtRifaDescripcion.setVisibility(View.GONE);
             }
-            txtPrecioNumero.setText("Precio por número: $" + String.valueOf(rifa.getPrecioNumero()));
+            txtPrecioNumero.setText(String.valueOf(rifa.getPrecioNumero()));
             txtRifaRecaudado.setText("Monto recaudado: $" + calcularRecaudado(rifa));
 
             // Permite copiar el código al portapapeles
@@ -271,6 +272,7 @@ public class RifaOrganizadorFragment extends Fragment {
     private void inflarEleccionGanadores(View view, RifaDTO rifa) {
         MaterialButton btnConfirmar = view.findViewById(R.id.rifa_organizador_btn_confirmar_ganadores);
         RecyclerView rvPremios = view.findViewById(R.id.recycler_view_eleccion_ganadores);
+        view.findViewById(R.id.rifa_organizador_mcv_eleccion_ganadores).setVisibility(View.VISIBLE);
         view.findViewById(R.id.rifa_organizador_txt_seccion_eleccion_ganadores).setVisibility(View.VISIBLE);
         view.findViewById(R.id.rifa_organizador_txt_eleccion_ganadores_descripcion).setVisibility(View.VISIBLE);
         rvPremios.setVisibility(View.VISIBLE);
@@ -278,8 +280,8 @@ public class RifaOrganizadorFragment extends Fragment {
 
         // Junta todos los números comprados
         List<Integer> todosNumeros = new ArrayList<>();
-        for (NumeroComprado nc : rifa.getNumerosComprados()) {
-            todosNumeros.addAll(nc.getNumerosComprados());
+        for (int i = 1; i <= rifa.getCantNumeros(); i++) {
+            todosNumeros.add(i);
         }
 
         // Mapea premios -> Asignación
@@ -331,7 +333,6 @@ public class RifaOrganizadorFragment extends Fragment {
             rifaOrganizadorViewModel.resultadoAsignacionNumerosGanadores.observe(getViewLifecycleOwner(), asignacionExitosa -> {
                 if (asignacionExitosa) {
                     Snackbar.make(getView(), "¡Los números ganadores se han definido con éxito!", Snackbar.LENGTH_LONG).show();
-
                     // Se ocultan las vistas para la elección de los ganadores
                     view.findViewById(R.id.rifa_organizador_txt_seccion_eleccion_ganadores).setVisibility(View.GONE);
                     view.findViewById(R.id.rifa_organizador_txt_eleccion_ganadores_descripcion).setVisibility(View.GONE);
