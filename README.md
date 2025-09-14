@@ -16,7 +16,7 @@ La arquitectura se basa en un frontend móvil en **Android**, con backend server
 - **Cloud Functions**: Lógica para notificaciones, asignación de números ganadores (en modo aleatorio) y validación de compras y conexión con Mercado Pago.
 - **Mercado Pago**: Pasarela de pago para adquirir los números de la rifa. Internamente usa el método de **Split Payments** que ofrece Mercado Pago sobre la API **Checkout Pro**.
 
-**❗Tengase en cuenta que Mercado Pago cobra una comisión del 2.2% cuyo costo se cobra al participante de la rifa.**
+**❗Tengase en cuenta que Mercado Pago cobra una comisión+IVA cuyo costo se cobra al organizador de la rifa. El porcentaje de comisión depende del método de pago y el plazo de liquidación de cobro, siendo este último configurable desde Mercado Pago por el organizador**
 
 ## Requisitos para ejecución en entorno de desarrollo
 - Android Studio 2024.1.1 con un dispositivo/emulador API 26 o mayor con servicios de Google y Mercado Pago instalados. 
