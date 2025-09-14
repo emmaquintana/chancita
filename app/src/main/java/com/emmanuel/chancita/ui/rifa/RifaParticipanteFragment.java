@@ -167,21 +167,17 @@ public class RifaParticipanteFragment extends Fragment {
                     if (numerosGanadores != null && !numerosGanadores.isEmpty()) {
 
                         // Se oculta la sección de compra de números
-                        view.findViewById(R.id.rifa_participante_btn_comprar_numeros).setVisibility(View.GONE);
-                        view.findViewById(R.id.rifa_participante_rv_numeros).setVisibility(View.GONE);
-                        view.findViewById(R.id.rifa_participante_txt_comprar_numeros_titulo).setVisibility(View.GONE);
-                        view.findViewById(R.id.rifa_participante_txt_comprar_numeros_descripcion).setVisibility(View.GONE);
+                        view.findViewById(R.id.rifa_participante_mcv_comprar_numeros).setVisibility(View.GONE);
 
                         // Se oculta la sección de premios, pues después se muestra otra sección con premios pero que indica
                         // el número ganador correspondiente al premio
-                        view.findViewById(R.id.rifa_participante_txt_premios_titulo).setVisibility(View.GONE);
-                        view.findViewById(R.id.rifa_participante_txt_premios).setVisibility(View.GONE);
+                        view.findViewById(R.id.rifa_participante_mcv_premios).setVisibility(View.GONE);
 
-                        // Se oculta la sección de compra de números
 
+                        // Mostrar números ganadores
                         // TextView para los números ganadores
+                        view.findViewById(R.id.rifa_participante_mcv_ganadores).setVisibility(View.VISIBLE);
                         TextView txtNumerosGanadores = view.findViewById(R.id.rifa_participante_txt_numeros_ganadores);
-                        txtNumerosGanadores.setVisibility(View.VISIBLE);
                         txtNumerosGanadores.setText("Números ganadores: " + Utilidades.listaAString(numerosGanadores));
 
                         // TextView para premios + número ganador
@@ -207,8 +203,6 @@ public class RifaParticipanteFragment extends Fragment {
                             }
 
                         }
-
-                        txtPremiosGanadores.setVisibility(View.VISIBLE);
                         txtPremiosGanadores.setText(premiosText.toString());
 
                         // Verifica si el usuario ganó

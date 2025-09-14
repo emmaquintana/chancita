@@ -317,6 +317,7 @@
 
             <!-- Card Premios -->
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/rifa_participante_mcv_premios"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardElevation="1dp"
@@ -388,7 +389,7 @@
 
             <!-- Card Resultados (Ganadores) - Visible solo cuando hay ganadores -->
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card_ganadores"
+                android:id="@+id/rifa_participante_mcv_ganadores"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardElevation="1dp"

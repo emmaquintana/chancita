@@ -236,6 +236,7 @@ public class RifaOrganizadorFragment extends Fragment {
                                                 GanadorInfoAdapter ganadorInfoAdapter = new GanadorInfoAdapter(ganadorInfoList);
                                                 rvGanadorInfo.setAdapter(ganadorInfoAdapter);
                                                 rvGanadorInfo.setVisibility(View.VISIBLE);
+                                                view.findViewById(R.id.rifa_organizador_mcv_ganadores).setVisibility(View.VISIBLE);
                                                 view.findViewById(R.id.rifa_organizador_txt_seccion_ganadores)
                                                         .setVisibility(View.VISIBLE);
                                             }
@@ -251,6 +252,7 @@ public class RifaOrganizadorFragment extends Fragment {
                                 GanadorInfoAdapter ganadorInfoParticipanteAdapter = new GanadorInfoAdapter(ganadorInfoList);
                                 rvGanadorInfo.setAdapter(ganadorInfoParticipanteAdapter);
                                 rvGanadorInfo.setVisibility(View.VISIBLE);
+                                view.findViewById(R.id.rifa_organizador_mcv_ganadores).setVisibility(View.VISIBLE);
                                 view.findViewById(R.id.rifa_organizador_txt_seccion_ganadores)
                                         .setVisibility(View.VISIBLE);
                             }
