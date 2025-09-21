@@ -34,6 +34,7 @@ import com.emmanuel.chancita.ui.SharedViewModel;
 import com.emmanuel.chancita.ui.rifa.adapters.NumerosAdapter;
 import com.emmanuel.chancita.utils.Utilidades;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -107,6 +108,26 @@ public class RifaParticipanteFragment extends Fragment {
             ClipData clip = ClipData.newPlainText("Código Rifa", codigo);
             clipboard.setPrimaryClip(clip);
             Toast.makeText(requireContext(), "Código copiado al portapapeles", Toast.LENGTH_SHORT).show();
+        });
+
+        // Muestra una ventana de dialogo que aclara al usuario el significado del método de elección de ganador
+        view.findViewById(R.id.rifa_participante_txt_metodo_eleccion_head).setOnClickListener(v -> {
+            String mensaje;
+
+            if (rifa.getMetodoEleccionGanador() == MetodoEleccionGanador.ALEATORIO) {
+                mensaje = "Llegada la fecha y hora del sorteo, el sistema escogerá automáticamente a los números ganadores.\n" +
+                        "En caso de que resultes ganador, te notificaremos.";
+            }
+            else {
+                mensaje = "Llegada la fecha y hora del sorteo, el creador de la rifa manualmente escogerá los números ganadores.\nTras ello," +
+                        " el creador de la rifa se pondrá en contacto contigo.";
+            }
+
+            new MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Método de elección de ganador")
+                    .setMessage(mensaje)
+                    .setPositiveButton("Aceptar", null)
+                    .show();
         });
 
         rifaParticipanteViewModel.obtenerRifa(rifaId).observe(getViewLifecycleOwner(), rifa -> {
