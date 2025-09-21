@@ -31,6 +31,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
@@ -116,6 +117,16 @@ public class inicioFragment extends Fragment {
             if (!codigo.isEmpty()) {
                 inicioViewModel.obtenerRifaPorCodigo(codigo).observe(getViewLifecycleOwner(), rifa -> {
                     if (rifa != null) {
+                        if (rifa.getCreadoPor().equals(usuario.getId())) {
+                            new MaterialAlertDialogBuilder(requireContext())
+                                    .setTitle("Oops!")
+                                    .setMessage("No te puedes unir a tu propia rifa.")
+                                    .setPositiveButton("Aceptar", null)
+                                    .show();
+
+                            return;
+                        }
+
                         if (rifa.getEstado() == RifaEstado.ABIERTO) {
                             inicioViewModel.unirseARifa(codigo);
                             Intent intent = new Intent(getContext(), RifaParticipanteActivity.class);
