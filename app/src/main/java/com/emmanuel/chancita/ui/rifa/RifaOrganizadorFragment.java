@@ -37,6 +37,7 @@ import com.emmanuel.chancita.ui.rifa.model.Participante;
 import com.emmanuel.chancita.utils.Utilidades;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -130,6 +131,18 @@ public class RifaOrganizadorFragment extends Fragment {
                 ClipData clip = ClipData.newPlainText("Código Rifa", codigo);
                 clipboard.setPrimaryClip(clip);
                 Toast.makeText(requireContext(), "Código copiado al portapapeles", Toast.LENGTH_SHORT).show();
+            });
+
+            // Aclaración sobre el monto recaudado al usuario Organizador
+            txtRifaRecaudado.setOnClickListener(v -> {
+                new MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("Monto recaudado")
+                        .setMessage("El monto recaudado es tan solo un aproximado.\n" +
+                                "Por cada compra de número, Mercado Pago se cobra una comisión (+ IVA sobre esa comisión) cuyo porcentaje depende del método de pago.\n" +
+                                "Además, también puede descontarsele dependendiendo del plazo de liquidación que usted " +
+                                "tenga configurado en su aplicación de Mercado Pago")
+                        .setPositiveButton("Aceptar", null)
+                        .show();
             });
 
             if (!rifa.getNumerosComprados().isEmpty()) {
@@ -390,6 +403,4 @@ public class RifaOrganizadorFragment extends Fragment {
                     });
         }
     }
-
-
 }
