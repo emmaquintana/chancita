@@ -145,6 +145,11 @@ public class RifaOrganizadorFragment extends Fragment {
                         .show();
             });
 
+            // Si el estado de la rifa NO es "Abierto", se imposibilita al usuario Organizador editar datos de la rifa
+            if (rifa.getEstado() == RifaEstado.ABIERTO) {
+                fab.setVisibility(View.VISIBLE);
+            }
+
             if (!rifa.getNumerosComprados().isEmpty()) {
                 // Si hay números comprados, NO se muestra el texto "No hay participantes"
                 TextView noHayParticipantes = view.findViewById(R.id.rifa_organizador_txt_no_hay_participantes);
