@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.emmanuel.chancita.R;
 import com.emmanuel.chancita.data.dto.RifaDTO;
+import com.emmanuel.chancita.data.model.RifaEstado;
 import com.emmanuel.chancita.data.model.Usuario;
 import com.emmanuel.chancita.databinding.FragmentIniciarSesionBinding;
 import com.emmanuel.chancita.ui.SharedViewModel;
@@ -113,13 +114,28 @@ public class inicioFragment extends Fragment {
         btnUnirse.setOnClickListener(v -> {
             String codigo = input.getText().toString().trim();
             if (!codigo.isEmpty()) {
-                inicioViewModel.unirseARifa(codigo);
-
                 inicioViewModel.obtenerRifaPorCodigo(codigo).observe(getViewLifecycleOwner(), rifa -> {
                     if (rifa != null) {
-                        Intent intent = new Intent(getContext(), RifaParticipanteActivity.class);
-                        intent.putExtra("rifa_id", rifa.getId());
-                        startActivity(intent);
+                        if (rifa.getEstado() == RifaEstado.ABIERTO) {
+                            inicioViewModel.unirseARifa(codigo);
+                            Intent intent = new Intent(getContext(), RifaParticipanteActivity.class);
+                            intent.putExtra("rifa_id", rifa.getId());
+                            startActivity(intent);
+                        }
+                        else if (rifa.getEstado() == RifaEstado.CERRADO) {
+                            new MaterialAlertDialogBuilder(requireContext())
+                                    .setTitle("Oops!")
+                                    .setMessage("La rifa con el código \"" + codigo + "\" ya no posee números disponibles")
+                                    .setPositiveButton("Aceptar", null)
+                                    .show();
+                        }
+                        else {
+                            new MaterialAlertDialogBuilder(requireContext())
+                                    .setTitle("Oops!")
+                                    .setMessage("La rifa con el código \"" + codigo + "\" ya se sorteó")
+                                    .setPositiveButton("Aceptar", null)
+                                    .show();
+                        }
                     }
                     else {
                         Snackbar.make(getView(), "No existe rifa con el código " + codigo, Snackbar.LENGTH_SHORT).show();
