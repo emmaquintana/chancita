@@ -76,6 +76,16 @@
                         android:textSize="16sp"
                         android:visibility="gone" />
 
+                    <ProgressBar
+                        android:id="@+id/inicio_cargando_creadas"
+                        style="?android:attr/progressBarStyleLarge"
+                        android:indeterminateTint="?attr/colorPrimary"
+                        android:layout_marginTop="16dp"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:layout_gravity="center"
+                        android:visibility="gone"/>
+
                     <!-- RecyclerView para rifas creadas -->
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_view_rifas_creadas"
@@ -156,6 +166,16 @@
                         android:layout_marginTop="16dp"
                         tools:itemCount="2"
                         tools:listitem="@layout/layout_rifa" />
+
+                    <ProgressBar
+                        android:id="@+id/inicio_cargando_unidas"
+                        style="?android:attr/progressBarStyleLarge"
+                        android:indeterminateTint="?attr/colorPrimary"
+                        android:layout_marginTop="16dp"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:layout_gravity="center"
+                        android:visibility="gone"/>
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

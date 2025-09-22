@@ -14,14 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.emmanuel.chancita.R;
 import com.emmanuel.chancita.data.dto.RifaDTO;
 import com.emmanuel.chancita.data.model.RifaEstado;
 import com.emmanuel.chancita.data.model.Usuario;
-import com.emmanuel.chancita.databinding.FragmentIniciarSesionBinding;
 import com.emmanuel.chancita.ui.SharedViewModel;
 import com.emmanuel.chancita.ui.rifa.crear_rifa.CrearRifaActivity;
 import com.emmanuel.chancita.ui.inicio.adapters.RifaAdapter;
@@ -31,8 +30,6 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
@@ -50,6 +47,9 @@ public class inicioFragment extends Fragment {
     private RecyclerView rvRifasUnidas;
     private TextView msgNoRifasCreadas;
     private TextView msgNoRifasUnidas;
+    private ProgressBar progressBarCreadas;
+    private ProgressBar progressBarUnidas;
+
 
     public static inicioFragment newInstance() {
         return new inicioFragment();
@@ -73,12 +73,19 @@ public class inicioFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
+        progressBarCreadas.setVisibility(View.VISIBLE);
+        progressBarUnidas.setVisibility(View.VISIBLE);
+
         View view = getView();
         if (view == null) return;
 
         // Actualiza datos
         inicioViewModel.obtenerRifasUnidasDeUsuarioActual().observe(getViewLifecycleOwner(), rifasUnidas -> {
             inflarRifasUnidas(rifasUnidas);
+        });
+
+        inicioViewModel.obtenerRifasCreadasPorUsuarioActual().observe(getViewLifecycleOwner(), rifasCreadas -> {
+            inflarRifasCreadas(rifasCreadas);
         });
     }
 
@@ -92,6 +99,8 @@ public class inicioFragment extends Fragment {
         rvRifasUnidas = view.findViewById(R.id.recycler_view_rifas_unidas);
         msgNoRifasCreadas = view.findViewById(R.id.inicio_txt_no_rifas_creadas);
         msgNoRifasUnidas = view.findViewById(R.id.inicio_txt_no_rifas_unidas);
+        progressBarCreadas = view.findViewById(R.id.inicio_cargando_creadas);
+        progressBarUnidas = view.findViewById(R.id.inicio_cargando_unidas);
 
         setearObservers();
 
@@ -201,6 +210,9 @@ public class inicioFragment extends Fragment {
     }
 
     private void inflarRifasUnidas(List<RifaDTO> listaRifas) {
+        progressBarUnidas.setVisibility(View.GONE);
+
+
         if (listaRifas.size() != 0) {
 
             // Si el usuario no se unió a rifas, se le informa de ello al usuario
@@ -225,6 +237,8 @@ public class inicioFragment extends Fragment {
     }
 
     private void inflarRifasCreadas(List<RifaDTO> listaRifas) {
+        progressBarCreadas.setVisibility(View.GONE);
+
         // Si hay rifas creadas, se las muestra
         if (listaRifas.size() != 0) {
 
