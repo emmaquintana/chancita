@@ -14,7 +14,7 @@ public class PermisosUtils {
             return ContextCompat.checkSelfPermission(context,
                     Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
         }
-        // Para versiones anteriores, siempre retornamos true
+        // Para versiones anteriores, siempre se tiene el permiso de notificaciones
         return true;
     }
 }

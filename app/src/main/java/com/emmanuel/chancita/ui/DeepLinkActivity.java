@@ -91,7 +91,6 @@ public class DeepLinkActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("pagoExitoso", true);
 
-        // Puedes agregar más información si viene en la URL
         String preferenceId = data.getQueryParameter("preference_id");
         String paymentId = data.getQueryParameter("payment_id");
 

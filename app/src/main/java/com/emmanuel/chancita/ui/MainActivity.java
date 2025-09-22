@@ -90,35 +90,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        /*
-        RifaOrganizadorViewModel rifaOrganizadorViewModel = new ViewModelProvider(this).get(RifaOrganizadorViewModel.class);
-
-        List<RifaPremio> premios = new ArrayList<>();
-        premios.add(new RifaPremio(Utilidades.generarCodigo(10,10), "Smartphone", "Un celular de última generación", 2));
-        premios.add(new RifaPremio(Utilidades.generarCodigo(10,10), "Smartphone", "Un celular de última generación", 2));
-        premios.add(new RifaPremio(Utilidades.generarCodigo(10,10), "Smartphone", "Un celular de última generación", 2));
-
-
-        RifaDTO nuevaRifa = new RifaDTO(
-                null, // id (lo genera Firestore en el DAO)
-                "Rifa de Tecnología", // titulo
-                "Participa para ganar premios tecnológicos", // descripcion
-                100, // cantidad de números
-                "usuario123", // creadoPor (id del usuario actual)
-                RifaEstado.ABIERTO, // estado
-                "TECNO2026", // código de rifa
-                MetodoEleccionGanador.DETERMINISTA, // método de elección del ganador
-                "El número más alto será el ganador", // motivo (si aplica)
-                LocalDateTime.now().plusDays(7), // fecha del sorteo
-                10.0, // precio del número
-                LocalDateTime.now(), // creadoEn
-                premios, // lista de premios,
-                new ArrayList<Integer>()
-        );
-
-        rifaOrganizadorViewModel.crearRifa(nuevaRifa);
-*/
-// Solicitar permiso de notificaciones si es Android 13+
         // Solicitar permiso de notificaciones si es Android 13+
         solicitarPermisoNotificaciones();
 

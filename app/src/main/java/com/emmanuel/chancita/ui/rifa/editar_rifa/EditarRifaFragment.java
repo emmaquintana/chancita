@@ -289,7 +289,7 @@ public class EditarRifaFragment extends Fragment implements EditarPremioAdapter.
                     .build();
 
             datePicker.addOnPositiveButtonClickListener(selection -> {
-                // Solución: usar UTC para evitar problemas de zona horaria
+                // Usar UTC para evitar problemas de zona horaria
                 Calendar selected = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                 selected.setTimeInMillis(selection);
 
@@ -330,7 +330,6 @@ public class EditarRifaFragment extends Fragment implements EditarPremioAdapter.
                 calendar.set(Calendar.HOUR_OF_DAY, selectedHour);
                 calendar.set(Calendar.MINUTE, selectedMinute);
 
-                // Formato HH:mm
                 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
                 tietEditarRifaHoraSorteo.setText(sdf.format(calendar.getTime()));
             });

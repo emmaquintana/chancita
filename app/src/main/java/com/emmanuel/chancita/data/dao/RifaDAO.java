@@ -153,7 +153,9 @@ public class RifaDAO {
                 .addOnCompleteListener(listener);
     }
 
-        public void unirseARifa(String codigo, OnCompleteListener<Void> listener) {
+    /** Permite al usuario actual unirse a una rifa mediante un código.</br>
+     * Internamente, agrega el id del usuario a un campo participantesIds del documento correspondiente a la rifa*/
+    public void unirseARifa(String codigo, OnCompleteListener<Void> listener) {
             FirebaseUser usuarioActual = auth.getCurrentUser();
 
             db.collection("rifas")
@@ -175,13 +177,6 @@ public class RifaDAO {
                         }
                     });
         }
-
-    public void obtenerRifasUnidasPorUsuario(String usuarioId, OnCompleteListener<QuerySnapshot> listener) {
-        db.collection("rifas")
-                .whereArrayContains("participantes", usuarioId)
-                .get()
-                .addOnCompleteListener(listener);
-    }
 
     /**
      * Edita una rifa existente en Firestore
@@ -215,6 +210,7 @@ public class RifaDAO {
                 .addOnCompleteListener(listener);
     }
 
+    /**Obtiene las rifas creadas por el usuario actual*/
     public void obtenerRifasCreadasPorUsuarioActual(OnCompleteListener<QuerySnapshot> listener) {
          FirebaseUser usuarioActual = auth.getCurrentUser();
 
@@ -224,6 +220,7 @@ public class RifaDAO {
                 .addOnCompleteListener(listener);
     }
 
+    /**Obtiene las rifas creadas por un usuario*/
     public void obtenerRifasCreadasPorUsuario(String usuarioId, OnCompleteListener<QuerySnapshot> listener) {
         db.collection("rifas")
                 .whereEqualTo("creadoPor", usuarioId)
@@ -231,6 +228,7 @@ public class RifaDAO {
                 .addOnCompleteListener(listener);
     }
 
+    /**Obtiene la rifa en base a un codigo*/
     public void obtenerRifasPorCodigo(String codigo, OnCompleteListener<QuerySnapshot> listener) {
         db.collection("rifas")
                 .whereEqualTo("codigo", codigo)
@@ -244,6 +242,7 @@ public class RifaDAO {
                 .addOnCompleteListener(listener);
     }
 
+    /**Obtiene las rifas a las que se unió el usuario actual*/
     public void obtenerRifasUnidasDeUsuarioActual(OnCompleteListener<QuerySnapshot> listener) {
         FirebaseUser usuarioActual = auth.getCurrentUser();
 
@@ -253,13 +252,7 @@ public class RifaDAO {
                 .addOnCompleteListener(listener);
     }
 
-    public void obtenerRifasAbiertas(OnCompleteListener<QuerySnapshot> listener) {
-        db.collection("rifas")
-                .whereEqualTo("estado", RifaEstado.ABIERTO)
-                .get()
-                .addOnCompleteListener(listener);
-    }
-
+    /**Obtiene los números de una rifa*/
     public void obtenerNumerosPorRifa(String rifaId, OnCompleteListener<QuerySnapshot> listener) {
         db.collection("numeros")
                 .whereEqualTo("rifaId", rifaId)
@@ -267,14 +260,9 @@ public class RifaDAO {
                 .addOnCompleteListener(listener);
     }
 
-    public interface OnParticipantesListener {
-        void onComplete(List<Usuario> participantes);
-    }
-
     public interface OnParticipantesDocsListener {
         void onComplete(List<DocumentSnapshot> documentos);
     }
-
     /**
      * Obtiene los DocumentSnapshot de los participantes de una rifa, usando chunks de 10 IDs.
      */
@@ -312,6 +300,7 @@ public class RifaDAO {
         });
     }
 
+    /**Permite a un usuario comprar números de una rifa solo si esta no está cerrada ni sorteada.*/
     public Task<Void> comprarNumeros(String rifaId, String usuarioId, List<Integer> numeros, double precioUnitario) {
         DocumentReference rifaRef = db.collection("rifas").document(rifaId);
 
@@ -375,6 +364,7 @@ public class RifaDAO {
         });
     }
 
+    /**Verifica si existe una rifa con cierto código*/
     public void existeRifaConCodigo(String codigo, String rifaIdActual, Consumer<Boolean> callback) {
         db.collection("rifas")
                 .whereEqualTo("codigo", codigo)

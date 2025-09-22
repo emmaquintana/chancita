@@ -138,6 +138,7 @@ public class UsuarioDAO {
         });
     }
 
+    /**Permite eliminar toda la info de un usuario</br>Esto no lo elimina de otras colecciones*/
     public void eliminarUsuario(String usuarioId, OnCompleteListener<Void> listener) {
         db.collection("usuarios").document(usuarioId)
                 .delete()
@@ -155,6 +156,7 @@ public class UsuarioDAO {
                 .addOnCompleteListener(listener);
     }
 
+    /**Obtiene info del usuario organizador*/
     public void obtenerOrganizador(String organizadorId, OnCompleteListener<Usuario> listener) {
         db.collection("usuarios").document(organizadorId)
                 .get()

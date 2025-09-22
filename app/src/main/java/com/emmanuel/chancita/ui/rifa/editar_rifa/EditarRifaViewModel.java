@@ -72,17 +72,15 @@ public class EditarRifaViewModel extends ViewModel {
      * Valida una rifa de forma completa (incluye validación de código único)
      */
     public void validarYProcesarRifa(RifaDTO rifa) {
-        // Primero validaciones básicas
         if (!validarRifaBasico(rifa)) {
             return; // El error ya se setea en validarRifaBasico
         }
 
-        // Luego validar código único (asíncrono)
         validarCodigoUnico(rifa);
     }
 
     /**
-     * Validaciones básicas de la rifa (síncronas)
+     * Validaciones básicas de la rifa
      */
     private boolean validarRifaBasico(RifaDTO rifa) {
         if (rifa.getTitulo() == null || rifa.getTitulo().trim().isEmpty()) {
@@ -156,7 +154,7 @@ public class EditarRifaViewModel extends ViewModel {
     }
 
     /**
-     * Valida si el código es único (asíncrono)
+     * Valida si el código es único
      */
     private void validarCodigoUnico(RifaDTO rifa) {
         rifaRepository.existeRifaConCodigo(rifa.getCodigo(), rifa.getId(), exists -> {

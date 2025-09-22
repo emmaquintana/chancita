@@ -107,7 +107,7 @@ public class CrearRifaPaso2Fragment extends Fragment {
                     .build();
 
             datePicker.addOnPositiveButtonClickListener(selection -> {
-                // Solución: usar UTC para evitar problemas de zona horaria
+                // Usar UTC para evitar problemas de zona horaria
                 Calendar selected = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
                 selected.setTimeInMillis(selection);
 

@@ -45,7 +45,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Verificar si hay datos adicionales
         if (!remoteMessage.getData().isEmpty()) {
             Log.d("FCM", "Datos del mensaje: " + remoteMessage.getData());
-            // Puedes procesar datos adicionales aquí si es necesario
         }
     }
 
@@ -63,7 +62,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             // Configurar notificación
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                    .setSmallIcon(R.drawable.ic_notification) // Asegúrate de que este icono existe
+                    .setSmallIcon(R.drawable.ic_notification)
                     .setContentTitle(title)
                     .setContentText(body)
                     .setStyle(new NotificationCompat.BigTextStyle().bigText(body))
