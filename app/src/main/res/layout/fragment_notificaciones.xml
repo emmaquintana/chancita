@@ -28,6 +28,7 @@
                 android:visibility="gone"
                 android:layout_marginTop="16dp"
                 android:textSize="20sp"
+                android:textColor="?attr/colorOnSurface"
                 android:text="@string/no_tienes_notificaciones" />
 
             <androidx.recyclerview.widget.RecyclerView

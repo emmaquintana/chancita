@@ -43,7 +43,7 @@ public class RifaAdapter extends RecyclerView.Adapter<RifaAdapter.RaffleViewHold
         RifaDTO rifa = rifas.get(position);
 
         // Formateador de fecha para "dd/MM/yyyy"
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
         // Rellenar los datos en los TextViews
         holder.nombreRifa.setText(rifa.getTitulo());
