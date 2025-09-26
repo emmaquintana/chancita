@@ -18,12 +18,101 @@
             android:orientation="vertical"
             android:padding="8dp">
 
+            <!-- Card para Rifas Disponibles -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/inicio_card_rifas_disponibles"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="0dp"
+                android:layout_marginTop="24dp"
+                app:cardBackgroundColor="@color/md_theme_surfaceContainerLowest"
+                app:cardCornerRadius="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <!-- Header -->
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Rifas recomendadas"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <!-- Mensaje cuando no hay rifas -->
+                    <TextView
+                        android:id="@+id/inicio_txt_no_rifas_recomendadas"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center"
+                        android:text="No hay rifas para recomendarle"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="16sp"
+                        android:visibility="gone" />
+
+                    <!-- Progress -->
+                    <ProgressBar
+                        android:id="@+id/inicio_cargando_recomendadas"
+                        style="?android:attr/progressBarStyleLarge"
+                        android:indeterminateTint="?attr/colorPrimary"
+                        android:layout_marginTop="16dp"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:layout_gravity="center"
+                        android:visibility="gone"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingTop="16dp">
+
+                        <!-- Flecha izquierda -->
+                        <ImageButton
+                            android:id="@+id/inicio_btn_previo"
+                            android:layout_width="20dp"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:src="@drawable/ic_arrow_left"
+                            android:contentDescription="Anterior" />
+
+                        <!-- RecyclerView horizontal, ocupa todo el espacio restante -->
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recycler_view_rifas_recomendadas"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:clipToPadding="false"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="8dp"
+                            android:overScrollMode="never" />
+
+                        <!-- Flecha derecha -->
+                        <ImageButton
+                            android:id="@+id/inicio_btn_siguiente"
+                            android:layout_width="20dp"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:src="@drawable/ic_arrow_right"
+                            android:contentDescription="Siguiente" />
+
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
             <!-- Card para Rifas Creadas -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/inicio_card_rifas_creadas"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
+                android:layout_marginTop="24dp"
                 app:cardElevation="0dp"
                 app:cardBackgroundColor="@color/md_theme_surfaceContainerLowest"
                 app:cardCornerRadius="8dp">
@@ -106,6 +195,7 @@
                 android:id="@+id/inicio_card_rifas_unidas"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
                 app:cardElevation="0dp"
                 app:cardBackgroundColor="@color/md_theme_surfaceContainerLowest"
                 app:cardCornerRadius="8dp">

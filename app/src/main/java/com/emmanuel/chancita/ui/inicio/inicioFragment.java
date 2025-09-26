@@ -9,11 +9,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -31,6 +34,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.Collections;
 import java.util.List;
 
 public class inicioFragment extends Fragment {
@@ -49,6 +53,14 @@ public class inicioFragment extends Fragment {
     private TextView msgNoRifasUnidas;
     private ProgressBar progressBarCreadas;
     private ProgressBar progressBarUnidas;
+    private RecyclerView rvRifasDisponibles;
+    private TextView msgNoRifasDisponibles;
+    private ProgressBar progressBarDisponibles;
+    private ImageButton btnPrev;
+    private ImageButton btnNext;
+    private SnapHelper snapHelperDisponibles;
+
+
 
 
     public static inicioFragment newInstance() {
@@ -75,6 +87,9 @@ public class inicioFragment extends Fragment {
 
         progressBarCreadas.setVisibility(View.VISIBLE);
         progressBarUnidas.setVisibility(View.VISIBLE);
+        progressBarDisponibles.setVisibility(View.VISIBLE);
+        btnNext.setVisibility(View.GONE);
+        btnPrev.setVisibility(View.GONE);
 
         View view = getView();
         if (view == null) return;
@@ -86,6 +101,10 @@ public class inicioFragment extends Fragment {
 
         inicioViewModel.obtenerRifasCreadasPorUsuarioActual().observe(getViewLifecycleOwner(), rifasCreadas -> {
             inflarRifasCreadas(rifasCreadas);
+        });
+
+        inicioViewModel.obtenerRifasRecomendadas().observe(getViewLifecycleOwner(), rifasRecomendadas -> {
+            inflarRifasDisponibles(rifasRecomendadas);
         });
     }
 
@@ -101,6 +120,15 @@ public class inicioFragment extends Fragment {
         msgNoRifasUnidas = view.findViewById(R.id.inicio_txt_no_rifas_unidas);
         progressBarCreadas = view.findViewById(R.id.inicio_cargando_creadas);
         progressBarUnidas = view.findViewById(R.id.inicio_cargando_unidas);
+        rvRifasDisponibles = view.findViewById(R.id.recycler_view_rifas_recomendadas);
+        msgNoRifasDisponibles = view.findViewById(R.id.inicio_txt_no_rifas_recomendadas);
+        progressBarDisponibles = view.findViewById(R.id.inicio_cargando_recomendadas);
+        btnNext = view.findViewById(R.id.inicio_btn_siguiente);
+        btnPrev = view.findViewById(R.id.inicio_btn_previo);
+        snapHelperDisponibles = new LinearSnapHelper();
+        snapHelperDisponibles.attachToRecyclerView(rvRifasDisponibles);
+
+
 
         setearObservers();
 
@@ -193,6 +221,13 @@ public class inicioFragment extends Fragment {
         inicioViewModel.usuarioActualPoseeTokenMercadoPago().observe(getViewLifecycleOwner(), poseeTokenMP -> {
             this.poseeTokenMP = poseeTokenMP;
         });
+
+        inicioViewModel.obtenerRifasRecomendadas().observe(getViewLifecycleOwner(), listaRifas -> {
+            if (listaRifas != null) {
+                inflarRifasDisponibles(listaRifas);
+            }
+        });
+
     }
 
     public void setearListeners() {
@@ -260,4 +295,51 @@ public class inicioFragment extends Fragment {
             msgNoRifasCreadas.setVisibility(View.VISIBLE);
         }
     }
+
+    private void inflarRifasDisponibles(List<RifaDTO> listaRifas) {
+        progressBarDisponibles.setVisibility(View.GONE);
+
+        if (!listaRifas.isEmpty()) {
+            msgNoRifasDisponibles.setVisibility(View.GONE);
+            btnNext.setVisibility(View.VISIBLE);
+            btnPrev.setVisibility(View.VISIBLE);
+            rvRifasDisponibles.setVisibility(View.VISIBLE);
+
+            RifaAdapter.OnItemClickListener listener = rifa -> {
+                inicioViewModel.unirseARifa(rifa.getCodigo());
+                Intent intent = new Intent(getContext(), RifaParticipanteActivity.class);
+                intent.putExtra("rifa_id", rifa.getId());
+                startActivity(intent);
+            };
+
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+            rvRifasDisponibles.setLayoutManager(layoutManager);
+
+            Collections.shuffle(listaRifas);
+            List<RifaDTO> maxCinco = listaRifas.size() > 5 ? listaRifas.subList(0, 5) : listaRifas;
+            RifaAdapter adapter = new RifaAdapter(maxCinco, listener);
+            // --- Botón siguiente ---
+            btnNext.setOnClickListener(v -> {
+                int nextPos = layoutManager.findFirstVisibleItemPosition() + 1;
+                if (nextPos < adapter.getItemCount()) {
+                    rvRifasDisponibles.smoothScrollToPosition(nextPos);
+                }
+            });
+
+            // --- Botón anterior ---
+            btnPrev.setOnClickListener(v -> {
+                int prevPos = layoutManager.findFirstVisibleItemPosition() - 1;
+                if (prevPos >= 0) {
+                    rvRifasDisponibles.smoothScrollToPosition(prevPos);
+                }
+            });
+            rvRifasDisponibles.setAdapter(adapter);
+        } else {
+            msgNoRifasDisponibles.setVisibility(View.VISIBLE);
+            btnNext.setVisibility(View.GONE);
+            btnPrev.setVisibility(View.GONE);
+            rvRifasDisponibles.setVisibility(View.GONE);
+        }
+    }
+
 }
