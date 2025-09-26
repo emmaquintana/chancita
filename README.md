@@ -8,12 +8,13 @@ La app gestiona la autenticación de usuarios y persistencia de datos con **Fire
 
 La arquitectura se basa en un frontend móvil en **Android**, con backend serverless en **Firebase** y **Mercado Pago** como pasarela de pagos:
 
-<img width="1280" height="720" alt="Definición de arquitectura" src="https://github.com/user-attachments/assets/3a245d78-73e1-4d93-a13f-92494e288b49" />
+<img width="1280" height="720" alt="Definición de arquitectura" src="https://github.com/user-attachments/assets/76383490-07da-4366-a48e-cdd10c90379b" />
 
 - **Android App**: Interfaz de usuario diseñada sobre el **patrón arquitectónico MVVM** donde los organizadores crean rifas y los participantes compran números además de ver resultados.  
 - **Firebase Authentication**: Gestiona la creación de cuenta y login seguros.
 - **Firestore Database**: Almacena información de rifas, participantes y números vendidos.
 - **Cloud Functions**: Lógica para notificaciones, asignación de números ganadores (en modo aleatorio) y validación de compras y conexión con Mercado Pago.
+- **Firebase Cloud Messaging**: Permite a los usuarios recibir notificaciones.
 - **Mercado Pago**: Pasarela de pago para adquirir los números de la rifa. Internamente usa el método de **Split Payments** que ofrece Mercado Pago sobre la API **Checkout Pro**.
 
 **❗Tengase en cuenta que Mercado Pago cobra una comisión+IVA cuyo costo se cobra al organizador de la rifa. El porcentaje de comisión depende del método de pago y el plazo de liquidación de cobro, siendo este último configurable desde Mercado Pago por el organizador**
