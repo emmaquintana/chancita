@@ -81,6 +81,7 @@
                             android:layout_height="wrap_content"
                             android:background="@android:color/transparent"
                             android:src="@drawable/ic_arrow_left"
+                            app:tint="?attr/colorOnSurface"
                             android:contentDescription="Anterior" />
 
                         <!-- RecyclerView horizontal, ocupa todo el espacio restante -->
@@ -100,6 +101,7 @@
                             android:layout_width="20dp"
                             android:layout_height="wrap_content"
                             android:background="@android:color/transparent"
+                            app:tint="?attr/colorOnSurface"
                             android:src="@drawable/ic_arrow_right"
                             android:contentDescription="Siguiente" />
 
