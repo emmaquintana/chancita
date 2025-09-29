@@ -26,7 +26,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.emmanuel.chancita.R;
-import com.emmanuel.chancita.data.dto.RifaDTO;
 import com.emmanuel.chancita.data.model.MetodoEleccionGanador;
 import com.emmanuel.chancita.data.model.NumeroComprado;
 import com.emmanuel.chancita.data.model.Rifa;
@@ -57,7 +56,7 @@ public class RifaParticipanteFragment extends Fragment {
 
     private RifaParticipanteViewModel rifaParticipanteViewModel;
     private SharedViewModel sharedViewModel;
-    private RifaDTO rifa;
+    private Rifa rifa;
     private String rifaId;
 
     public static RifaParticipanteFragment newInstance() {
@@ -537,7 +536,7 @@ public class RifaParticipanteFragment extends Fragment {
         }
     }
 
-    private void salirDeLaRifa(RifaDTO rifa) {
+    private void salirDeLaRifa(Rifa rifa) {
         String usuarioId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         // Quitar al usuario de participantes

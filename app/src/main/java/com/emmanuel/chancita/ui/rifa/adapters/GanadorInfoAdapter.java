@@ -9,14 +9,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.emmanuel.chancita.R;
-import com.emmanuel.chancita.data.dto.GanadorInfoDTO;
+import com.emmanuel.chancita.data.model.GanadorInfo;
+
 import java.util.List;
 
 public class GanadorInfoAdapter extends RecyclerView.Adapter<GanadorInfoAdapter.ViewHolder> {
 
-    private List<GanadorInfoDTO> ganadores;
+    private List<GanadorInfo> ganadores;
 
-    public GanadorInfoAdapter(List<GanadorInfoDTO> ganadores) {
+    public GanadorInfoAdapter(List<GanadorInfo> ganadores) {
         this.ganadores = ganadores;
     }
 
@@ -30,7 +31,7 @@ public class GanadorInfoAdapter extends RecyclerView.Adapter<GanadorInfoAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        GanadorInfoDTO ganador = ganadores.get(position);
+        GanadorInfo ganador = ganadores.get(position);
 
         holder.ganadorNombre.setText("Nombre: " + ganador.getNombre());
         holder.ganadorCelular.setText("Nro. de celular: " + ganador.getCelular());

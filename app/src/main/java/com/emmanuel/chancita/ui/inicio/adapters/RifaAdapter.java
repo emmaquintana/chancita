@@ -9,7 +9,6 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.emmanuel.chancita.R;
-import com.emmanuel.chancita.data.dto.RifaDTO;
 import com.emmanuel.chancita.data.model.Rifa;
 import com.emmanuel.chancita.utils.Utilidades;
 
@@ -18,16 +17,16 @@ import java.util.List;
 
 public class RifaAdapter extends RecyclerView.Adapter<RifaAdapter.RaffleViewHolder> {
 
-    private List<RifaDTO> rifas;
+    private List<Rifa> rifas;
     private OnItemClickListener listener;
 
-    public RifaAdapter(List<RifaDTO> rifas, OnItemClickListener listener) {
+    public RifaAdapter(List<Rifa> rifas, OnItemClickListener listener) {
         this.rifas = rifas;
         this.listener = listener;
     }
 
     public interface OnItemClickListener {
-        void onItemClick(RifaDTO rifa);
+        void onItemClick(Rifa rifa);
     }
 
     @NonNull
@@ -40,7 +39,7 @@ public class RifaAdapter extends RecyclerView.Adapter<RifaAdapter.RaffleViewHold
 
     @Override
     public void onBindViewHolder(@NonNull RaffleViewHolder holder, int position) {
-        RifaDTO rifa = rifas.get(position);
+        Rifa rifa = rifas.get(position);
 
         // Formateador de fecha para "dd/MM/yyyy"
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");

@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.emmanuel.chancita.data.dto.RifaDTO;
+import com.emmanuel.chancita.data.model.Rifa;
 import com.emmanuel.chancita.data.model.RifaEstado;
 import com.emmanuel.chancita.data.model.Usuario;
 import com.emmanuel.chancita.data.repository.RifaRepository;
@@ -42,7 +42,7 @@ public class InicioViewModel extends ViewModel {
         this.usuarioRepository = new UsuarioRepository();
     }
 
-    public LiveData<RifaDTO> obtenerRifa(String rifaId) {
+    public LiveData<Rifa> obtenerRifa(String rifaId) {
         _obteniendoRifasCreadas.setValue(true);
 
         return rifaRepository.obtenerRifa(rifaId, task -> {
@@ -58,7 +58,7 @@ public class InicioViewModel extends ViewModel {
         rifaRepository.unirseARifa(codigo, null);
     }
 
-    public LiveData<List<RifaDTO>> obtenerRifasCreadasPorUsuarioActual() {
+    public LiveData<List<Rifa>> obtenerRifasCreadasPorUsuarioActual() {
         _obteniendoRifasCreadas.setValue(true);
 
         return rifaRepository.obtenerRifasCreadasPorUsuarioActual(task -> {
@@ -70,7 +70,7 @@ public class InicioViewModel extends ViewModel {
         });
     }
 
-    public LiveData<List<RifaDTO>> obtenerRifasUnidasDeUsuarioActual() {
+    public LiveData<List<Rifa>> obtenerRifasUnidasDeUsuarioActual() {
         _obteniendoRifasUnidas.setValue(true);
 
         return rifaRepository.obtenerRifasUnidasDeUsuarioActual(task -> {
@@ -82,7 +82,7 @@ public class InicioViewModel extends ViewModel {
         });
     }
 
-    public LiveData<RifaDTO> obtenerRifaPorCodigo(String codigo) {
+    public LiveData<Rifa> obtenerRifaPorCodigo(String codigo) {
         return rifaRepository.obtenerRifaPorCodigo(codigo, null);
     }
 
@@ -94,19 +94,19 @@ public class InicioViewModel extends ViewModel {
         return rifaRepository.usuarioActualPoseeTokenMercadoPago();
     }
 
-    public LiveData<List<RifaDTO>> obtenerRifasRecomendadas() {
-        MutableLiveData<List<RifaDTO>> rifasLiveData = new MutableLiveData<>();
+    public LiveData<List<Rifa>> obtenerRifasRecomendadas() {
+        MutableLiveData<List<Rifa>> rifasLiveData = new MutableLiveData<>();
         String usuarioId = FirebaseAuth.getInstance().getUid();
 
         FirebaseFirestore.getInstance()
                 .collection("rifas")
                 .get()
                 .addOnSuccessListener(querySnapshot -> {
-                    List<RifaDTO> rifas = new ArrayList<>();
+                    List<Rifa> rifas = new ArrayList<>();
 
                     for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
                         try {
-                            RifaDTO rifa = mapearRifa(doc);
+                            Rifa rifa = mapearRifa(doc);
 
                             // Filtrar para que no aparezcan rifas creadas ni unidas por el usuario y aparezcan las abiertas
                             if (
@@ -128,8 +128,8 @@ public class InicioViewModel extends ViewModel {
         return rifasLiveData;
     }
 
-    private RifaDTO mapearRifa(DocumentSnapshot doc) {
-        RifaDTO rifa = new RifaDTO();
+    private Rifa mapearRifa(DocumentSnapshot doc) {
+        Rifa rifa = new Rifa();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
         rifa.setId(doc.getId());

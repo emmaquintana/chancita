@@ -1,13 +1,13 @@
-package com.emmanuel.chancita.data.dto;
+package com.emmanuel.chancita.data.model;
 
-public class GanadorInfoDTO {
+public class GanadorInfo {
     private String nombre;
     private String celular;
     private String email;
     private int numeroGanador;
     private int puesto;
 
-    public GanadorInfoDTO(String nombre, String celular, String email, int numeroGanador, int puesto) {
+    public GanadorInfo(String nombre, String celular, String email, int numeroGanador, int puesto) {
         this.nombre = nombre;
         this.celular = celular;
         this.email = email;

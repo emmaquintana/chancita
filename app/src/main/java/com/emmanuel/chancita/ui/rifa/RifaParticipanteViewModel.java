@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.emmanuel.chancita.data.dto.RifaDTO;
-import com.emmanuel.chancita.data.dto.UsuarioDTO;
+import com.emmanuel.chancita.data.model.Rifa;
+import com.emmanuel.chancita.data.model.Usuario;
 import com.emmanuel.chancita.data.repository.RifaRepository;
 
 import java.util.List;
@@ -27,7 +27,7 @@ public class RifaParticipanteViewModel extends ViewModel {
         this.rifaRepository = new RifaRepository();
     }
 
-    public LiveData<RifaDTO> obtenerRifa(String rifaId) {
+    public LiveData<Rifa> obtenerRifa(String rifaId) {
         _obteniendoRifa.setValue(true);
 
         return rifaRepository.obtenerRifa(rifaId, task -> {
@@ -47,7 +47,7 @@ public class RifaParticipanteViewModel extends ViewModel {
         return rifaRepository.obtenerNumerosGanadores(rifaId);
     }
 
-    public LiveData<UsuarioDTO> obenerOrganizador(String rifaId) {
+    public LiveData<Usuario> obenerOrganizador(String rifaId) {
         return rifaRepository.obtenerOrganizador(rifaId);
     }
 

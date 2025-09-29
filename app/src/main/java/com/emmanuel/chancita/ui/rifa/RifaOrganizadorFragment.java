@@ -23,11 +23,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.emmanuel.chancita.R;
-import com.emmanuel.chancita.data.dto.GanadorInfoDTO;
-import com.emmanuel.chancita.data.dto.PremioAsignacionDTO;
-import com.emmanuel.chancita.data.dto.RifaDTO;
+import com.emmanuel.chancita.data.model.GanadorInfo;
 import com.emmanuel.chancita.data.model.MetodoEleccionGanador;
 import com.emmanuel.chancita.data.model.NumeroComprado;
+import com.emmanuel.chancita.data.model.PremioAsignacion;
+import com.emmanuel.chancita.data.model.Rifa;
 import com.emmanuel.chancita.data.model.RifaEstado;
 import com.emmanuel.chancita.data.model.RifaPremio;
 import com.emmanuel.chancita.ui.SharedViewModel;
@@ -219,7 +219,7 @@ public class RifaOrganizadorFragment extends Fragment {
         return stb.toString().substring(0, stb.toString().length() - 2); // Quita el padding bottom que se forma por el último \n\n
     }
 
-    private void inflarGanadores(View view, RifaDTO rifa) {
+    private void inflarGanadores(View view, Rifa rifa) {
         RecyclerView rvGanadorInfo = view.findViewById(R.id.recycler_view_ganadores);
         rvGanadorInfo.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -227,7 +227,7 @@ public class RifaOrganizadorFragment extends Fragment {
                 .observe(getViewLifecycleOwner(), numerosGanadores -> {
                     if (numerosGanadores == null || numerosGanadores.isEmpty()) return;
 
-                    List<GanadorInfoDTO> ganadorInfoList = new ArrayList<>();
+                    List<GanadorInfo> ganadorInfoList = new ArrayList<>();
                     int total = numerosGanadores.size();
                     final int[] processed = {0};
 
@@ -247,7 +247,7 @@ public class RifaOrganizadorFragment extends Fragment {
                                 rifaOrganizadorViewModel.obtenerUsuario(usuarioId)
                                         .observe(getViewLifecycleOwner(), usuario -> {
                                             if (usuario != null) {
-                                                GanadorInfoDTO dto = new GanadorInfoDTO(
+                                                GanadorInfo dto = new GanadorInfo(
                                                         usuario.getNombre() + " " + usuario.getApellido(),
                                                         usuario.getNroCelular(),
                                                         usuario.getCorreo(),
@@ -287,7 +287,7 @@ public class RifaOrganizadorFragment extends Fragment {
     }
 
 
-    private void inflarParticipantes(View view, RifaDTO rifa) {
+    private void inflarParticipantes(View view, Rifa rifa) {
         procesarParticipantes(rifa.getNumerosComprados(), participantes -> {
             RecyclerView rvParticipantes = view.findViewById(R.id.recycler_view_participantes);
             rvParticipantes.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -296,7 +296,7 @@ public class RifaOrganizadorFragment extends Fragment {
         });
     }
 
-    private void inflarEleccionGanadores(View view, RifaDTO rifa) {
+    private void inflarEleccionGanadores(View view, Rifa rifa) {
         MaterialButton btnConfirmar = view.findViewById(R.id.rifa_organizador_btn_confirmar_ganadores);
         RecyclerView rvPremios = view.findViewById(R.id.recycler_view_eleccion_ganadores);
         view.findViewById(R.id.rifa_organizador_mcv_eleccion_ganadores).setVisibility(View.VISIBLE);
@@ -312,9 +312,9 @@ public class RifaOrganizadorFragment extends Fragment {
         }
 
         // Mapea premios -> Asignación
-        List<PremioAsignacionDTO> asignaciones = new ArrayList<>();
+        List<PremioAsignacion> asignaciones = new ArrayList<>();
         for (RifaPremio premio : rifa.getPremios()) {
-            asignaciones.add(new PremioAsignacionDTO(premio, todosNumeros));
+            asignaciones.add(new PremioAsignacion(premio, todosNumeros));
         }
 
         // Setea adapter
@@ -324,12 +324,12 @@ public class RifaOrganizadorFragment extends Fragment {
 
         // Confirma selección
         btnConfirmar.setOnClickListener(v -> {
-            List<PremioAsignacionDTO> resultados = adapter.getResultados();
+            List<PremioAsignacion> resultados = adapter.getResultados();
             List<Integer> numerosGanadores = new ArrayList<>();
             Set<Integer> usados = new HashSet<>();
 
             // Realiza validaciones
-            for (PremioAsignacionDTO res : resultados) {
+            for (PremioAsignacion res : resultados) {
                 if (res.getNumeroSeleccionado() == null) {
                     Toast.makeText(requireContext(), "Todos los premios deben tener un número asignado", Toast.LENGTH_SHORT).show();
                     return;
@@ -375,7 +375,7 @@ public class RifaOrganizadorFragment extends Fragment {
         });
     }
 
-    private double calcularRecaudado(RifaDTO rifa) {
+    private double calcularRecaudado(Rifa rifa) {
         double acum = 0;
 
         for (NumeroComprado nc : rifa.getNumerosComprados()) {

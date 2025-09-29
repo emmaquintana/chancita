@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.emmanuel.chancita.data.dto.RifaDTO;
 import com.emmanuel.chancita.data.model.MetodoEleccionGanador;
+import com.emmanuel.chancita.data.model.Rifa;
 import com.emmanuel.chancita.data.model.RifaPremio;
 import com.emmanuel.chancita.data.repository.RifaRepository;
 
@@ -37,11 +37,11 @@ public class EditarRifaViewModel extends ViewModel {
     public LiveData<String> errorValidacion = _errorValidacion;
 
     // Nueva propiedad para indicar cuando se debe proceder con la edición
-    private final MutableLiveData<RifaDTO> _rifaValidadaParaEditar = new MutableLiveData<>();
-    public LiveData<RifaDTO> rifaValidadaParaEditar = _rifaValidadaParaEditar;
+    private final MutableLiveData<Rifa> _rifaValidadaParaEditar = new MutableLiveData<>();
+    public LiveData<Rifa> rifaValidadaParaEditar = _rifaValidadaParaEditar;
 
     /** Valida y edita la rifa */
-    public void editarRifa(RifaDTO rifaDTO) {
+    public void editarRifa(Rifa rifaDTO) {
         _editandoRifa.setValue(true);
 
         rifaRepository.editarRifa(rifaDTO, task -> {
@@ -56,7 +56,7 @@ public class EditarRifaViewModel extends ViewModel {
         });
     }
 
-    public LiveData<RifaDTO> obtenerRifa(String rifaId) {
+    public LiveData<Rifa> obtenerRifa(String rifaId) {
         _obteniendoRifa.setValue(true);
 
         return rifaRepository.obtenerRifa(rifaId, task -> {
@@ -71,7 +71,7 @@ public class EditarRifaViewModel extends ViewModel {
     /**
      * Valida una rifa de forma completa (incluye validación de código único)
      */
-    public void validarYProcesarRifa(RifaDTO rifa) {
+    public void validarYProcesarRifa(Rifa rifa) {
         if (!validarRifaBasico(rifa)) {
             return; // El error ya se setea en validarRifaBasico
         }
@@ -82,7 +82,7 @@ public class EditarRifaViewModel extends ViewModel {
     /**
      * Validaciones básicas de la rifa
      */
-    private boolean validarRifaBasico(RifaDTO rifa) {
+    private boolean validarRifaBasico(Rifa rifa) {
         if (rifa.getTitulo() == null || rifa.getTitulo().trim().isEmpty()) {
             _errorValidacion.setValue("El título no puede estar vacío");
             return false;
@@ -156,7 +156,7 @@ public class EditarRifaViewModel extends ViewModel {
     /**
      * Valida si el código es único
      */
-    private void validarCodigoUnico(RifaDTO rifa) {
+    private void validarCodigoUnico(Rifa rifa) {
         rifaRepository.existeRifaConCodigo(rifa.getCodigo(), rifa.getId(), exists -> {
             if (exists) {
                 _errorValidacion.setValue("Ya existe una rifa con ese código");

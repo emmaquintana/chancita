@@ -4,10 +4,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.emmanuel.chancita.data.dao.RifaDAO;
-import com.emmanuel.chancita.data.dao.RifaGanadorDAO;
-import com.emmanuel.chancita.data.dao.UsuarioDAO;
-import com.emmanuel.chancita.data.dto.RifaDTO;
-import com.emmanuel.chancita.data.dto.UsuarioDTO;
 import com.emmanuel.chancita.data.model.MetodoEleccionGanador;
 import com.emmanuel.chancita.data.model.NumeroComprado;
 import com.emmanuel.chancita.data.model.Rifa;
@@ -21,10 +17,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -32,34 +26,30 @@ import java.util.stream.Collectors;
 
 public class RifaRepository {
     private final RifaDAO rifaDAO;
-    private final RifaGanadorDAO rifaGanadorDAO;
-    private final UsuarioDAO usuarioDAO;
 
     public RifaRepository() {
         this.rifaDAO = new RifaDAO();
-        this.rifaGanadorDAO = new RifaGanadorDAO();
-        this.usuarioDAO = new UsuarioDAO();
     }
 
     /**
      * Crea una nueva rifa en la BD
      */
-    public void crearRifa(RifaDTO rifaDto, OnCompleteListener<Void> listener) {
+    public void crearRifa(Rifa rifa, OnCompleteListener<Void> listener) {
         Rifa nuevaRifa = new Rifa(
                 null, // El ID se generará en el DAO
-                rifaDto.getTitulo(),
-                rifaDto.getDescripcion(),
-                rifaDto.getCantNumeros(),
-                rifaDto.getCreadoPor(),
-                rifaDto.getEstado(),
-                rifaDto.getCreadoEn(),
-                rifaDto.getCodigo(),
-                rifaDto.getMetodoEleccionGanador(),
-                rifaDto.getMotivoEleccionGanador(),
-                rifaDto.getFechaSorteo(),
-                rifaDto.getPrecioNumero(),
+                rifa.getTitulo(),
+                rifa.getDescripcion(),
+                rifa.getCantNumeros(),
+                rifa.getCreadoPor(),
+                rifa.getEstado(),
+                rifa.getCreadoEn(),
+                rifa.getCodigo(),
+                rifa.getMetodoEleccionGanador(),
+                rifa.getMotivoEleccionGanador(),
+                rifa.getFechaSorteo(),
+                rifa.getPrecioNumero(),
                 new ArrayList<String>(),
-                rifaDto.getPremios(),
+                rifa.getPremios(),
                 new ArrayList<>()
         );
 
@@ -69,27 +59,27 @@ public class RifaRepository {
     /**
      * Edita una rifa a partir de un RifaDTO
      */
-    public void editarRifa(RifaDTO rifaDto, OnCompleteListener<Void> listener) {
-        if (rifaDto.getId() == null) {
+    public void editarRifa(Rifa rifa, OnCompleteListener<Void> listener) {
+        if (rifa.getId() == null) {
             throw new IllegalArgumentException("El ID de la rifa no puede ser null al editar");
         }
 
         Rifa rifaActualizada = new Rifa(
-                rifaDto.getId(),
-                rifaDto.getTitulo(),
-                rifaDto.getDescripcion(),
-                rifaDto.getCantNumeros(),
-                rifaDto.getCreadoPor(),
-                rifaDto.getEstado(),
-                rifaDto.getCreadoEn(),
-                rifaDto.getCodigo(),
-                rifaDto.getMetodoEleccionGanador(),
-                rifaDto.getMotivoEleccionGanador(),
-                rifaDto.getFechaSorteo(),
-                rifaDto.getPrecioNumero(),
-                rifaDto.getParticipantesIds(),
-                rifaDto.getPremios(),
-                rifaDto.getNumerosComprados()
+                rifa.getId(),
+                rifa.getTitulo(),
+                rifa.getDescripcion(),
+                rifa.getCantNumeros(),
+                rifa.getCreadoPor(),
+                rifa.getEstado(),
+                rifa.getCreadoEn(),
+                rifa.getCodigo(),
+                rifa.getMetodoEleccionGanador(),
+                rifa.getMotivoEleccionGanador(),
+                rifa.getFechaSorteo(),
+                rifa.getPrecioNumero(),
+                rifa.getParticipantesIds(),
+                rifa.getPremios(),
+                rifa.getNumerosComprados()
         );
 
         rifaDAO.editarRifa(rifaActualizada, listener);
@@ -102,8 +92,8 @@ public class RifaRepository {
     /**
      * Obtiene una rifa por su ID
      */
-    public LiveData<RifaDTO> obtenerRifa(String rifaId, OnCompleteListener<DocumentSnapshot> listener) {
-        MutableLiveData<RifaDTO> liveData = new MutableLiveData<>();
+    public LiveData<Rifa> obtenerRifa(String rifaId, OnCompleteListener<DocumentSnapshot> listener) {
+        MutableLiveData<Rifa> liveData = new MutableLiveData<>();
 
         rifaDAO.obtenerRifa(rifaId, task -> {
             if (task.isSuccessful() && task.getResult().exists()) {
@@ -172,12 +162,11 @@ public class RifaRepository {
                 List<String> participantesIds = (List<String>) doc.get("participantesIds");
 
 
-                RifaDTO rifaDTO = new RifaDTO(
-                        id, titulo, descripcion, cantNumeros, creadoPor,
-                        estado, codigo, metodo, motivo, fechaSorteo, participantesIds, precioNumero, creadoEn, premios, numerosComprados
-                );
+                Rifa rifa = new Rifa(id, titulo, descripcion, cantNumeros, creadoPor,
+                        estado, creadoEn, codigo, metodo, motivo, fechaSorteo,
+                        precioNumero, participantesIds, premios, numerosComprados);
 
-                liveData.setValue(rifaDTO);
+                liveData.setValue(rifa);
 
             } else {
                 liveData.setValue(null);
@@ -193,53 +182,10 @@ public class RifaRepository {
     }
 
     /**
-     * Obtiene las rifas creadas por un usuario
-     */
-    public LiveData<List<RifaDTO>> obtenerRifasCreadasPorUsuario(String usuarioId, OnCompleteListener<QuerySnapshot> listener) {
-        MutableLiveData<List<RifaDTO>> liveData = new MutableLiveData<>();
-
-        rifaDAO.obtenerRifasCreadasPorUsuario(usuarioId, task -> {
-            if (task.isSuccessful()) {
-                List<RifaDTO> rifas = task.getResult().getDocuments().stream()
-                        .map(document -> {
-                            Rifa rifa = document.toObject(Rifa.class);
-                            return new RifaDTO(
-                                    null,
-                                    rifa.getTitulo(),
-                                    rifa.getDescripcion(),
-                                    rifa.getCantNumeros(),
-                                    rifa.getCreadoPor(),
-                                    rifa.getEstado(),
-                                    rifa.getCodigo(),
-                                    rifa.getMetodoEleccionGanador(),
-                                    rifa.getMotivoEleccionGanador(),
-                                    rifa.getFechaSorteo(),
-                                    rifa.getParticipantesIds(),
-                                    rifa.getPrecioNumero(),
-                                    rifa.getCreadoEn(),
-                                    rifa.getPremios(),
-                                    rifa.getNumerosComprados()
-                            );
-                        })
-                        .collect(Collectors.toList());
-                liveData.setValue(rifas);
-            } else {
-                liveData.setValue(new ArrayList<>());
-            }
-
-            if (listener != null) {
-                listener.onComplete(task);
-            }
-        });
-
-        return liveData;
-    }
-
-    /**
      * Busca una rifa por código
      */
-    public LiveData<RifaDTO> obtenerRifaPorCodigo(String codigo, OnCompleteListener<QuerySnapshot> listener) {
-        MutableLiveData<RifaDTO> liveData = new MutableLiveData<>();
+    public LiveData<Rifa> obtenerRifaPorCodigo(String codigo, OnCompleteListener<QuerySnapshot> listener) {
+        MutableLiveData<Rifa> liveData = new MutableLiveData<>();
 
         rifaDAO.obtenerRifasPorCodigo(codigo, task -> {
             if (task.isSuccessful() && !task.getResult().isEmpty()) {
@@ -312,12 +258,11 @@ public class RifaRepository {
                 List<String> participantesIds = (List<String>) doc.get("participantesIds");
 
 
-                RifaDTO rifaDTO = new RifaDTO(
-                        id, titulo, descripcion, cantNumeros, creadoPor,
-                        estado, codigo, metodo, motivo, fechaSorteo, participantesIds, precioNumero, creadoEn, premios, numerosComprados
-                );
+                Rifa rifa = new Rifa(id, titulo, descripcion, cantNumeros, creadoPor,
+                        estado, creadoEn, codigo, metodo, motivo, fechaSorteo,
+                        precioNumero, participantesIds, premios, numerosComprados);
 
-                liveData.setValue(rifaDTO);
+                liveData.setValue(rifa);
             } else {
                 liveData.setValue(null);
             }
@@ -331,12 +276,12 @@ public class RifaRepository {
     }
 
 
-    public LiveData<List<RifaDTO>> obtenerRifasCreadasPorUsuarioActual(OnCompleteListener<QuerySnapshot> listener) {
-        MutableLiveData<List<RifaDTO>> liveData = new MutableLiveData<>();
+    public LiveData<List<Rifa>> obtenerRifasCreadasPorUsuarioActual(OnCompleteListener<QuerySnapshot> listener) {
+        MutableLiveData<List<Rifa>> liveData = new MutableLiveData<>();
 
         rifaDAO.obtenerRifasCreadasPorUsuarioActual(task -> {
             if (task.isSuccessful()) {
-                List<RifaDTO> rifas = task.getResult().getDocuments().stream()
+                List<Rifa> rifas = task.getResult().getDocuments().stream()
                         .map(document -> {
                             String id = document.getId();
                             String titulo = document.getString("titulo");
@@ -402,10 +347,9 @@ public class RifaRepository {
                             List<String> participantesIds = (List<String>) document.get("participantesIds");
 
 
-                            return new RifaDTO(
-                                    id, titulo, descripcion, cantNumeros, creadoPor,
-                                    estado, codigo, metodo, motivo, fechaSorteo, participantesIds, precioNumero, creadoEn, premios, numerosComprados
-                            );
+                            return new Rifa(id, titulo, descripcion, cantNumeros, creadoPor,
+                                    estado, creadoEn, codigo, metodo, motivo, fechaSorteo,
+                                    precioNumero, participantesIds, premios, numerosComprados);
                         })
                         .collect(Collectors.toList());
                 liveData.setValue(rifas);
@@ -422,12 +366,12 @@ public class RifaRepository {
 
     }
 
-    public LiveData<List<RifaDTO>> obtenerRifasUnidasDeUsuarioActual(OnCompleteListener<QuerySnapshot> listener) {
-        MutableLiveData<List<RifaDTO>> liveData = new MutableLiveData<>();
+    public LiveData<List<Rifa>> obtenerRifasUnidasDeUsuarioActual(OnCompleteListener<QuerySnapshot> listener) {
+        MutableLiveData<List<Rifa>> liveData = new MutableLiveData<>();
 
         rifaDAO.obtenerRifasUnidasDeUsuarioActual(task -> {
             if (task.isSuccessful()) {
-                List<RifaDTO> rifas = task.getResult().getDocuments().stream()
+                List<Rifa> rifas = task.getResult().getDocuments().stream()
                         .map(document -> {
                             String id = document.getId();
                             String titulo = document.getString("titulo");
@@ -492,11 +436,9 @@ public class RifaRepository {
 
                             List<String> participantesIds = (List<String>) document.get("participantesIds");
 
-
-                            return new RifaDTO(
-                                    id, titulo, descripcion, cantNumeros, creadoPor,
-                                    estado, codigo, metodo, motivo, fechaSorteo, participantesIds, precioNumero, creadoEn, premios, numerosComprados
-                            );
+                            return new Rifa(id, titulo, descripcion, cantNumeros, creadoPor,
+                                    estado, creadoEn, codigo, metodo, motivo, fechaSorteo,
+                                    precioNumero, participantesIds, premios, numerosComprados);
                         })
                         .collect(Collectors.toList());
                 liveData.setValue(rifas);
@@ -512,15 +454,16 @@ public class RifaRepository {
         return liveData;
     }
 
-    public LiveData<List<UsuarioDTO>> obtenerParticipantes(String rifaId) {
-        MutableLiveData<List<UsuarioDTO>> liveData = new MutableLiveData<>();
+    public LiveData<List<Usuario>> obtenerParticipantes(String rifaId) {
+        MutableLiveData<List<Usuario>> liveData = new MutableLiveData<>();
 
         rifaDAO.obtenerParticipantes(rifaId, documentos -> {
-            List<UsuarioDTO> dtos = new ArrayList<>();
+            List<Usuario> dtos = new ArrayList<>();
 
             for (DocumentSnapshot doc : documentos) {
                 if (doc.exists()) {
                     try {
+                        String id = doc.getId();
                         String nombre = doc.getString("nombre");
                         String apellido = doc.getString("apellido");
                         String correo = doc.getString("correo");
@@ -541,12 +484,12 @@ public class RifaRepository {
                         if (ultimoIngresoStr != null && !ultimoIngresoStr.isEmpty()) {
                             ultimoIngreso = LocalDateTime.parse(ultimoIngresoStr);
                         }
-                        UsuarioDTO dto = new UsuarioDTO(
+                        Usuario usuario = new Usuario(id,
                                 nombre, apellido, correo, nroCelular, contrasena,
                                 fechaNacimiento, creadoEn, ultimoIngreso
                         );
 
-                        dtos.add(dto);
+                        dtos.add(usuario);
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -604,8 +547,8 @@ public class RifaRepository {
         return liveData;
     }
 
-    public LiveData<UsuarioDTO> obtenerOrganizador(String rifaId) {
-        MutableLiveData<UsuarioDTO> liveData = new MutableLiveData<>();
+    public LiveData<Usuario> obtenerOrganizador(String rifaId) {
+        MutableLiveData<Usuario> liveData = new MutableLiveData<>();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         rifaDAO.obtenerUidOrganizador(rifaId, task -> {
@@ -619,7 +562,7 @@ public class RifaRepository {
                         .addOnCompleteListener(userTask -> {
                             if (userTask.isSuccessful() && userTask.getResult() != null && userTask.getResult().exists()) {
                                 DocumentSnapshot doc = userTask.getResult();
-                                UsuarioDTO organizador = new UsuarioDTO();
+                                Usuario organizador = new Usuario();
                                 organizador.setNombre(doc.getString("nombre"));
                                 organizador.setApellido(doc.getString("apellido"));
                                 organizador.setCorreo(doc.getString("correo"));
@@ -644,13 +587,6 @@ public class RifaRepository {
 
     public void existeRifaConCodigo(String codigo, String rifaIdActual, Consumer<Boolean> callback) {
         rifaDAO.existeRifaConCodigo(codigo, rifaIdActual, callback);
-    }
-
-    /**
-     * Actualiza el estado de una rifa
-     */
-    public void actualizarEstadoRifa(String rifaId, RifaEstado nuevoEstado, OnCompleteListener<Void> listener) {
-        rifaDAO.actualizarEstadoRifa(rifaId, nuevoEstado, listener);
     }
 
     public LiveData<Boolean> usuarioActualPoseeTokenMercadoPago() {

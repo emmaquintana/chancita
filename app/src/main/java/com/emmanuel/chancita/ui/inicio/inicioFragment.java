@@ -21,7 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.emmanuel.chancita.R;
-import com.emmanuel.chancita.data.dto.RifaDTO;
+import com.emmanuel.chancita.data.model.Rifa;
 import com.emmanuel.chancita.data.model.RifaEstado;
 import com.emmanuel.chancita.data.model.Usuario;
 import com.emmanuel.chancita.ui.SharedViewModel;
@@ -244,7 +244,7 @@ public class inicioFragment extends Fragment {
         });
     }
 
-    private void inflarRifasUnidas(List<RifaDTO> listaRifas) {
+    private void inflarRifasUnidas(List<Rifa> listaRifas) {
         progressBarUnidas.setVisibility(View.GONE);
 
 
@@ -274,7 +274,7 @@ public class inicioFragment extends Fragment {
         }
     }
 
-    private void inflarRifasCreadas(List<RifaDTO> listaRifas) {
+    private void inflarRifasCreadas(List<Rifa> listaRifas) {
         progressBarCreadas.setVisibility(View.GONE);
 
         // Si hay rifas creadas, se las muestra
@@ -299,7 +299,7 @@ public class inicioFragment extends Fragment {
         }
     }
 
-    private void inflarRifasDisponibles(List<RifaDTO> listaRifas) {
+    private void inflarRifasDisponibles(List<Rifa> listaRifas) {
         progressBarDisponibles.setVisibility(View.GONE);
 
         if (!listaRifas.isEmpty()) {
@@ -321,7 +321,7 @@ public class inicioFragment extends Fragment {
             rvRifasDisponibles.setLayoutManager(layoutManager);
 
             Collections.shuffle(listaRifas);
-            List<RifaDTO> maxCinco = listaRifas.size() > 5 ? listaRifas.subList(0, 5) : listaRifas;
+            List<Rifa> maxCinco = listaRifas.size() > 5 ? listaRifas.subList(0, 5) : listaRifas;
             RifaAdapter adapter = new RifaAdapter(maxCinco, listener);
             // --- Botón siguiente ---
             btnNext.setOnClickListener(v -> {

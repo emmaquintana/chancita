@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.emmanuel.chancita.data.dto.RifaDTO;
 import com.emmanuel.chancita.data.model.MetodoEleccionGanador;
+import com.emmanuel.chancita.data.model.Rifa;
 import com.emmanuel.chancita.data.model.RifaEstado;
 import com.emmanuel.chancita.data.model.RifaPremio;
 import com.emmanuel.chancita.data.repository.RifaRepository;
@@ -20,8 +20,8 @@ public class CrearRifaSharedViewModel extends ViewModel {
     private final RifaRepository rifaRepository;
 
     // Datos de la rifa en construcción
-    private final MutableLiveData<RifaDTO> _rifaEnConstruccion = new MutableLiveData<>();
-    public LiveData<RifaDTO> rifaEnConstruccion = _rifaEnConstruccion;
+    private final MutableLiveData<Rifa> _rifaEnConstruccion = new MutableLiveData<>();
+    public LiveData<Rifa> rifaEnConstruccion = _rifaEnConstruccion;
 
     // Estado de creación
     private final MutableLiveData<Boolean> _creandoRifa = new MutableLiveData<>();
@@ -43,7 +43,7 @@ public class CrearRifaSharedViewModel extends ViewModel {
     }
 
     private void inicializarRifa() {
-        RifaDTO nuevaRifa = new RifaDTO();
+        Rifa nuevaRifa = new Rifa();
         nuevaRifa.setCreadoEn(LocalDateTime.now());
         nuevaRifa.setEstado(RifaEstado.ABIERTO);
         nuevaRifa.setParticipantesIds(new ArrayList<>());
@@ -59,7 +59,7 @@ public class CrearRifaSharedViewModel extends ViewModel {
      */
     public void actualizarDatosBasicos(String titulo, String descripcion, int cantPremios,
                                        int cantNumeros, double precio, LocalDateTime fechaSorteo) {
-        RifaDTO rifa = _rifaEnConstruccion.getValue();
+        Rifa rifa = _rifaEnConstruccion.getValue();
         if (rifa != null) {
             rifa.setTitulo(titulo);
             rifa.setDescripcion(descripcion);
@@ -87,7 +87,7 @@ public class CrearRifaSharedViewModel extends ViewModel {
      * Paso 3: Información de premios
      */
     public void actualizarPremios(List<RifaPremio> premios) {
-        RifaDTO rifa = _rifaEnConstruccion.getValue();
+        Rifa rifa = _rifaEnConstruccion.getValue();
         if (rifa != null) {
             rifa.setPremios(premios);
             _rifaEnConstruccion.setValue(rifa);
@@ -98,7 +98,7 @@ public class CrearRifaSharedViewModel extends ViewModel {
      * Paso 4: Método de elección
      */
     public void actualizarMetodoEleccion(MetodoEleccionGanador metodo) {
-        RifaDTO rifa = _rifaEnConstruccion.getValue();
+        Rifa rifa = _rifaEnConstruccion.getValue();
         if (rifa != null) {
             rifa.setMetodoEleccionGanador(metodo);
             _rifaEnConstruccion.setValue(rifa);
@@ -109,7 +109,7 @@ public class CrearRifaSharedViewModel extends ViewModel {
      * Paso 5: Descripción del método (si es determinista)
      */
     public void actualizarDescripcionMetodo(String descripcion) {
-        RifaDTO rifa = _rifaEnConstruccion.getValue();
+        Rifa rifa = _rifaEnConstruccion.getValue();
         if (rifa != null) {
             rifa.setMotivoEleccionGanador(descripcion);
             _rifaEnConstruccion.setValue(rifa);
@@ -189,7 +189,7 @@ public class CrearRifaSharedViewModel extends ViewModel {
      * Crear la rifa final
      */
     public void crearRifa(String creadoPor) {
-        RifaDTO rifa = _rifaEnConstruccion.getValue();
+        Rifa rifa = _rifaEnConstruccion.getValue();
         if (rifa == null) {
             _resultadoCreacion.setValue("Error: No hay datos de rifa para crear");
             return;
@@ -229,7 +229,7 @@ public class CrearRifaSharedViewModel extends ViewModel {
     /**
      * Obtener datos actuales de la rifa
      */
-    public RifaDTO getRifaActual() {
+    public Rifa getRifaActual() {
         return _rifaEnConstruccion.getValue();
     }
 }

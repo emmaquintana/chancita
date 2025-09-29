@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.emmanuel.chancita.data.dto.UsuarioDTO;
+import com.emmanuel.chancita.data.model.Usuario;
 import com.emmanuel.chancita.data.repository.UsuarioRepository;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 
@@ -44,9 +44,9 @@ public class CrearCuentaViewModel extends ViewModel {
             return;
         }
 
-        UsuarioDTO usuarioDto = new UsuarioDTO(nombre, apellido, correo, nroCelular, contraseña, fechaNacimiento, null, null);
+        Usuario usuario = new Usuario(null, correo, nombre, apellido, nroCelular, contraseña, fechaNacimiento, null, null);
 
-        usuarioRepository.crearUsuario(usuarioDto, task -> {
+        usuarioRepository.crearUsuario(usuario, task -> {
             _estaRegistrandose.postValue(false);
             if (task.isSuccessful()) {
                 _resultadoRegistro.setValue("¡El usuario ha sido creado con éxito!");

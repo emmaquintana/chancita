@@ -13,15 +13,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.emmanuel.chancita.R;
-import com.emmanuel.chancita.data.dto.PremioAsignacionDTO;
+import com.emmanuel.chancita.data.model.PremioAsignacion;
 
 import java.util.List;
 
 public class EleccionGanadoresAdapter extends RecyclerView.Adapter<EleccionGanadoresAdapter.ViewHolder> {
 
-    private List<PremioAsignacionDTO> premios;
+    private List<PremioAsignacion> premios;
 
-    public EleccionGanadoresAdapter(List<PremioAsignacionDTO> premios) {
+    public EleccionGanadoresAdapter(List<PremioAsignacion> premios) {
         this.premios = premios;
     }
 
@@ -35,7 +35,7 @@ public class EleccionGanadoresAdapter extends RecyclerView.Adapter<EleccionGanad
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        PremioAsignacionDTO asignacion = premios.get(position);
+        PremioAsignacion asignacion = premios.get(position);
 
         holder.txtPremioTitulo.setText(asignacion.getPremio().getPremioTitulo());
         holder.txtPremioDescripcion.setText(asignacion.getPremio().getPremioDescripcion());
@@ -111,7 +111,7 @@ public class EleccionGanadoresAdapter extends RecyclerView.Adapter<EleccionGanad
         return premios.size();
     }
 
-    public List<PremioAsignacionDTO> getResultados() {
+    public List<PremioAsignacion> getResultados() {
         return premios;
     }
 

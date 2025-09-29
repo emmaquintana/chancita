@@ -4,8 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.emmanuel.chancita.data.dto.RifaDTO;
-import com.emmanuel.chancita.data.dto.UsuarioDTO;
+import com.emmanuel.chancita.data.model.Rifa;
 import com.emmanuel.chancita.data.model.Usuario;
 import com.emmanuel.chancita.data.repository.RifaRepository;
 import com.emmanuel.chancita.data.repository.UsuarioRepository;
@@ -43,7 +42,7 @@ public class RifaOrganizadorViewModel extends ViewModel {
         this.usuarioRepository = new UsuarioRepository();
     }
 
-    public void crearRifa(RifaDTO rifaDTO) {
+    public void crearRifa(Rifa rifaDTO) {
         _creandoRifa.setValue(true);
 
         rifaRepository.crearRifa(rifaDTO, task -> {
@@ -80,7 +79,7 @@ public class RifaOrganizadorViewModel extends ViewModel {
     }
 
 
-    public LiveData<RifaDTO> obtenerRifa(String rifaId) {
+    public LiveData<Rifa> obtenerRifa(String rifaId) {
         _obteniendoRifa.setValue(true);
 
         return rifaRepository.obtenerRifa(rifaId, task -> {
@@ -92,11 +91,11 @@ public class RifaOrganizadorViewModel extends ViewModel {
         });
     }
 
-    public LiveData<List<UsuarioDTO>> obtenerParticipantes(String rifaId) {
+    public LiveData<List<Usuario>> obtenerParticipantes(String rifaId) {
         return rifaRepository.obtenerParticipantes(rifaId);
     }
 
-    public LiveData<List<RifaDTO>> obtenerRifasCreadasPorUsuarioActual(OnCompleteListener<QuerySnapshot> listener) {
+    public LiveData<List<Rifa>> obtenerRifasCreadasPorUsuarioActual(OnCompleteListener<QuerySnapshot> listener) {
         _obteniendoRifa.setValue(true);
 
         return rifaRepository.obtenerRifasCreadasPorUsuarioActual(task -> {

@@ -1,15 +1,13 @@
-package com.emmanuel.chancita.data.dto;
-
-import com.emmanuel.chancita.data.model.RifaPremio;
+package com.emmanuel.chancita.data.model;
 
 import java.util.List;
 
-public class PremioAsignacionDTO {
+public class PremioAsignacion {
     private RifaPremio premio;
     private List<Integer> numerosDisponibles;
     private Integer numeroSeleccionado;
 
-    public PremioAsignacionDTO(RifaPremio premio, List<Integer> numerosDisponibles) {
+    public PremioAsignacion(RifaPremio premio, List<Integer> numerosDisponibles) {
         this.premio = premio;
         this.numerosDisponibles = numerosDisponibles;
     }

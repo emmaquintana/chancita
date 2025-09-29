@@ -23,8 +23,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.emmanuel.chancita.R;
-import com.emmanuel.chancita.data.dto.RifaDTO;
 import com.emmanuel.chancita.data.model.MetodoEleccionGanador;
+import com.emmanuel.chancita.data.model.Rifa;
 import com.emmanuel.chancita.data.model.RifaPremio;
 import com.emmanuel.chancita.ui.SharedViewModel;
 import com.emmanuel.chancita.ui.rifa.RifaOrganizadorFragment;
@@ -57,7 +57,7 @@ public class EditarRifaFragment extends Fragment implements EditarPremioAdapter.
     private EditarRifaViewModel editarRifaViewModel;
     private String rifaId;
     private NavController navController;
-    private RifaDTO rifaActual;
+    private Rifa rifaActual;
     private boolean botonGuardarClicked = false;
     private Calendar calendar = Calendar.getInstance();
 
