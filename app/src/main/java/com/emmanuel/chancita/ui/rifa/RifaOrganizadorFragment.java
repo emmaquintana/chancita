@@ -120,6 +120,8 @@ public class RifaOrganizadorFragment extends Fragment {
             }
             else {
                 txtRifaDescripcion.setVisibility(View.GONE);
+                view.findViewById(R.id.rifa_organizador_ll_descripcion).setVisibility(View.GONE);
+                view.findViewById(R.id.rifa_organizador_view_descripcion).setVisibility(View.GONE);
             }
             txtPrecioNumero.setText(String.valueOf(rifa.getPrecioNumero()));
             txtRifaRecaudado.setText("Monto recaudado: $" + calcularRecaudado(rifa));

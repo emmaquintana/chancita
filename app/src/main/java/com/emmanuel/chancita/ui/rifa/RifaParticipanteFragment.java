@@ -147,6 +147,7 @@ public class RifaParticipanteFragment extends Fragment {
             txtRifaPremios.setText(formatearPremios(rifa.getPremios()));
             // Si no hay descripción, se oculta la sección "Descripción"
             if (rifa.getDescripcion() == null || rifa.getDescripcion().trim().isEmpty()) {
+                view.findViewById(R.id.rifa_participante_mcv_descripcion).setVisibility(View.GONE);
                 txtRifaDescripcion.setVisibility(View.GONE);
                 txtRifaDescripcionHead.setVisibility(View.GONE);
             }

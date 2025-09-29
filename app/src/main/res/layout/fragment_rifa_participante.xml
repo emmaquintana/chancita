@@ -286,6 +286,7 @@
 
             <!-- Card Descripción -->
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/rifa_participante_mcv_descripcion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardElevation="1dp"

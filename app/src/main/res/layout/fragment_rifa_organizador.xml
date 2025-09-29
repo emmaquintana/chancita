@@ -118,12 +118,14 @@
                     </LinearLayout>
 
                     <View
+                        android:id="@+id/rifa_organizador_view_descripcion"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="?attr/colorOutlineVariant"
                         android:layout_marginVertical="4dp"/>
 
                     <LinearLayout
+                        android:id="@+id/rifa_organizador_ll_descripcion"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
