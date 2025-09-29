@@ -16,12 +16,15 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.LiveData;
 
 import com.emmanuel.chancita.R;
+import com.emmanuel.chancita.data.model.Rifa;
 import com.emmanuel.chancita.data.repository.RifaRepository;
 import com.emmanuel.chancita.ui.rifa.RifaParticipanteActivity;
 import com.emmanuel.chancita.ui.rifa.crear_rifa.CrearRifaActivity;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 public class DeepLinkActivity extends AppCompatActivity {
 
@@ -38,44 +41,69 @@ public class DeepLinkActivity extends AppCompatActivity {
             if (host.equals("oauth-success")) {
                 // Manejar éxito de OAuth
                 handleOAuthSuccess(data);
+                finish();
 
             } else if (host.equals("oauth-failure")) {
                 // Manejar error de OAuth
                 handleOAuthFailure(data);
+                finish();
 
             } else if (host.equals("pago-exitoso")) {
                 // Pago exitoso
                 handlePagoExitoso(data);
+                finish();
 
             } else if (host.equals("pago-fallido")) {
                 // Pago fallido
                 handlePagoFallido(data);
+                finish();
 
             } else if (host.equals("pago-pendiente")) {
                 // Pago pendiente
                 handlePagoPendiente(data);
+                finish();
             } else if (host.equals("rifa")) {
                 if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                    String codigoRifa = data.getQueryParameter("codigo");
                     String idRifa = data.getQueryParameter("rifa_id");
-                    if (codigoRifa != null && idRifa != null) {
-                        unirseARifa(codigoRifa);
-                        Intent intent = new Intent(this, RifaParticipanteActivity.class);
-                        intent.putExtra("rifa_id", idRifa);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
+                    if (idRifa != null) {
+                        RifaRepository rifaRepository = new RifaRepository();
+                        rifaRepository.obtenerRifa(idRifa, task -> {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot snapshot = task.getResult();
+                                if (snapshot != null && snapshot.exists()) {
+                                    String codigoRifa = snapshot.getString("codigo");
+
+                                    // Llamas tu función con el código
+                                    unirseARifa(codigoRifa);
+
+                                    Intent intent = new Intent(this, RifaParticipanteActivity.class);
+                                    intent.putExtra("rifa_id", idRifa);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            } else {
+                                // Manejar error
+                                Log.e("Rifa", "No se pudo obtener la rifa", task.getException());
+                                finish();
+                            }
+                        });
+                    }
+                    else {
+                        finish();
                     }
                 }
                 else {
                     Intent intent = new Intent(this, AuthActivity.class);
                     startActivity(intent);
+                    finish();
                 }
 
             }
-
         }
-
-        finish();
+        else {
+            finish();
+        }
     }
 
     private void handleOAuthSuccess(Uri data) {

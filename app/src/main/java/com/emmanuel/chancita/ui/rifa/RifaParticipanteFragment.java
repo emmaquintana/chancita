@@ -101,9 +101,8 @@ public class RifaParticipanteFragment extends Fragment {
 
          // Permite compartir la rifa
          btnCompartirRifa.setOnClickListener(v -> {
-            String codigoRifa = rifa.getCodigo();
             String rifaId = rifa.getId();
-            String universalLink = "https://emmaquintana.github.io/appchancita/redireccion-rifa/redir.html?codigo=" + codigoRifa + "&rifa_id=" + rifaId;
+            String universalLink = "https://emmaquintana.github.io/appchancita/redireccion-rifa/redir.html?rifa_id=" + rifaId;
 
              Intent sendIntent = new Intent();
              sendIntent.setAction(Intent.ACTION_SEND);
