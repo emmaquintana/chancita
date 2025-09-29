@@ -1,7 +1,6 @@
 package com.emmanuel.chancita.ui;
 
 import android.Manifest;
-import androidx.appcompat.app.AlertDialog;;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -16,41 +15,25 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
+
 import com.emmanuel.chancita.R;
-import com.emmanuel.chancita.data.dto.RifaDTO;
-import com.emmanuel.chancita.data.model.MetodoEleccionGanador;
-import com.emmanuel.chancita.data.model.RifaEstado;
-import com.emmanuel.chancita.data.model.RifaPremio;
-import com.emmanuel.chancita.ui.rifa.RifaOrganizadorViewModel;
-import com.emmanuel.chancita.utils.Utilidades;
+import com.emmanuel.chancita.databinding.ActivityMainBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.NavOptions;
-import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
-import com.emmanuel.chancita.databinding.ActivityMainBinding;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+;
 
 public class MainActivity extends AppCompatActivity {
 
