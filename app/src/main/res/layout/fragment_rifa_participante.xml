@@ -165,7 +165,7 @@
                             android:textSize="16sp"
                             android:textColor="?attr/colorOnSurface"
                             android:gravity="end"
-                            android:drawableEnd="@drawable/ic_share"
+                            android:drawableEnd="@drawable/ic_copy"
                             android:drawablePadding="8dp"
                             android:drawableTint="?attr/colorPrimary"
                             android:foreground="?attr/selectableItemBackground"/>
@@ -242,6 +242,19 @@
                             android:gravity="end"/>
 
                     </LinearLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:id="@+id/rifa_participante_btn_compartir_rifa"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Compartir rifa"
+                        android:textSize="16sp"
+                        android:visibility="gone"
+                        app:icon="@drawable/ic_share"
+                        app:iconGravity="start"
+                        app:strokeColor="?attr/colorPrimary"
+                        app:cornerRadius="8dp"/>
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

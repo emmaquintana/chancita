@@ -292,6 +292,20 @@
 
                     </LinearLayout>
 
+                    <com.google.android.material.button.MaterialButton
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:id="@+id/rifa_organizador_btn_compartir_rifa"
+                        android:layout_marginTop="16dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Compartir rifa"
+                        android:textSize="16sp"
+                        android:visibility="gone"
+                        app:icon="@drawable/ic_share"
+                        app:iconGravity="start"
+                        app:strokeColor="?attr/colorPrimary"
+                        app:cornerRadius="8dp"/>
+
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 

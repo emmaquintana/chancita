@@ -1,6 +1,9 @@
 package com.emmanuel.chancita.ui.rifa;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -93,18 +96,29 @@ public class RifaParticipanteFragment extends Fragment {
         TextView txtPrecioNumero = view.findViewById(R.id.rifa_participante_txt_precio_numero); // Debe iniciar con "Precio por número: $"
         TextView txtRifaCodigoInfo = view.findViewById(R.id.rifa_participante_txt_codigo_info);
         MaterialButton btnSalir = view.findViewById(R.id.rifa_participante_btn_salir);
+        MaterialButton btnCompartirRifa = view.findViewById(R.id.rifa_participante_btn_compartir_rifa);
 
-        // Permite compartir la rifa
-        txtRifaCodigo.setOnClickListener(v -> {
+
+         // Permite compartir la rifa
+         btnCompartirRifa.setOnClickListener(v -> {
             String codigoRifa = rifa.getCodigo();
             String rifaId = rifa.getId();
             String universalLink = "https://emmaquintana.github.io/appchancita/redireccion-rifa/redir.html?codigo=" + codigoRifa + "&rifa_id=" + rifaId;
 
-            Intent sendIntent = new Intent();
-            sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_TEXT, "Únete a esta rifa: " + universalLink);
-            sendIntent.setType("text/plain");
-            startActivity(Intent.createChooser(sendIntent, "Compartir rifa"));
+             Intent sendIntent = new Intent();
+             sendIntent.setAction(Intent.ACTION_SEND);
+             sendIntent.putExtra(Intent.EXTRA_TEXT, "Únete a esta rifa: " + universalLink);
+             sendIntent.setType("text/plain");
+             startActivity(Intent.createChooser(sendIntent, "Compartir rifa"));
+         });
+
+        // Permite copiar el código de la rifa
+        txtRifaCodigo.setOnClickListener(v -> {
+            String codigo = txtRifaCodigo.getText().toString().replace("Código: ", "");
+            ClipboardManager clipboard = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("Código Rifa", codigo);
+            clipboard.setPrimaryClip(clip);
+            Toast.makeText(requireContext(), "Código copiado al portapapeles", Toast.LENGTH_SHORT).show();
         });
 
         txtRifaCodigoInfo.setOnClickListener(v -> {
@@ -143,6 +157,7 @@ public class RifaParticipanteFragment extends Fragment {
             }
 
             // Setea la información de la rifa
+            btnCompartirRifa.setVisibility(View.VISIBLE);
             txtRifaTitulo.setText(rifa.getTitulo());
             txtRifaEstado.setText(rifa.getEstado().toString());
             txtRifaCodigo.setText(rifa.getCodigo());

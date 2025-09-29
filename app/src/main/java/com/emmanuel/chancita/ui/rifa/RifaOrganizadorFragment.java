@@ -102,6 +102,7 @@ public class RifaOrganizadorFragment extends Fragment {
         TextView txtRifaDescripcion = view.findViewById(R.id.rifa_organizador_txt_info_descripcion);
         TextView txtPrecioNumero = view.findViewById(R.id.rifa_organizador_txt_info_precio);
         TextView txtRifaCodigoInfo = view.findViewById(R.id.rifa_organizador_txt_codigo_info);
+        MaterialButton btnCompartirRifa = view.findViewById(R.id.rifa_participante_btn_compartir_rifa);
         FloatingActionButton fab = view.findViewById(R.id.rifa_organizador_fab_editar);
 
         fab.setOnClickListener(v ->
@@ -109,16 +110,9 @@ public class RifaOrganizadorFragment extends Fragment {
                         .navigate(R.id.action_rifaOrganizadorFragment_to_editarRifaFragment)
         );
 
-        txtRifaCodigoInfo.setOnClickListener(v -> {
-            new MaterialAlertDialogBuilder(getContext())
-                    .setTitle("Código de la rifa")
-                    .setMessage("El código de la rifa puede ser usado por otros usuarios para unirse a la rifa.")
-                    .setPositiveButton("Entendido", null)
-                    .show();
-        });
-
         rifaOrganizadorViewModel.obtenerRifa(rifaId).observe(getViewLifecycleOwner(), rifa -> {
 
+            btnCompartirRifa.setVisibility(View.VISIBLE);
             txtRifaTitulo.setText(rifa.getTitulo());
             txtRifaEstado.setText(Utilidades.capitalizar(rifa.getEstado().toString()));
             txtRifaCodigo.setText(rifa.getCodigo());
@@ -136,14 +130,24 @@ public class RifaOrganizadorFragment extends Fragment {
             txtPrecioNumero.setText(String.valueOf(rifa.getPrecioNumero()));
             txtRifaRecaudado.setText("Monto recaudado: $" + calcularRecaudado(rifa));
 
+            // Permite copiar el código de la rifa
             txtRifaCodigo.setOnClickListener(v -> {
+                String codigo = txtRifaCodigo.getText().toString().replace("Código: ", "");
+                ClipboardManager clipboard = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("Código Rifa", codigo);
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(requireContext(), "Código copiado al portapapeles", Toast.LENGTH_SHORT).show();
+            });
+
+            // Permite compartir la rifa
+            btnCompartirRifa.setOnClickListener(v -> {
                 String codigoRifa = rifa.getCodigo();
                 String rifaId = rifa.getId();
                 String universalLink = "https://emmaquintana.github.io/appchancita/redireccion-rifa/redir.html?codigo=" + codigoRifa + "&rifa_id=" + rifaId;
 
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "Únete a mi rifa: " + universalLink);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Únete a esta rifa: " + universalLink);
                 sendIntent.setType("text/plain");
                 startActivity(Intent.createChooser(sendIntent, "Compartir rifa"));
             });
