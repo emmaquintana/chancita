@@ -18,7 +18,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.emmanuel.chancita.R;
+import com.emmanuel.chancita.data.repository.RifaRepository;
+import com.emmanuel.chancita.ui.rifa.RifaParticipanteActivity;
 import com.emmanuel.chancita.ui.rifa.crear_rifa.CrearRifaActivity;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class DeepLinkActivity extends AppCompatActivity {
 
@@ -51,7 +54,25 @@ public class DeepLinkActivity extends AppCompatActivity {
             } else if (host.equals("pago-pendiente")) {
                 // Pago pendiente
                 handlePagoPendiente(data);
+            } else if (host.equals("rifa")) {
+                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                    String codigoRifa = data.getQueryParameter("codigo");
+                    String idRifa = data.getQueryParameter("rifa_id");
+                    if (codigoRifa != null && idRifa != null) {
+                        unirseARifa(codigoRifa);
+                        Intent intent = new Intent(this, RifaParticipanteActivity.class);
+                        intent.putExtra("rifa_id", idRifa);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    }
+                }
+                else {
+                    Intent intent = new Intent(this, AuthActivity.class);
+                    startActivity(intent);
+                }
+
             }
+
         }
 
         finish();
@@ -151,5 +172,10 @@ public class DeepLinkActivity extends AppCompatActivity {
         }
 
         notificationManager.notify((int) System.currentTimeMillis(), builder.build());
+    }
+
+    private void unirseARifa(String codigo) {
+        RifaRepository rifaRepository = new RifaRepository();
+        rifaRepository.unirseARifa(codigo, null);
     }
 }

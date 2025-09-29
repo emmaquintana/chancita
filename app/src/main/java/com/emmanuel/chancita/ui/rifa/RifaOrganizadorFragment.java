@@ -3,6 +3,7 @@ package com.emmanuel.chancita.ui.rifa;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -126,14 +127,18 @@ public class RifaOrganizadorFragment extends Fragment {
             txtPrecioNumero.setText(String.valueOf(rifa.getPrecioNumero()));
             txtRifaRecaudado.setText("Monto recaudado: $" + calcularRecaudado(rifa));
 
-            // Permite copiar el código al portapapeles
             txtRifaCodigo.setOnClickListener(v -> {
-                String codigo = txtRifaCodigo.getText().toString().replace("Código: ", "");
-                ClipboardManager clipboard = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("Código Rifa", codigo);
-                clipboard.setPrimaryClip(clip);
-                Toast.makeText(requireContext(), "Código copiado al portapapeles", Toast.LENGTH_SHORT).show();
+                String codigoRifa = rifa.getCodigo();
+                String rifaId = rifa.getId();
+                String universalLink = "https://emmaquintana.github.io/appchancita/redireccion-rifa/redir.html?codigo=" + codigoRifa + "&rifa_id=" + rifaId;
+
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Únete a mi rifa: " + universalLink);
+                sendIntent.setType("text/plain");
+                startActivity(Intent.createChooser(sendIntent, "Compartir rifa"));
             });
+
 
             // Aclaración sobre el monto recaudado al usuario Organizador
             txtRifaRecaudado.setOnClickListener(v -> {

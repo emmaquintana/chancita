@@ -57,12 +57,17 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="chancita" android:host="pago-fallido" />
             </intent-filter>
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="chancita" android:host="pago-pendiente" />
+            </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="chancita"/>
             </intent-filter>
         </activity>
         <activity

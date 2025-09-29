@@ -262,6 +262,7 @@ public class inicioFragment extends Fragment {
 
             // Genera el layout
             rvRifasUnidas.setLayoutManager(new LinearLayoutManager(getContext()));
+            rvRifasUnidas.setVisibility(View.VISIBLE);
             RifaAdapter joinedAdapter = new RifaAdapter(listaRifas, rifaUnidaListener);
             rvRifasUnidas.setAdapter(joinedAdapter);
         }

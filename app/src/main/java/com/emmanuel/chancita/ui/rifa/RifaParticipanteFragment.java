@@ -104,13 +104,17 @@ public class RifaParticipanteFragment extends Fragment {
         TextView txtPrecioNumero = view.findViewById(R.id.rifa_participante_txt_precio_numero); // Debe iniciar con "Precio por número: $"
         MaterialButton btnSalir = view.findViewById(R.id.rifa_participante_btn_salir);
 
-        // Permite copiar el código al portapapeles
+        // Permite compartir la rifa
         txtRifaCodigo.setOnClickListener(v -> {
-            String codigo = txtRifaCodigo.getText().toString().replace("Código: ", "");
-            ClipboardManager clipboard = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clip = ClipData.newPlainText("Código Rifa", codigo);
-            clipboard.setPrimaryClip(clip);
-            Toast.makeText(requireContext(), "Código copiado al portapapeles", Toast.LENGTH_SHORT).show();
+            String codigoRifa = rifa.getCodigo();
+            String rifaId = rifa.getId();
+            String universalLink = "https://emmaquintana.github.io/appchancita/redireccion-rifa/redir.html?codigo=" + codigoRifa + "&rifa_id=" + rifaId;
+
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, "Únete a esta rifa: " + universalLink);
+            sendIntent.setType("text/plain");
+            startActivity(Intent.createChooser(sendIntent, "Compartir rifa"));
         });
 
         // Muestra una ventana de dialogo que aclara al usuario el significado del método de elección de ganador
