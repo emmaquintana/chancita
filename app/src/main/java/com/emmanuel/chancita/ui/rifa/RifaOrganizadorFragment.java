@@ -94,19 +94,28 @@ public class RifaOrganizadorFragment extends Fragment {
 
         TextView txtRifaTitulo = view.findViewById(R.id.rifa_organizador_txt_titulo_rifa);
         TextView txtRifaRecaudado = view.findViewById(R.id.rifa_organizador_txt_monto_recaudado); // Debe iniciar con "Monto recaudado: $"
-        TextView txtRifaEstado = view.findViewById(R.id.rifa_organizador_txt_info_estado); // Debe iniciar con "Estado: "
-        TextView txtRifaCodigo = view.findViewById(R.id.rifa_organizador_txt_info_codigo); // Debe iniciar con "Código: "
-        TextView txtRifaFechaSorteo = view.findViewById(R.id.rifa_organizador_txt_info_fecha); // Debe iniciar con "Fecha de sorteo: "
-        TextView txtRifaMetodoEleccionGanador = view.findViewById(R.id.rifa_organizador_txt_info_metodo); // Debe iniciar con "Método de elección: "
-        TextView txtRifaPremios = view.findViewById(R.id.rifa_organizador_txt_premios); // Debe iniciar con "1er puesto: "
+        TextView txtRifaEstado = view.findViewById(R.id.rifa_organizador_txt_info_estado);
+        TextView txtRifaCodigo = view.findViewById(R.id.rifa_organizador_txt_info_codigo);
+        TextView txtRifaFechaSorteo = view.findViewById(R.id.rifa_organizador_txt_info_fecha);
+        TextView txtRifaMetodoEleccionGanador = view.findViewById(R.id.rifa_organizador_txt_info_metodo);
+        TextView txtRifaPremios = view.findViewById(R.id.rifa_organizador_txt_premios);
         TextView txtRifaDescripcion = view.findViewById(R.id.rifa_organizador_txt_info_descripcion);
-        TextView txtPrecioNumero = view.findViewById(R.id.rifa_organizador_txt_info_precio); // Debe iniciar con "Precio por número: $"
+        TextView txtPrecioNumero = view.findViewById(R.id.rifa_organizador_txt_info_precio);
+        TextView txtRifaCodigoInfo = view.findViewById(R.id.rifa_organizador_txt_codigo_info);
         FloatingActionButton fab = view.findViewById(R.id.rifa_organizador_fab_editar);
 
         fab.setOnClickListener(v ->
                 NavHostFragment.findNavController(this)
                         .navigate(R.id.action_rifaOrganizadorFragment_to_editarRifaFragment)
         );
+
+        txtRifaCodigoInfo.setOnClickListener(v -> {
+            new MaterialAlertDialogBuilder(getContext())
+                    .setTitle("Código de la rifa")
+                    .setMessage("El código de la rifa puede ser usado por otros usuarios para unirse a la rifa.")
+                    .setPositiveButton("Entendido", null)
+                    .show();
+        });
 
         rifaOrganizadorViewModel.obtenerRifa(rifaId).observe(getViewLifecycleOwner(), rifa -> {
 

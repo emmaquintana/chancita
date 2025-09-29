@@ -1,22 +1,9 @@
 package com.emmanuel.chancita.ui.rifa;
 
-import static androidx.core.content.ContextCompat.getSystemService;
-
 import android.app.Activity;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.text.util.Linkify;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.emmanuel.chancita.R;
 import com.emmanuel.chancita.data.model.MetodoEleccionGanador;
@@ -36,21 +30,17 @@ import com.emmanuel.chancita.ui.rifa.adapters.NumerosAdapter;
 import com.emmanuel.chancita.utils.Utilidades;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.functions.FirebaseFunctions;
-import com.google.firebase.functions.FirebaseFunctionsException;
-import com.google.firebase.functions.HttpsCallableOptions;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 public class RifaParticipanteFragment extends Fragment {
 
@@ -101,6 +91,7 @@ public class RifaParticipanteFragment extends Fragment {
         TextView txtRifaDescripcion = view.findViewById(R.id.rifa_participante_txt_descripcion);
         TextView txtRifaDescripcionHead = view.findViewById(R.id.rifa_participante_txt_descripcion_titulo);
         TextView txtPrecioNumero = view.findViewById(R.id.rifa_participante_txt_precio_numero); // Debe iniciar con "Precio por número: $"
+        TextView txtRifaCodigoInfo = view.findViewById(R.id.rifa_participante_txt_codigo_info);
         MaterialButton btnSalir = view.findViewById(R.id.rifa_participante_btn_salir);
 
         // Permite compartir la rifa
@@ -114,6 +105,14 @@ public class RifaParticipanteFragment extends Fragment {
             sendIntent.putExtra(Intent.EXTRA_TEXT, "Únete a esta rifa: " + universalLink);
             sendIntent.setType("text/plain");
             startActivity(Intent.createChooser(sendIntent, "Compartir rifa"));
+        });
+
+        txtRifaCodigoInfo.setOnClickListener(v -> {
+            new MaterialAlertDialogBuilder(getContext())
+                    .setTitle("Código de la rifa")
+                    .setMessage("El código de la rifa puede ser usado por otros usuarios para unirse a la rifa.")
+                    .setPositiveButton("Entendido", null)
+                    .show();
         });
 
         // Muestra una ventana de dialogo que aclara al usuario el significado del método de elección de ganador

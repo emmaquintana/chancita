@@ -165,9 +165,14 @@
                         android:layout_marginBottom="8dp">
 
                         <TextView
+                            android:id="@+id/rifa_organizador_txt_codigo_info"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:drawableStart="@drawable/ic_info_outline"
+                            android:drawablePadding="4dp"
+                            android:drawableTint="?attr/colorPrimary"
+                            android:foreground="?attr/selectableItemBackground"
                             android:text="Código:"
                             android:textSize="16sp"
                             android:textColor="?attr/colorOnSurfaceVariant"
