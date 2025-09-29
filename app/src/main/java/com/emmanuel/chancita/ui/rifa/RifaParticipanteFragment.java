@@ -29,6 +29,8 @@ import com.emmanuel.chancita.R;
 import com.emmanuel.chancita.data.dto.RifaDTO;
 import com.emmanuel.chancita.data.model.MetodoEleccionGanador;
 import com.emmanuel.chancita.data.model.NumeroComprado;
+import com.emmanuel.chancita.data.model.Rifa;
+import com.emmanuel.chancita.data.model.RifaEstado;
 import com.emmanuel.chancita.data.model.RifaPremio;
 import com.emmanuel.chancita.ui.SharedViewModel;
 import com.emmanuel.chancita.ui.rifa.adapters.NumerosAdapter;
@@ -100,6 +102,7 @@ public class RifaParticipanteFragment extends Fragment {
         TextView txtRifaDescripcion = view.findViewById(R.id.rifa_participante_txt_descripcion);
         TextView txtRifaDescripcionHead = view.findViewById(R.id.rifa_participante_txt_descripcion_titulo);
         TextView txtPrecioNumero = view.findViewById(R.id.rifa_participante_txt_precio_numero); // Debe iniciar con "Precio por número: $"
+        MaterialButton btnSalir = view.findViewById(R.id.rifa_participante_btn_salir);
 
         // Permite copiar el código al portapapeles
         txtRifaCodigo.setOnClickListener(v -> {
@@ -171,6 +174,35 @@ public class RifaParticipanteFragment extends Fragment {
                         txtCorreoOrganizador,
                         Linkify.EMAIL_ADDRESSES
                 );
+            });
+
+            // Condiciones para mostrar el botón "Salir"
+            boolean usuarioComproNumeros = false;
+            if (rifa.getNumerosComprados() != null) {
+                for (NumeroComprado nc : rifa.getNumerosComprados()) {
+                    if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals(nc.getUsuarioId()) && nc.getNumerosComprados() != null && !nc.getNumerosComprados().isEmpty()) {
+                        usuarioComproNumeros = true;
+                        break;
+                    }
+                }
+            }
+            boolean yaSeSorteo = rifa.getEstado() == RifaEstado.SORTEADO;
+
+            if (!usuarioComproNumeros || yaSeSorteo) {
+                btnSalir.setVisibility(View.VISIBLE);
+            } else {
+                btnSalir.setVisibility(View.GONE);
+            }
+
+            // Acción del botón
+            btnSalir.setOnClickListener(v -> {
+                // Confirmación antes de salir
+                new MaterialAlertDialogBuilder(getContext())
+                        .setTitle("Salir de la rifa")
+                        .setMessage("¿Estás seguro de que quieres salir de la rifa?")
+                        .setPositiveButton("Sí", (dialog, which) -> salirDeLaRifa(rifa))
+                        .setNegativeButton("Cancelar", null)
+                        .show();
             });
         });
 
@@ -500,6 +532,27 @@ public class RifaParticipanteFragment extends Fragment {
             Log.e("AUTH_DEBUG", "Usuario NO autenticado");
         }
     }
+
+    private void salirDeLaRifa(RifaDTO rifa) {
+        String usuarioId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        // Quitar al usuario de participantes
+        List<String> participantes = new ArrayList<>(rifa.getParticipantesIds());
+        participantes.remove(usuarioId);
+
+        // Actualizar Firestore
+        FirebaseFirestore.getInstance()
+                .collection("rifas")
+                .document(rifa.getId())
+                .update("participantesIds", participantes)
+                .addOnSuccessListener(aVoid -> {
+                    requireActivity().finish();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(getContext(), "Error al salir de la rifa", Toast.LENGTH_SHORT).show();
+                });
+    }
+
 
     // En tu Fragment donde está el botón de comprar
     @Override

@@ -267,6 +267,8 @@ public class inicioFragment extends Fragment {
         }
         else {
             // Si el usuario no se unió a rifas, se le informa de ello al usuario
+            rvRifasUnidas.setAdapter(null);
+            rvRifasUnidas.setVisibility(View.GONE);
             msgNoRifasUnidas.setVisibility(View.VISIBLE);
         }
     }
@@ -301,8 +303,10 @@ public class inicioFragment extends Fragment {
 
         if (!listaRifas.isEmpty()) {
             msgNoRifasDisponibles.setVisibility(View.GONE);
-            btnNext.setVisibility(View.VISIBLE);
-            btnPrev.setVisibility(View.VISIBLE);
+            if (listaRifas.size() != 1) {
+                btnNext.setVisibility(View.VISIBLE);
+                btnPrev.setVisibility(View.VISIBLE);
+            }
             rvRifasDisponibles.setVisibility(View.VISIBLE);
 
             RifaAdapter.OnItemClickListener listener = rifa -> {

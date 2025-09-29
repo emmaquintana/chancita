@@ -493,6 +493,21 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/rifa_participante_btn_salir"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Salir de la rifa"
+                android:textSize="16sp"
+                android:textColor="@color/md_theme_error"
+                android:layout_marginTop="16dp"
+                android:visibility="visible"
+                app:cornerRadius="12dp"
+                app:strokeColor="#FF0000"
+                app:strokeWidth="1dp"
+                />
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
