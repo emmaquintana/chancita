@@ -102,7 +102,7 @@ public class RifaOrganizadorFragment extends Fragment {
         TextView txtRifaDescripcion = view.findViewById(R.id.rifa_organizador_txt_info_descripcion);
         TextView txtPrecioNumero = view.findViewById(R.id.rifa_organizador_txt_info_precio);
         TextView txtRifaCodigoInfo = view.findViewById(R.id.rifa_organizador_txt_codigo_info);
-        MaterialButton btnCompartirRifa = view.findViewById(R.id.rifa_participante_btn_compartir_rifa);
+        MaterialButton btnCompartirRifa = view.findViewById(R.id.rifa_organizador_btn_compartir_rifa);
         FloatingActionButton fab = view.findViewById(R.id.rifa_organizador_fab_editar);
 
         fab.setOnClickListener(v ->
@@ -112,13 +112,13 @@ public class RifaOrganizadorFragment extends Fragment {
 
         rifaOrganizadorViewModel.obtenerRifa(rifaId).observe(getViewLifecycleOwner(), rifa -> {
 
-            btnCompartirRifa.setVisibility(View.VISIBLE);
             txtRifaTitulo.setText(rifa.getTitulo());
             txtRifaEstado.setText(Utilidades.capitalizar(rifa.getEstado().toString()));
             txtRifaCodigo.setText(rifa.getCodigo());
             txtRifaFechaSorteo.setText(Utilidades.formatearFechaHora(rifa.getFechaSorteo(), "dd-MM-yyyy HH:mm"));
             txtRifaMetodoEleccionGanador.setText(Utilidades.capitalizar(rifa.getMetodoEleccionGanador().toString()) + (rifa.getMetodoEleccionGanador() == MetodoEleccionGanador.DETERMINISTA ? " (" + rifa.getMotivoEleccionGanador() + ")" : ""));
             txtRifaPremios.setText(formatearPremios(rifa.getPremios()));
+            btnCompartirRifa.setVisibility(View.VISIBLE);
             if (rifa.getDescripcion() != null && !rifa.getDescripcion().equals("")) {
                 txtRifaDescripcion.setText(rifa.getDescripcion());
             }
@@ -149,6 +149,14 @@ public class RifaOrganizadorFragment extends Fragment {
                 sendIntent.putExtra(Intent.EXTRA_TEXT, "Únete a esta rifa: " + universalLink);
                 sendIntent.setType("text/plain");
                 startActivity(Intent.createChooser(sendIntent, "Compartir rifa"));
+            });
+
+            txtRifaCodigoInfo.setOnClickListener(v -> {
+                new MaterialAlertDialogBuilder(getContext())
+                        .setTitle("Código de la rifa")
+                        .setMessage("El código de la rifa puede ser usado por otros usuarios para unirse a la rifa.")
+                        .setPositiveButton("Entendido", null)
+                        .show();
             });
 
 
