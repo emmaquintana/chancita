@@ -1,29 +1,41 @@
 package com.emmanuel.chancita.ui.inicio;
 
+import android.app.Application;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.emmanuel.chancita.data.AppDatabase;
+import com.emmanuel.chancita.data.dao.RifaDaoRoom;
 import com.emmanuel.chancita.data.model.Rifa;
+import com.emmanuel.chancita.data.model.RifaEntityRoom;
 import com.emmanuel.chancita.data.model.RifaEstado;
 import com.emmanuel.chancita.data.model.Usuario;
 import com.emmanuel.chancita.data.repository.RifaRepository;
+import com.emmanuel.chancita.data.repository.RifaRepositoryRoom;
 import com.emmanuel.chancita.data.repository.UsuarioRepository;
+import com.emmanuel.chancita.utils.Utilidades;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Source;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
-public class InicioViewModel extends ViewModel {
+public class InicioViewModel extends AndroidViewModel {
 
     private final RifaRepository rifaRepository;
     private final UsuarioRepository usuarioRepository;
+    private final RifaDaoRoom rifaDaoRoom;
 
     // Obtener rifas creadas por el usuario actual
     private final MutableLiveData<Boolean> _obteniendoRifasCreadas = new MutableLiveData<>();
@@ -37,21 +49,11 @@ public class InicioViewModel extends ViewModel {
     private final MutableLiveData<String> _resultadoObtencionRifaUnidas = new MutableLiveData<>();
     public final LiveData<String> resultadoObtencionRifaUnidas = _resultadoObtencionRifaUnidas;
 
-    public InicioViewModel() {
+    public InicioViewModel(@NonNull Application application) {
+        super(application);
         this.rifaRepository = new RifaRepository();
         this.usuarioRepository = new UsuarioRepository();
-    }
-
-    public LiveData<Rifa> obtenerRifa(String rifaId) {
-        _obteniendoRifasCreadas.setValue(true);
-
-        return rifaRepository.obtenerRifa(rifaId, task -> {
-            _obteniendoRifasCreadas.setValue(false);
-
-            if (!task.isSuccessful()) {
-                _resultadoObtencionRifaCreadas.setValue("Algo salió mal");
-            }
-        });
+        this.rifaDaoRoom = AppDatabase.getInstance(application).rifaDao();
     }
 
     public void unirseARifa(String codigo) {
@@ -100,20 +102,16 @@ public class InicioViewModel extends ViewModel {
 
         FirebaseFirestore.getInstance()
                 .collection("rifas")
-                .get()
+                .get(Source.SERVER)
                 .addOnSuccessListener(querySnapshot -> {
                     List<Rifa> rifas = new ArrayList<>();
 
                     for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
                         try {
                             Rifa rifa = mapearRifa(doc);
-
-                            // Filtrar para que no aparezcan rifas creadas ni unidas por el usuario y aparezcan las abiertas
-                            if (
-                                    !rifa.getCreadoPor().equals(usuarioId)
+                            if (!rifa.getCreadoPor().equals(usuarioId)
                                     && !rifa.getParticipantesIds().contains(usuarioId)
-                                    && rifa.getEstado() == RifaEstado.ABIERTO
-                            ) {
+                                    && rifa.getEstado() == RifaEstado.ABIERTO) {
                                 rifas.add(rifa);
                             }
                         } catch (Exception e) {
@@ -122,11 +120,27 @@ public class InicioViewModel extends ViewModel {
                     }
 
                     rifasLiveData.setValue(rifas);
+
+                    // Guardar en Room para fallback offline
+                    Executors.newSingleThreadExecutor().execute(() -> {
+                        List<RifaEntityRoom> entities = Utilidades.Converters.toEntityList(rifas);
+                        rifaDaoRoom.insertAll(entities);
+                    });
                 })
-                .addOnFailureListener(e -> rifasLiveData.setValue(new ArrayList<>()));
+                .addOnFailureListener(e -> {
+                    // Si falla Firestore, leer desde Room
+                    rifaDaoRoom.getAll().observeForever(rifaEntities -> {
+                        if (rifaEntities != null) {
+                            List<Rifa> rifasCacheadas = Utilidades.Converters.toRifa(rifaEntities);
+                            rifasLiveData.postValue(rifasCacheadas);
+                        }
+                    });
+
+                });
 
         return rifasLiveData;
     }
+
 
     private Rifa mapearRifa(DocumentSnapshot doc) {
         Rifa rifa = new Rifa();
