@@ -19,6 +19,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -96,6 +98,7 @@ public class RifaParticipanteFragment extends Fragment {
         TextView txtPrecioNumero = view.findViewById(R.id.rifa_participante_txt_precio_numero); // Debe iniciar con "Precio por número: $"
         TextView txtRifaCodigoInfo = view.findViewById(R.id.rifa_participante_txt_codigo_info);
         MaterialButton btnSalir = view.findViewById(R.id.rifa_participante_btn_salir);
+        MaterialButton btnQr = view.findViewById(R.id.rifa_participante_btn_qr_rifa);
         MaterialButton btnCompartirRifa = view.findViewById(R.id.rifa_participante_btn_compartir_rifa);
 
 
@@ -110,6 +113,15 @@ public class RifaParticipanteFragment extends Fragment {
              sendIntent.setType("text/plain");
              startActivity(Intent.createChooser(sendIntent, "Compartir rifa"));
          });
+
+         // Permite compartir la rifa mediante código QR
+         btnQr.setOnClickListener(v -> {
+            Bundle args = new Bundle();
+            args.putString("rifa_id", rifaId);
+
+            NavController navController = Navigation.findNavController(v);
+            navController.navigate(R.id.action_rifaParticipanteFragment_to_qrRifaFragment, args);
+        });
 
         // Permite copiar el código de la rifa
         txtRifaCodigo.setOnClickListener(v -> {
@@ -156,7 +168,12 @@ public class RifaParticipanteFragment extends Fragment {
             }
 
             // Setea la información de la rifa
-            btnCompartirRifa.setVisibility(View.VISIBLE);
+            if (rifa.getEstado() == RifaEstado.ABIERTO) {
+                btnCompartirRifa.setVisibility(View.VISIBLE);
+                btnQr.setVisibility(View.VISIBLE);
+                view.findViewById(R.id.rifa_participante_ll_codigo).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.rifa_participante_v_codigo).setVisibility(View.VISIBLE);
+            }
             txtRifaTitulo.setText(rifa.getTitulo());
             txtRifaEstado.setText(rifa.getEstado().toString());
             txtRifaCodigo.setText(rifa.getCodigo());

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center">
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_margin="24dp"
+            android:textSize="24sp"
+            android:text="¡Puedes compartir este QR para que demás personas puedan escanerlo y así unirse a la rifa!"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            />
+
+        <ImageView
+            android:id="@+id/qr_rifa_img"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:contentDescription="QR de la rifa" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/qr_rifa_btn_compartir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Compartir QR"
+            app:icon="@drawable/ic_share_up"
+            android:layout_marginTop="24dp"/>
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

@@ -33,6 +33,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.zxing.integration.android.IntentIntegrator;
 
 import java.util.Collections;
 import java.util.List;
@@ -140,12 +141,23 @@ public class inicioFragment extends Fragment {
         View view = getLayoutInflater().inflate(R.layout.dialog_unirse_rifa, null);
 
         TextInputEditText input = view.findViewById(R.id.dialog_unirse_rifa_tiet_codigo);
+        MaterialButton btnEscanear = view.findViewById(R.id.dialog_unirse_rifa_btn_escanear);
         MaterialButton btnCancelar = view.findViewById(R.id.dialog_unirse_rifa_btn_cancelar);
         MaterialButton btnUnirse = view.findViewById(R.id.dialog_unirse_rifa_btn_unirse);
 
         AlertDialog dialog = new MaterialAlertDialogBuilder(requireContext())
                 .setView(view)
                 .create();
+
+        btnEscanear.setOnClickListener(v -> {
+            dialog.dismiss(); // cierro el diálogo para abrir el scanner
+            new IntentIntegrator(requireActivity())
+                    .setPrompt("Escanea el QR de la rifa")
+                    .setOrientationLocked(false)
+                    .setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
+                    .initiateScan();
+        });
+
 
         btnCancelar.setOnClickListener(v -> dialog.dismiss());
 

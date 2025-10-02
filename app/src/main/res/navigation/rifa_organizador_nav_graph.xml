@@ -16,6 +16,26 @@
         tools:layout="@layout/fragment_rifa_organizador" >
         <action
             android:id="@+id/action_rifaOrganizadorFragment_to_editarRifaFragment"
-            app:destination="@id/editarRifaFragment" />
+            app:destination="@id/editarRifaFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_rifaOrganizadorFragment_to_fragmentQrRifa"
+            app:destination="@id/fragmentQrRifa"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentQrRifa"
+        android:name="com.emmanuel.chancita.ui.rifa.QrRifaFragment"
+        android:label="FragmentQrRifa">
+        <argument
+            android:name="rifa_id"
+            app:argType="string" />
     </fragment>
 </navigation>

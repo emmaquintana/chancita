@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -103,6 +104,7 @@ public class RifaOrganizadorFragment extends Fragment {
         TextView txtPrecioNumero = view.findViewById(R.id.rifa_organizador_txt_info_precio);
         TextView txtRifaCodigoInfo = view.findViewById(R.id.rifa_organizador_txt_codigo_info);
         MaterialButton btnCompartirRifa = view.findViewById(R.id.rifa_organizador_btn_compartir_rifa);
+        MaterialButton btnQr = view.findViewById(R.id.rifa_organizador_btn_qr_rifa);
         FloatingActionButton fab = view.findViewById(R.id.rifa_organizador_fab_editar);
 
         fab.setOnClickListener(v ->
@@ -112,13 +114,18 @@ public class RifaOrganizadorFragment extends Fragment {
 
         rifaOrganizadorViewModel.obtenerRifa(rifaId).observe(getViewLifecycleOwner(), rifa -> {
 
+            if (rifa.getEstado() == RifaEstado.ABIERTO) {
+                btnCompartirRifa.setVisibility(View.VISIBLE);
+                btnQr.setVisibility(View.VISIBLE);
+                view.findViewById(R.id.rifa_organizador_ll_codigo).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.rifa_organizador_v_codigo).setVisibility(View.VISIBLE);
+            }
             txtRifaTitulo.setText(rifa.getTitulo());
             txtRifaEstado.setText(Utilidades.capitalizar(rifa.getEstado().toString()));
             txtRifaCodigo.setText(rifa.getCodigo());
             txtRifaFechaSorteo.setText(Utilidades.formatearFechaHora(rifa.getFechaSorteo(), "dd-MM-yyyy HH:mm"));
             txtRifaMetodoEleccionGanador.setText(Utilidades.capitalizar(rifa.getMetodoEleccionGanador().toString()) + (rifa.getMetodoEleccionGanador() == MetodoEleccionGanador.DETERMINISTA ? " (" + rifa.getMotivoEleccionGanador() + ")" : ""));
             txtRifaPremios.setText(formatearPremios(rifa.getPremios()));
-            btnCompartirRifa.setVisibility(View.VISIBLE);
             if (rifa.getDescripcion() != null && !rifa.getDescripcion().equals("")) {
                 txtRifaDescripcion.setText(rifa.getDescripcion());
             }
@@ -137,6 +144,14 @@ public class RifaOrganizadorFragment extends Fragment {
                 ClipData clip = ClipData.newPlainText("Código Rifa", codigo);
                 clipboard.setPrimaryClip(clip);
                 Toast.makeText(requireContext(), "Código copiado al portapapeles", Toast.LENGTH_SHORT).show();
+            });
+
+            btnQr.setOnClickListener(v -> {
+                Bundle args = new Bundle();
+                args.putString("rifa_id", rifaId);
+
+                NavController navController = Navigation.findNavController(v);
+                navController.navigate(R.id.action_rifaOrganizadorFragment_to_fragmentQrRifa, args);
             });
 
             // Permite compartir la rifa

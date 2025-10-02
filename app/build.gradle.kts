@@ -36,6 +36,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.zxing.android.embedded)
     implementation(libs.room.runtime)
     annotationProcessor(libs.room.compiler)
     implementation(libs.room.ktx)

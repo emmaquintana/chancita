@@ -46,20 +46,59 @@
         android:orientation="horizontal"
         android:gravity="end">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/dialog_unirse_rifa_btn_cancelar"
-            style="?attr/materialButtonOutlinedStyle"
+            style="@style/Widget.Material3.Button.TextButton.Dialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cancelar"/>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/dialog_unirse_rifa_btn_unirse"
-            style="?attr/materialButtonOutlinedStyle"
+            style="@style/Widget.Material3.Button.TextButton.Dialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Unirse"
             android:layout_marginStart="8dp"/>
+
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginVertical="16dp">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="?attr/colorOutline"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="o"
+            android:textColor="?attr/colorOnSurface"
+            android:paddingHorizontal="8dp"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="?attr/colorOutline"/>
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/dialog_unirse_rifa_btn_escanear"
+        style="@style/Widget.Material3.Button.IconButton.Filled"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Escanear QR"
+        app:icon="@drawable/ic_qr_scanner"
+        app:iconPadding="4dp"
+        app:iconGravity="textStart"
+        />
 
 </LinearLayout>
