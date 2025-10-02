@@ -386,6 +386,9 @@ public class RifaOrganizadorFragment extends Fragment {
                     rvPremios.setVisibility(View.GONE);
                     btnConfirmar.setVisibility(View.GONE);
 
+                    // Se imposibilita editar la rifa
+                    view.findViewById(R.id.rifa_organizador_fab_editar).setVisibility(View.GONE);
+
                     inflarGanadores(view, rifa);
                 }
                 else {
